@@ -1,0 +1,212 @@
+
+/**
+ * HTML and body
+ */
+html {
+	font-size: 100%;
+}
+html, body {
+	width: 100%;
+	height: 100%;
+}
+body {
+	font-family: @fontFamily;
+	font-size: @fontSizeNormal;
+	font-weight: @fontWeightNormal;
+	color: @colorText;
+	background:	@colorWhite;
+}
+
+/**
+ * Headings
+ */
+h1, h2, h3, h4, h5, h6 {
+	font-weight: @fontWeightNormal;
+}
+section, article {
+	h2, h3, h4, h5, h6 {
+		margin-top: @marginSection;
+	}
+	h1 {
+		font-size: 2.5rem;
+	}
+	h2 {
+		font-size: 2rem;
+	}
+	h3 {
+		font-size: 1.4rem;
+	}
+	h4 {
+		font-weight: @fontWeightBold;
+	}
+	h5 {
+		text-decoration: underline;
+	}
+	header {
+		margin-bottom: @marginSection;
+		p {
+			letter-spacing: 1px;
+			margin: .5rem 0 0;
+			font-size: @fontSizeSmall;
+			color: @colorTextMuted;
+		}
+	}
+}
+
+/**
+ * Paragraphs
+ */
+p {
+	font-size: @fontSizeNormal;
+	line-height: @lineHeight;
+	margin-bottom: @marginParagraph;
+	text-align: justify;
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+/**
+ * Lists
+ */
+ul, ol {
+	margin: 0 0 @marginParagraph 1.75rem;
+	line-height: @lineHeight;
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+/**
+ * Links
+ */
+a {
+	color: @colorTextLink;
+	text-decoration: none;
+	cursor: pointer;
+	&:hover {
+		text-decoration: underline;
+	}
+	&:hover, &:active {
+		outline: none;
+	}
+}
+
+/**
+ * Images
+ */
+img {
+	max-width: 100%;
+}
+
+/**
+ * Dividers
+ */
+hr {
+	height: 0;
+	border: 0;
+	margin: @marginSection 0;
+	border-bottom: 1px solid @colorBorders;
+}
+
+/**
+ * Input elements
+ */
+button, input, select, textarea {
+	font-family: @fontFamily;
+	font-size: @fontSizeNormal;
+	font-weight: @fontWeightNormal;
+	color: @colorText;
+}
+
+/**********************************************************************************
+ * Common classes
+ */
+
+/**
+ * Positioning
+ */
+.pull-left {
+	float: left;
+}
+.pull-right {
+	float: right;
+}
+.clear:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+/**
+ * Utility
+ */
+.pointer {
+	cursor: pointer;
+}
+.hidden {
+	display: none;
+}
+.no-whitespace {
+	font-size: 0;
+}
+
+/**
+ * Text styles
+ */
+strong, .bold {
+	font-weight: @fontWeightNormal;
+}
+em, .italic {
+	font-style: @fontStyleItalic;
+}
+small, .small {
+	font-size: @fontSizeSmall;
+}
+.text-muted {
+	color: @colorTextMuted;
+}
+.text-center {
+	text-align: center;
+}
+.text-left {
+	text-align: left;
+}
+.text-right {
+	text-align: right;
+}
+
+/**
+ * Fade in/out classes
+ */
+.fade {
+	&.ng-hide-remove, &.ng-hide-add.ng-hide-add-active {
+		opacity: 0;
+	}
+	&.ng-hide-add, &.ng-hide-remove.ng-hide-remove-active {
+		opacity: 1;
+	}
+	&.out.ng-hide-add.ng-hide-add-active, &.in.ng-hide-remove.ng-hide-remove-active {
+		.transition(opacity .2s linear);
+	}
+}
+
+/**********************************************************************************
+ * Site layout
+ */
+
+/**
+ * Site contents
+ */
+.site-contents {
+	padding: 4rem 0;
+	@media (min-width: 768px) {
+		padding: 6rem 0;
+	}
+}
+.container {
+	margin: 0 auto;
+	width: 100%;
+	max-width: 1024px;
+	padding: 0 2rem;
+}

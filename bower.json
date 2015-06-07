@@ -1,0 +1,16 @@
+{
+  "name": "Mean-Stack",
+	"description": "A module based boilerplate for developing full-stack javascript applications using MongoDB, Express, AngularJS and Node.js.",
+	"version": "0.1.0",
+	"dependencies": {
+		"angular": "~1.4",
+    "angular-animate": "~1.4",
+    "angular-cookies": "~1.4",
+    "angular-messages": "~1.4",
+    "angular-mocks": "~1.4",
+		"angular-resource": "~1.4",
+    "angular-sanitize": "~1.4",
+    "angular-touch": "~1.4",
+		"angular-ui-router": "~0.2.15"
+	}
+}

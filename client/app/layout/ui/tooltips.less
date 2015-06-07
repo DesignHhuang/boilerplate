@@ -1,0 +1,43 @@
+
+/**
+ * Tooltips
+ */
+.tooltip {
+	position: absolute;
+	background: #444;
+	color: @colorWhite;
+	font-size: @fontSizeSmall;
+	line-height: @lineHeight;
+	padding: 0.5rem;
+	z-index: 1000;
+	text-align: center;
+	margin-top: 3px;
+	white-space: nowrap;
+	.box-shadow(1px 1px 5px rgba(0,0,0,0.35));
+
+	/**
+	 * Transition animation
+	 */
+	transition: opacity .2s linear;
+	&.ng-enter, &.ng-leave, &.ng-leave-active {
+		opacity: 0;
+	}
+	&.ng-enter-active {
+		opacity: 1;
+	}
+
+	/**
+	 * Triangle
+	 */
+	&:before {
+		position: absolute;
+		width: 0;
+		height: 0;
+		left: 50%;
+		margin: -13px 0 0 -5px;
+		content: "";
+		border-width: 0 5px 5px 5px;
+		border-style: solid;
+		border-color: transparent transparent #444 transparent;
+	}
+}

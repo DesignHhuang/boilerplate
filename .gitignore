@@ -1,0 +1,25 @@
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Editors
+*.sublime-*
+
+# Node & Bower
+node_modules/
+client/vendor/
+npm-debug.log
+
+# Karma
+karma.log
+karma-unit.js
+
+# General
+*.log
+*.tmp
+*.bak
+temp/
+build/
+
+# Local environment
+server/env/local.js

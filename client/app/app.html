@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-controller="AppCtrl">
+<head>
+	<base href="/" />
+	<title ng-bind="MyApp.name">My Application</title>
+	<meta charset="utf-8" />
+	<meta name="author" content="" />
+	<meta name="description" content="" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<% styles.forEach(function (file) { %>
+    <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
+    <link rel="shortcut icon" href="favicon.png" />
+    <% scripts.forEach(function (file) { %>
+    <script src="js/<%= file %>"></script><% }); %>
+</head>
+<body lang="en" detect-window-scrolling>
+<header class="site-header" ng-controller="NavCtrl" ng-class="{compact: isScrolled}">
+	<div class="container">
+		<button type="button" class="menu-toggle" ng-click="toggleMenu()" ng-class="{toggled: isMenuVisible}">
+			<span></span>
+			<span></span>
+			<span></span>
+		</button>
+		<nav ng-class="{visible: isMenuVisible, mobile: isMobile}" ng-click="toggleMenu(false)">
+			<menu class="menu main" ng-cloak>
+				<li class="title">Main</li>
+				<li ng-repeat="item in Menu.main"><a ui-sref="{{item.sref}}" ui-sref-active="active">{{item.title}}</a></li>
+			</menu>
+			<menu class="menu user" ng-cloak>
+				<li class="title">User</li>
+				<li ng-if="User.isPresent()"><a ui-sref="user.profile">{{User.data.name}}</a></li>
+				<li ng-if="User.isPresent()"><a ng-click="doLogout()">Logout</a></li>
+				<li ng-if="!User.isPresent()"><a ui-sref="user.register">Register</a></li>
+				<li ng-if="!User.isPresent()"><a ng-click="doLogin()">Login</a></li>
+			</menu>
+		</nav>
+	</div>
+</header>
+<main class="site-contents">
+	<div class="container" ui-view></div>
+</main>
+<footer class="site-footer"></footer>
+<script>
+	angular.element(document).ready(function() {
+        setTimeout(function() {
+        	angular.bootstrap(document.getElementsByTagName('html')[0], ['MyApp']);
+        }, 10);
+    });
+</script>
+</body>
+</html>

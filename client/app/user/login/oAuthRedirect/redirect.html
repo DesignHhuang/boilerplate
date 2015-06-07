@@ -1,0 +1,6 @@
+<!-- user/login/oAuthRedirect/redirect.html -->
+<h1>Connecting your {{oAuthProvider}} account</h1>
+<p ng-if="oAuthStatus == 'signing-in'">Please wait while we sign you in...</p>
+<p ng-if="oAuthStatus == 'fetching-data'">Please wait while we get your user data...</p>
+<p ng-if="oAuthStatus == 'done'">Welcome {{oAuthUsername}}! Redirecting you now...</p>
+<p ng-if="oAuthStatus == 'error'" class="text-error">Oops, something went wrong:<br/>{{error}}</p>
