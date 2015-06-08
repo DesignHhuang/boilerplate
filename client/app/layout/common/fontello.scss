@@ -12,6 +12,7 @@
 	font-weight: normal;
 	font-style: normal;
 }
+
 /* Chrome hack: SVG is rendered more smooth in Windows */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	@font-face {
@@ -29,11 +30,9 @@
 	padding: 0 2px;
 	font-style: normal;
 	font-weight: normal;
-	font-variant: normal;
 	text-align: center;
 	text-transform: none;
 	text-decoration: none;
-	speak: none;
 }
 
 /* Icons */
@@ -48,8 +47,8 @@
 .icon-github:before { content: '\e818'; } /* '' */
 
 /* Spinning animation */
-.spinning::before {
-	.animation(spin 1.5s infinite linear);
+.spinning:before {
+	animation: spin 1.5s infinite linear;
 }
 
 /* Spin keyframes */

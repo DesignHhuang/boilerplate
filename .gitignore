@@ -18,8 +18,9 @@ karma-unit.js
 *.log
 *.tmp
 *.bak
-temp/
-build/
 
 # Local environment
 server/env/local.js
+
+# Generated public folder
+public/
