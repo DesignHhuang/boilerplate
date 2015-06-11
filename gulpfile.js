@@ -12,14 +12,13 @@ var del = require('del');
  * Needed tasks
  */
 
-//COPY client/assets
-
 //DEV:
 //Compile SCSS into CSS
 //Auto prefix CSS
 //Output as single file
 
 //PROD:
+//
 //Minify CSS
 
 /**
@@ -32,14 +31,14 @@ gulp.task('clean:public', function(callback) {
 /**
  * Copy client assets
  */
-gulp.task('assets', ['clean:public'], function() {
+gulp.task('copy:assets', ['clean:public'], function() {
   gulp.src('client/assets/**/*')
     .pipe(ignore('*.md'))
     .pipe(gulp.dest('./public'));
 });
 
 /**
- * SASS
+ * Compile SASS files
  */
 gulp.task('sass', function () {
   gulp.src('./client/app/app.scss')
@@ -51,13 +50,11 @@ gulp.task('sass:watch', function () {
 });
 
 /**
- * Build
+ * Build task
  */
-gulp.task('build', ['assets', 'sass']);
+gulp.task('build', ['copy:assets', 'sass']);
 
 /**
  * Default task
  */
-gulp.task('default', function() {
-
-});
+gulp.task('default', ['build']);

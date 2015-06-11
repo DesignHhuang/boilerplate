@@ -25,9 +25,7 @@ module.exports = {
    */
 	log: {
 		format: 'combined',
-		options: {
-			stream: 'access.log'
-		}
+		path: './log'
 	},
 
   /**

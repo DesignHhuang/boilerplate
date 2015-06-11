@@ -3,7 +3,6 @@
 /**
  * Module dependencies
  */
-var glob = require('glob');
 var fs = require('fs');
 var _ = require('lodash');
 

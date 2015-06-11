@@ -6,44 +6,39 @@
 require('app-module-path').addPath(__dirname);
 
 /**
- * Module dependencies
+ * External dependencies
  */
-var init = require('config/init')();
-var config = require('config/config');
-var mongoose = require('mongoose');
 var chalk = require('chalk');
 
 /**
- * Connect to database
+ * Application dependencies
  */
-var db = mongoose.connect(config.db.uri, config.db.options);
-mongoose.connection.on('error', function(err) {
- 	console.error(chalk.red('MongoDB connection error: ' + err));
- 	process.exit(-1);
-});
+var init = require('app/init')();
+var config = require('app/config');
+var errorHandler = require('app/error/handler');
+
+/**
+ * Log
+ */
+console.log('Running application', chalk.grey(config.app.name),
+  'in the', chalk.grey(process.env.NODE_ENV), 'environment');
 
 /**
  * Initialize express application
  */
-var app = require('./app/app')(db);
+console.log('Starting Express server...');
+var app = require('app/express')();
 var server = app.listen(config.server.port, function() {
 
-  //Get vars
-  var host = server.address().address;
-  var port = server.address().port;
+  //Determine address
+  var host = this.address().address.replace('::', 'localhost');
+  var port = this.address().port;
   var protocol = (process.env.NODE_ENV === 'secure') ? 'https://' : 'http://';
 
-  //Fix host
-  if (host === '::') {
-    host = 'localhost';
-  }
-
-  //Log
-  console.log(chalk.green('Application ' + config.app.name + ' started (' + process.env.NODE_ENV + ')'));
-  console.log(chalk.green('================================================='));
-  console.log(chalk.green('Web server:\t' + protocol + host + ':' + port));
-  console.log(chalk.green('Database:\t' + config.db.uri));
-});
+  //Remember in config and output success message
+  config.server.address = protocol + host + ':' + port;
+  console.log(chalk.green('Express server started @ '), chalk.grey(config.server.address));
+}).on('error', errorHandler.server);
 
 /**
  * Expose app

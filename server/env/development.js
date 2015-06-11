@@ -16,10 +16,7 @@ module.exports = {
    * Log settings
    */
 	log: {
-		format: 'dev',
-		options: {
-			stream: null
-		}
+		format: 'dev'
 	},
 
   /**

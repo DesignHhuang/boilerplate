@@ -22,5 +22,6 @@ karma-unit.js
 # Local environment
 server/env/local.js
 
-# Generated public folder
+# Generated public folder and log folder
 public/
+log/

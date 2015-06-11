@@ -1,21 +1,28 @@
 'user strict';
 
 /**
- * Module dependencies
+ * External dependencies
  */
 var express = require('express');
+var chalk = require('chalk');
 var path = require('path');
 var http = require('http');
 var morgan = require('morgan');
 var compression = require('compression');
 var bodyParser = require('body-parser');
-var config = require('config/config');
-var logger = require('app/logger/logger');
+var methodOverride = require('method-override');
 
 /**
- * Module export
+ * Application dependencies
  */
-module.exports = function(db) {
+var db = require('app/db');
+var config = require('app/config');
+var logger = require('common/request/logger');
+
+/**
+ * Export module
+ */
+module.exports = function() {
 
   //Initialize express app
 	var app = express();
@@ -38,18 +45,25 @@ module.exports = function(db) {
 		}
   }));
 
-  //Logger
-  app.use(morgan(logger.getLogFormat(), logger.getLogOptions()));
+  //Use morgan to log access
+  app.use(morgan(logger.format(), logger.options()));
 
-  //Request body parsing
+  //Parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({
 		extended: true
 	}));
+
+	//Parse application/json
 	app.use(bodyParser.json());
-  //app.use(methodOverride());
+  app.use(bodyParser.json({
+		type: 'application/vnd.api+json'
+	}));
+
+	//Use method overriding	in case only POST/GET allowed
+  app.use(methodOverride('X-HTTP-Method-Override'));
 
   //Set static folder
-	//app.use(express.static(path.resolve('./public')));
+	app.use(express.static(path.resolve('./public')));
 
 	app.get('/', function (req, res) {
   	res.send('Heers');
@@ -77,6 +91,11 @@ module.exports = function(db) {
 			url: req.originalUrl,
 			error: 'Not Found'
 		});
+	});
+
+	//Error handling
+	app.use(function(err, req, res, next) {
+  	//See http://expressjs.com/guide/error-handling.html
 	});
 
   //Return express server instance
