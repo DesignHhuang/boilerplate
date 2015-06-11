@@ -3,8 +3,13 @@
   "description": "A module based boilerplate for developing full-stack javascript applications using MongoDB, Express, AngularJS and Node.js.",
   "version": "0.1.0",
   "private": false,
-  "license": "MIT",
-  "author": "Adam Buczynski",
+  "license": "LicenseRef-LICENSE.md",
+  "main": "server/main.js",
+  "author": {
+    "name": "Adam Buczynski",
+    "email": "me@adambuczynski.com",
+    "url": "http://adambuczynski.com/"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AdamBuczynski/Mean-Stack.git"
@@ -14,8 +19,8 @@
     "npm": ">=2.10.1"
   },
   "scripts": {
-    "start": "node server/server.js",
-    "test": "",
+    "start": "node server/main.js",
+    "test": "node server/main.js -env=test",
     "postinstall": "bower install --config.interactive=false"
   },
   "dependencies": {
