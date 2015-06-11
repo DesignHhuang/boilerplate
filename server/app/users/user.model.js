@@ -86,4 +86,4 @@ UserSchema.methods.authenticate = function(password) {
 /**
  * Define model
  */
-mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);
