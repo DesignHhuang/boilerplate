@@ -1,6 +1,6 @@
-# Mean-Stack
+# Meanie
 
-A module based boilerplate for developing full-stack javascript applications using MongoDB, Express, AngularJS and Node.js.
+A boilerplate for developing full-stack modular javascript applications using MongoDB, Express, AngularJS and Node.js, including fully configured Gulp tasks.
 
 ## Resources
 
