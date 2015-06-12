@@ -7,10 +7,10 @@ angular.module('Common.Filters.Text.Markdown.Filter', [])
 /**
  * Filter definitions
  */
-.filter('markdown', function() {
+.filter('markdown', function($window) {
 	return function(text) {
-		if (text && angular.isFunction(marked)) {
-			return marked(text);
+		if (text && angular.isFunction($window.marked)) {
+			return $window.marked(text);
 		}
 		return text;
 	};

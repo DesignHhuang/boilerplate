@@ -14,7 +14,7 @@ angular.module('MyApp.User.Login.oAuthRedirect.Controller', [
 	//Parse query string helper
 	function parseQueryString(str) {
 		var params = {}, regex = /([^&=]+)=([^&]*)/g, m;
-		while (m = regex.exec(str)) {
+		while ((m = regex.exec(str))) {
 			params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
 		}
 		return params;

@@ -26,7 +26,9 @@ angular.module('Common.REST.Data.Service', [
 		 */
 		var bindInterface = function(resource, obj) {
 			for (var method in Api[resource]) {
-				obj[method] = Api[resource].do.bind(Api[resource], method);
+				if (Api[resource].hasOwnProperty(method)) {
+					obj[method] = Api[resource].do.bind(Api[resource], method);
+				}
 			}
 		};
 
@@ -88,7 +90,7 @@ angular.module('Common.REST.Data.Service', [
 			 * Destroy model
 			 */
 			destroy: function(resource, params, raw) {
-				return apiCall('destroy', resource, params, raw);
+				return Api[resource].do('destroy', params, raw);
 			},
 
 			/**

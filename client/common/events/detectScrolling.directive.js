@@ -15,10 +15,10 @@ angular.module('Common.Events.DetectScrolling.Directive', [])
 			//Attach event to element
 			element.on('scroll', function() {
 				var scrollOffset = 0;
-				if (typeof element[0].scrollTop != 'undefined') {
+				if (angular.isDefined(element[0].scrollTop)) {
 					scrollOffset = element[0].scrollTop;
 				}
-				else if (element[0].context && element[0].context.scrollTop != 'undefined') {
+				else if (element[0].context && angular.isDefined(element[0].context.scrollTop)) {
 					scrollOffset = element[0].context.scrollTop;
 				}
 

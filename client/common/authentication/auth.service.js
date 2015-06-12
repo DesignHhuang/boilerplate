@@ -140,7 +140,7 @@ angular.module('Common.Authentication.Auth.Service', [
 			Auth.storeAccessToken(accessToken);
 
 			//Expose and return token payload
-			return Auth.data = decodeTokenPayload(accessToken);
+			return (Auth.data = decodeTokenPayload(accessToken));
 		}
 
 		/**

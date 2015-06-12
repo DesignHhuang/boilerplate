@@ -138,7 +138,7 @@ angular.module('MyApp.Mock.Repository.Service', [
 				for (var key in params) {
 
 					//Strict filtering must have all parameter properties present
-					if ((strict && !angular.isDefined(this.items[i][key])) || (angular.isDefined(this.items[i][key]) && this.items[i][key] != params[key])) {
+					if ((strict && !angular.isDefined(this.items[i][key])) || (angular.isDefined(this.items[i][key]) && this.items[i][key] !== params[key])) {
 						matches = false;
 						break;
 					}
@@ -177,7 +177,7 @@ angular.module('MyApp.Mock.Repository.Service', [
 
 				//Loop params
 				for (var key in params) {
-					if (!angular.isDefined(this.items[i][key]) || this.items[i][key] != params[key]) {
+					if (!angular.isDefined(this.items[i][key]) || this.items[i][key] !== params[key]) {
 						matches = false;
 						break;
 					}
@@ -198,7 +198,7 @@ angular.module('MyApp.Mock.Repository.Service', [
 		 */
 		existsByProperty: function(property, value) {
 			for (var i = 0; i < this.items.length; i++) {
-				if (angular.isDefined(this.items[i][property]) && this.items[i][property] == value) {
+				if (angular.isDefined(this.items[i][property]) && this.items[i][property] === value) {
 					return true;
 				}
 			}
@@ -256,7 +256,7 @@ angular.module('MyApp.Mock.Repository.Service', [
 		 * Check if an item's property matches a specific value
 		 */
 		matchesProperty: function(item, matchProperty, matchValue) {
-			return (angular.isDefined(item[matchProperty]) && item[matchProperty] == matchValue);
+			return (angular.isDefined(item[matchProperty]) && item[matchProperty] === matchValue);
 		}
 	};
 

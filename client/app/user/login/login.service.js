@@ -52,10 +52,10 @@ angular.module('MyApp.User.Login.Service', [])
 				}
 
 				//Open modal
-				modalInstance = $modal.open({
+				/*modalInstance = $modal.open({
 					templateUrl: 'user/login/loginModal.html',
 					controller: 'UserLoginCtrl'
-				});
+				});*/
 			},
 
 			/**

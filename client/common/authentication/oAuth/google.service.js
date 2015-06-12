@@ -212,7 +212,7 @@ angular.module('Common.Authentication.oAuth.Google.Service', [
 				}
 
 				//Verify CSRF token if needed
-				if (CSRFToken && (!params.state || params.state != CSRFToken)) {
+				if (CSRFToken && (!params.state || params.state !== CSRFToken)) {
 					return $q.reject('Missing or invalid CSRF token');
 				}
 
@@ -225,7 +225,7 @@ angular.module('Common.Authentication.oAuth.Google.Service', [
 				}).success(function(data) {
 
 					//Verify audience
-					if (data.audience != clientId) {
+					if (data.audience !== clientId) {
 						deferred.reject('Invalid audience');
 						return;
 					}

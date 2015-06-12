@@ -56,7 +56,7 @@ angular.module('Common.Utility.Url.Service', [
 				default:
 					throw 'Illegal base64 url string';
 			}
-		  	return tryDecodeURIComponent(escape($window.atob(o)));
+		  return tryDecodeURIComponent($window.atob(o));
 		},
 
 		/**
@@ -72,7 +72,7 @@ angular.module('Common.Utility.Url.Service', [
 						var val = angular.isDefined(kv[1]) ? tryDecodeURIComponent(kv[1]) : true;
 						if (!hasOwnProperty.call(obj, key)) {
 							obj[key] = val;
-						} else if (isArray(obj[key])) {
+						} else if (angular.isArray(obj[key])) {
 							obj[key].push(val);
 						} else {
 							obj[key] = [obj[key],val];

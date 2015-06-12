@@ -159,7 +159,7 @@ angular.module('Common.Utility.Storage.Service', [
 			}
 
 			//Parse from JSON if needed
-			if (value.charAt(0) == '{' || value.charAt(0) == '[' || isStringNumber(value)) {
+			if (value.charAt(0) === '{' || value.charAt(0) === '[' || isStringNumber(value)) {
 				try {
 					return angular.fromJson(value);
 				}
@@ -319,7 +319,7 @@ angular.module('Common.Utility.Storage.Service', [
 				$parse(variable).assign(scope, value);
 
 				//Set watch
-				return scope.$watch(key, function(newValue) {
+				return scope.$watch(variable, function(newValue) {
 					Storage.set(storageKey, newValue, storageType);
 				}, angular.isObject(scope[variable]));
 			}

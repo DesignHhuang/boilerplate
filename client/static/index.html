@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-controller="AppCtrl">
+<head>
+	<base href="/">
+	<title ng-bind="MyApp.name">My Application</title>
+	<meta charset="utf-8">
+	<meta name="author" content="Adam Buczynski">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="shortcut icon" href="favicon.png">
+	<!-- inject:css -->
+  <!-- endinject -->
+	<!-- inject:js -->
+  <!-- endinject -->
+</head>
+<body lang="en" detect-window-scrolling>
+  <ng-include="'app.html'"></ng-include>
+<script>
+	angular.element(document).ready(function() {
+		setTimeout(function() {
+			angular.bootstrap(document.getElementsByTagName('html')[0], ['MyApp']);
+		}, 10);
+  });
+</script>
+</body>
+</html>

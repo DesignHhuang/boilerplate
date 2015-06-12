@@ -12,7 +12,7 @@ angular.module('MyApp.User.Connect.Controller', [])
 ) {
 
 	//Must have valid provider and user data
-	if (!$state.params.provider || !$state.params.user || ($state.params.provider != oAuth.provider())) {
+	if (!$state.params.provider || !$state.params.user || ($state.params.provider !== oAuth.provider())) {
 		$state.go('home');
 		return;
 	}

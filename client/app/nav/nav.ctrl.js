@@ -11,18 +11,6 @@ angular.module('MyApp.Nav.Controller', [
  */
 .controller('NavCtrl', function($scope, $window) {
 
-	//Remember current page
-	var currentPage;
-
-	//Flags
-	$scope.isScrolled = isScrolled();
-	$scope.isMobile = isMobile();
-	$scope.isMenuVisible = false;
-
-	/*****************************************************************************
-	 * Helpers
-	 ***/
-
 	/**
 	 * Is mobile check helper
 	 */
@@ -34,8 +22,16 @@ angular.module('MyApp.Nav.Controller', [
 	 * Is scrolled check helper
 	 */
 	function isScrolled() {
-		return (currentPage != 'home' || $window.pageYOffset > ($window.innerWidth * 0.05));
+		return (currentPage !== 'home' || $window.pageYOffset > ($window.innerWidth * 0.05));
 	}
+
+	//Remember current page
+	var currentPage;
+
+	//Flags
+	$scope.isScrolled = isScrolled();
+	$scope.isMobile = isMobile();
+	$scope.isMenuVisible = false;
 
 	/*****************************************************************************
 	 * Event listeners
@@ -54,7 +50,7 @@ angular.module('MyApp.Nav.Controller', [
 		currentPage = toPage;
 
 		//Went to different main page? Scroll to top
-		if (toPage != fromPage) {
+		if (toPage !== fromPage) {
 			$window.scrollTo(0, 0);
 		}
 

@@ -58,7 +58,7 @@ angular.module('MyApp.Mock.User.Repository.Service', [])
 
 			//Find authenticated user
 			for (var i = 0; i < this.items.length; i++) {
-				if (this.items[i].id == this.authenticatedId) {
+				if (this.items[i].id === this.authenticatedId) {
 					if (asReference) {
 						return this.items[i];
 					}
@@ -90,7 +90,7 @@ angular.module('MyApp.Mock.User.Repository.Service', [])
 
 			//Match against items (only email)
 			for (var i = 0; i < this.items.length; i++) {
-				if (this.items[i].email == credentials.email) {
+				if (this.items[i].email === credentials.email) {
 					this.setAuthenticatedId(this.items[i].id);
 					return true;
 				}

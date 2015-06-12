@@ -35,8 +35,10 @@ angular.module('MyApp.Mock.Backend', [
 			};
 			return $delegate.call(this, method, url, data, interceptor, headers);
 		};
-		for(var key in $delegate) {
-			proxy[key] = $delegate[key];
+		for (var key in $delegate) {
+			if ($delegate.hasOwnProperty(key)) {
+				proxy[key] = $delegate[key];
+			}
 		}
 		return proxy;
 	});

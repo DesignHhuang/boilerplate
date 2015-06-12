@@ -13,8 +13,7 @@ angular.module('MyApp', [
 	'ui.router',
 
 	//Templates
-	'Templates.App',
-	'Templates.Common',
+	'Templates',
 
 	//Mock backend
 	'MyApp.Mock.Backend',

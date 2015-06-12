@@ -99,7 +99,7 @@ angular.module('Common.Authentication.oAuth.Service', [
 			}
 
 			//Remember and return
-			return CSRFToken = newCSRFToken;
+			return (CSRFToken = newCSRFToken);
 		}
 
 		/**
@@ -230,7 +230,7 @@ angular.module('Common.Authentication.oAuth.Service', [
 				//Check for window being closed
 				var interval = $window.setInterval(function() {
 					try {
-						if (popup == null || popup.closed) {
+						if (popup === null || popup.closed) {
 							$window.clearInterval(interval);
 							if (!gotCallback) {
 								deferred.reject('oAuth.popupClosed');

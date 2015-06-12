@@ -91,7 +91,7 @@ angular.module('MyApp.User.Login', [
 	$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
 
 		//Authentication required for this state?
-		if (toState.auth === true && toState.name != 'user.login' && !Auth.isAuthenticated()) {
+		if (toState.auth === true && toState.name !== 'user.login' && !Auth.isAuthenticated()) {
 
 			//Don't navigate to this state and show the login modal
 			event.preventDefault();

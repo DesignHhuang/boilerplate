@@ -27,7 +27,7 @@ angular.module('Common.Filters.Text.Cut.Filter', [])
 		//Cut on words?
 		if (onWords) {
 			var lastspace = text.lastIndexOf(' ');
-			if (lastspace != -1) {
+			if (lastspace !== -1) {
 				text = text.substr(0, lastspace);
 			}
 		}
