@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Controller', [])
+angular.module('App.Controller', [])
 
 /**
  * Controller

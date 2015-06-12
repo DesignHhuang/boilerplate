@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Errors', [])
+angular.module('App.Errors', [])
 
 /**
  * Configuration

@@ -2,10 +2,10 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.User.Login', [
-	'MyApp.User.Login.Service',
-	'MyApp.User.Login.Controller',
-	'MyApp.User.Login.oAuthRedirect',
+angular.module('App.User.Login', [
+	'App.User.Login.Service',
+	'App.User.Login.Controller',
+	'App.User.Login.oAuthRedirect',
 	'Common.Authentication.Auth.Service',
 	'Common.Authentication.oAuth.Service',
 	'Common.Authentication.oAuth.Google.Service'
@@ -27,7 +27,7 @@ angular.module('MyApp.User.Login', [
 /**
  * Run logic
  */
-.run(function($rootScope, $state, MyApp, Auth, Login) {
+.run(function($rootScope, $state, Auth, Login) {
 
 	/**
 	 * Global logout helper

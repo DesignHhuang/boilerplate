@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Nav.Controller', [
+angular.module('App.Nav.Controller', [
 	'Common.Events.DetectWindowScrolling.Directive'
 ])
 

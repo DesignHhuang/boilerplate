@@ -2,8 +2,8 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.User.Profile', [
-	'MyApp.User.Profile.Controller'
+angular.module('App.User.Profile', [
+	'App.User.Profile.Controller'
 ])
 
 /**

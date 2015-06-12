@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Nav.Menu.Service', [])
+angular.module('App.Nav.Menu.Service', [])
 
 /**
  * Factory definition

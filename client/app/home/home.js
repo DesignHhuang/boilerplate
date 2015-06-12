@@ -2,8 +2,8 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Home', [
-	'MyApp.Home.Controller'
+angular.module('App.Home', [
+	'App.Home.Controller'
 ])
 
 /**

@@ -20,6 +20,13 @@ var config = require('app/config');
 var logger = require('common/request/logger');
 
 /**
+ * Define mime types
+ */
+express.static.mime.define({
+	'application/json': ['map']
+});
+
+/**
  * Export module
  */
 module.exports = function() {

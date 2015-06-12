@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.User.Profile.Controller', [])
+angular.module('App.User.Profile.Controller', [])
 
 /**
  * Controller

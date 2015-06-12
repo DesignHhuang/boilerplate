@@ -19,13 +19,15 @@ var ignore = require('gulp-ignore');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var cached = require('gulp-cached');
-var addsrc = require('gulp-add-src');
 var wrapper = require('gulp-wrapper');
 var stylish = require('jshint-stylish');
+var vinylBuffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 var preprocess = require('gulp-preprocess');
 var ngAnnotate = require('gulp-ng-annotate');
+var ngConstant = require('gulp-ng-constant');
 var autoprefixer = require('gulp-autoprefixer');
+var vinylSourceStream = require('vinyl-source-stream');
 var removeEmptyLines = require('gulp-remove-empty-lines');
 var removeHtmlComments = require('gulp-remove-html-comments');
 var angularTemplateCache = require('gulp-angular-templatecache');
@@ -41,7 +43,6 @@ var config = require('./config');
  * TODO
  *  - SCSS linting: gulp-scss-lint requires ruby, need a gulp task without this
  *    dependency.
- *  - Expose configuration and environment in Angular APP (MyApp.Env module)
  *  - Preprocessing
  */
 
@@ -54,6 +55,13 @@ var config = require('./config');
  */
 function packageFileName(ext) {
   return pkg.name.toLowerCase() + '-' + pkg.version + (ext || '');
+}
+
+/**
+ * Get prefixed Angular module name
+ */
+function angularModuleName(module) {
+  return 'App.' + module;
 }
 
 /**
@@ -76,8 +84,32 @@ function jsTestStream() {
 function jsTemplatesStream() {
   return gulp.src(config.assets.app.html)
     .pipe(angularTemplateCache({
-      module: 'Templates',
+      module: angularModuleName('Templates'),
       standalone: true
+    }));
+}
+
+/**
+ * Environment module stream
+ */
+function jsEnvironmentStream() {
+
+  //Create new stream and write config object as JSON string
+  var stream = vinylSourceStream('app.env.js');
+  stream.write(JSON.stringify({}));
+  stream.on('finish', function() {
+    stream.end();
+  });
+
+  //Turn into angular constant module JS file
+  return stream
+    .pipe(vinylBuffer())
+    .pipe(ngConstant({
+      name: angularModuleName('Env'),
+      stream: true,
+      constants: {
+        App: config.app
+      }
     }));
 }
 
@@ -108,8 +140,8 @@ function angularWrapper() {
 gulp.task('clean:public', function(callback) {
   return del([
     'public/**/*',
-    '!public/js',
-    '!public/css'
+    /*'!public/js',
+    '!public/css'*/
   ], callback);
 });
 
@@ -141,8 +173,12 @@ gulp.task('sass', function() {
  * Process application JS files
  */
 gulp.task('js', function() {
-  return es.merge(jsAppStream(), jsTemplatesStream())
-    .pipe(ngAnnotate())
+  return es.merge(
+    jsAppStream(),
+    jsTemplatesStream(),
+    jsEnvironmentStream()
+  )
+    .pipe(ngAnnotate())                             //Annotate module dependencies
     .pipe(sourcemaps.init())                        //Initialize source mapping
       .pipe(concat(packageFileName('.min.js')))     //Concatenate to one file
       .pipe(wrapper(angularWrapper()))              //Create wrapper

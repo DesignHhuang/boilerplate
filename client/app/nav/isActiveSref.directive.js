@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Nav.IsActiveSref.Directive', [])
+angular.module('App.Nav.IsActiveSref.Directive', [])
 
 /**
  * Directive

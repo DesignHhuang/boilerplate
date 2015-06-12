@@ -2,7 +2,7 @@
 <html ng-controller="AppCtrl">
 <head>
 	<base href="/">
-	<title ng-bind="MyApp.title">My Application</title>
+	<title ng-bind="App.title">My Application</title>
 	<meta charset="utf-8">
 	<meta name="author" content="Adam Buczynski">
 	<meta name="description" content="">
@@ -14,11 +14,11 @@
   <!-- endinject -->
 </head>
 <body lang="en" detect-window-scrolling>
-  <ng-include="'app.html'"></ng-include>
+  <ng-include src="'app.html'"></ng-include>
 <script>
 	angular.element(document).ready(function() {
 		setTimeout(function() {
-			angular.bootstrap(document.getElementsByTagName('html')[0], ['MyApp']);
+			angular.bootstrap(document.getElementsByTagName('html')[0], ['App']);
 		}, 10);
   });
 </script>

@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.User.Service', [
+angular.module('App.User.Service', [
 	'Common.REST.Api.Service',
 	'Common.Utility.Storage.Service'
 ])

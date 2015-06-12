@@ -2,8 +2,8 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Secure', [
-	'MyApp.Secure.Controller'
+angular.module('App.Secure', [
+	'App.Secure.Controller'
 ])
 
 /**

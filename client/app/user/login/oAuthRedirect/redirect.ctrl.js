@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.User.Login.oAuthRedirect.Controller', [
+angular.module('App.User.Login.oAuthRedirect.Controller', [
 	'Common.Authentication.oAuth.Service'
 ])
 

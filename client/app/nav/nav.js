@@ -2,10 +2,10 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Nav', [
-	'MyApp.Nav.Controller',
-	'MyApp.Nav.Menu.Service',
-	'MyApp.Nav.IsActiveSref.Directive'
+angular.module('App.Nav', [
+	'App.Nav.Controller',
+	'App.Nav.Menu.Service',
+	'App.Nav.IsActiveSref.Directive'
 ])
 
 /**

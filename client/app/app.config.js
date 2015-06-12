@@ -2,8 +2,8 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Config', [
-	'MyApp.User.Service'
+angular.module('App.Config', [
+	'App.User.Service'
 ])
 
 /**

@@ -2,18 +2,18 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Mock.Backend', [
+angular.module('App.Mock.Backend', [
 
 	//Use the E2E implementation of $httpBackend
 	'ngMockE2E',
 
 	//Mock helper service and repository
-	'MyApp.Mock.Service',
-	'MyApp.Mock.Repository.Service',
+	'App.Mock.Service',
+	'App.Mock.Repository.Service',
 
 	//Specific mock modules
-	'MyApp.Mock.Token',
-	'MyApp.Mock.User'
+	'App.Mock.Token',
+	'App.Mock.User'
 ])
 
 /**
@@ -46,15 +46,15 @@ angular.module('MyApp.Mock.Backend', [
 	/**
 	 * Http interceptor to output mock requests/responses in console
 	 */
-	$httpProvider.interceptors.push(['$q', 'Env', function($q, Env) {
+	$httpProvider.interceptors.push(['$q', 'App', function($q, App) {
 		return {
 
 			/**
 			 * Request interceptor to strip API path prefixes
 			 */
 			request: function(config) {
-				if (config.url.indexOf(Env.api.baseUrl) !== -1) {
-					config.url = config.url.replace(Env.api.baseUrl, '');
+				if (config.url.indexOf(App.api.baseUrl) !== -1) {
+					config.url = config.url.replace(App.api.baseUrl, '');
 				}
 				return config;
 			},

@@ -16,7 +16,16 @@ module.exports = {
 	app: {
 		name: pkg.name,
 		version: pkg.version,
-    title: 'MyApp'
+    title: 'MyApp',
+		baseUrl: '/',
+		api: {
+			baseUrl: '/api/v1/'
+		},
+		oAuth: {
+			Google: {
+				clientId: ''
+			}
+		}
 	},
 
   /**

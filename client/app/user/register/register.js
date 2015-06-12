@@ -2,8 +2,8 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.User.Register', [
-	'MyApp.User.Register.Controller'
+angular.module('App.User.Register', [
+	'App.User.Register.Controller'
 ])
 
 /**

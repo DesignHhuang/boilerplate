@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.User.Login.Service', [])
+angular.module('App.User.Login.Service', [])
 
 /**
  * Service definition

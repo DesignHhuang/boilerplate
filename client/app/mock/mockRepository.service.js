@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Mock.Repository.Service', [
+angular.module('App.Mock.Repository.Service', [
 	'Common.Utility.Storage.Service'
 ])
 

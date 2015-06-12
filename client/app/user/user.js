@@ -2,13 +2,13 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.User', [
-	'MyApp.User.Profile',
-	'MyApp.User.Login',
-	'MyApp.User.Register',
-	'MyApp.User.Connect',
-	'MyApp.User.Service',
-	'MyApp.User.UserExists.Directive'
+angular.module('App.User', [
+	'App.User.Profile',
+	'App.User.Login',
+	'App.User.Register',
+	'App.User.Connect',
+	'App.User.Service',
+	'App.User.UserExists.Directive'
 ])
 
 /**

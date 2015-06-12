@@ -2,9 +2,9 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Mock.User', [
-	'MyApp.Mock.User.Repository.Service',
-	'MyApp.Mock.Token.Repository.Service'
+angular.module('App.Mock.User', [
+	'App.Mock.User.Repository.Service',
+	'App.Mock.Token.Repository.Service'
 ])
 
 /**

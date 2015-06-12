@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.User.UserExists.Directive', [])
+angular.module('App.User.UserExists.Directive', [])
 
 /**
  * Directive

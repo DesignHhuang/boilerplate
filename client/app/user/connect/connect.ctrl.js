@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.User.Connect.Controller', [])
+angular.module('App.User.Connect.Controller', [])
 
 /**
  * Controller

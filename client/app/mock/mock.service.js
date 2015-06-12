@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Mock.Service', [
+angular.module('App.Mock.Service', [
 	'Common.Utility.Url.Service'
 ])
 

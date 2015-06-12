@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp', [
+angular.module('App', [
 
 	//Angular
 	'ngAnimate',
@@ -12,39 +12,28 @@ angular.module('MyApp', [
 	//3rd party
 	'ui.router',
 
-	//Templates
-	'Templates',
-
 	//Mock backend
-	'MyApp.Mock.Backend',
+	'App.Mock.Backend',
 
 	//Core modules
-	'MyApp.Env',
-	'MyApp.Config',
-	'MyApp.Errors',
-	'MyApp.Controller',
-	'MyApp.Nav',
+	'App.Env',
+	'App.Config',
+	'App.Errors',
+	'App.Controller',
+	'App.Nav',
+	'App.Templates',
 
 	//App modules
-	'MyApp.Home',
-	'MyApp.User',
-	'MyApp.Secure'
+	'App.Home',
+	'App.User',
+	'App.Secure'
 ])
-
-/**
- * App constant
- */
-.constant('MyApp', {
-	name: 'MyApp',
-	title: 'My Application',
-	version: '1.0.0'
-})
 
 /**
  * Technical configuration
  */
 .config(function(
-	$urlRouterProvider, $locationProvider, MyApp, Env, StorageProvider,
+	$urlRouterProvider, $locationProvider, App, StorageProvider,
 	ApiProvider, LoginProvider, AuthProvider, oAuthGoogleProvider
 ) {
 
@@ -53,23 +42,23 @@ angular.module('MyApp', [
 	$urlRouterProvider.otherwise('/');
 
 	//Storage settings
-	StorageProvider.setPrefix(MyApp.id.toLowerCase());
+	StorageProvider.setPrefix(App.name.toLowerCase());
 
 	//API base url
-	ApiProvider.setBaseURL(Env.api.baseUrl);
+	ApiProvider.setBaseURL(App.api.baseUrl);
 
 	//Login behaviour
 	LoginProvider.usingModal(false);
 
 	//Authentication configuration
-	AuthProvider.setClientIdentifier(MyApp.id);
-	AuthProvider.setAuthEndpoint(Env.api.baseUrl + 'user/login');
+	AuthProvider.setClientIdentifier(App.name);
+	AuthProvider.setAuthEndpoint(App.api.baseUrl + 'user/login');
 	AuthProvider.setStorageMode('session');
 
 	//oAuth configuration, Google specific
-	oAuthGoogleProvider.setPopupCallbackUrl(Env.site.baseUrl + 'oAuthCallback');
-	oAuthGoogleProvider.setRedirectCallbackUrl(Env.site.baseUrl + 'oAuthRedirect/google');
-	oAuthGoogleProvider.setClientId(Env.oAuth.Google.clientId);
+	oAuthGoogleProvider.setPopupCallbackUrl(App.baseUrl + 'oAuthCallback');
+	oAuthGoogleProvider.setRedirectCallbackUrl(App.baseUrl + 'oAuthRedirect/google');
+	oAuthGoogleProvider.setClientId(App.oAuth.Google.clientId);
 	oAuthGoogleProvider.setScopes([
 		'email', 'profile'
 	]);
@@ -126,11 +115,10 @@ angular.module('MyApp', [
 /**
  * Run logic
  */
-.run(function($rootScope, MyApp, Env) {
+.run(function($rootScope, App) {
 
-	//Set app and environment constants in root scope
-	$rootScope.MyApp = MyApp;
-	$rootScope.Env = Env;
+	//Set app constant in rootscope
+	$rootScope.App = App;
 
 	//Listen for authentication events
 	$rootScope.$on('auth.authenticated', function(event, auth) {

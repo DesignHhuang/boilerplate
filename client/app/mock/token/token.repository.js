@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('MyApp.Mock.Token.Repository.Service', [])
+angular.module('App.Mock.Token.Repository.Service', [])
 
 /**
  * Service definition

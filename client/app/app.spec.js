@@ -1,7 +1,7 @@
 /**
  * Specifications
  */
-describe('MyApp', function() {
+describe('App', function() {
 
 	/**
 	 * Main test
