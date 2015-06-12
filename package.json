@@ -1,10 +1,10 @@
 {
-  "name": "Mean-Stack",
+  "name": "MyApp",
   "description": "A module based boilerplate for developing full-stack javascript applications using MongoDB, Express, AngularJS and Node.js.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": false,
   "license": "LicenseRef-LICENSE.md",
-  "main": "server/main.js",
+  "main": "main.js",
   "author": {
     "name": "Adam Buczynski",
     "email": "me@adambuczynski.com",
@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AdamBuczynski/Mean-Stack.git"
+    "url": ""
   },
   "engines": {
     "node": ">=0.12.4",
     "npm": ">=2.10.1"
   },
   "scripts": {
-    "start": "node server/main.js",
-    "test": "node server/main.js -env=test",
+    "start": "node main.js",
+    "test": "node main.js -env=test",
     "postinstall": "bower install --config.interactive=false"
   },
   "dependencies": {
@@ -50,6 +50,7 @@
     "gulp-angular-templatecache": "^1.6.0",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-batch": "^1.0.5",
+    "gulp-cached": "^1.1.0",
     "gulp-concat": "^2.5.2",
     "gulp-csso": "^1.0.0",
     "gulp-filter": "^2.0.2",
@@ -65,6 +66,7 @@
     "gulp-sourcemaps": "^1.5.2",
     "gulp-uglify": "^1.2.0",
     "gulp-watch": "^4.2.4",
+    "gulp-wrapper": "^1.0.0",
     "jshint-stylish": "^2.0.0"
   }
 }

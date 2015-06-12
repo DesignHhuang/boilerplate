@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * Get package info
+ */
+var pkg = require('../package.json');
+
+/**
  * Global environment configuration
  */
 module.exports = {
@@ -9,7 +14,8 @@ module.exports = {
    * App settings
    */
 	app: {
-		name: 'MyApp',
+		name: pkg.name,
+		version: pkg.version,
     title: 'MyApp'
 	},
 

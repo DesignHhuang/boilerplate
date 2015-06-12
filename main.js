@@ -3,7 +3,7 @@
 /**
  * Add server folder to path
  */
-require('app-module-path').addPath(__dirname);
+require('app-module-path').addPath(__dirname + '/server');
 
 /**
  * External dependencies
@@ -13,7 +13,6 @@ var chalk = require('chalk');
 /**
  * Application dependencies
  */
-var init = require('app/init')();
 var config = require('app/config');
 var errorHandler = require('app/error/handler');
 

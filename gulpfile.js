@@ -18,7 +18,9 @@ var inject = require('gulp-inject');
 var ignore = require('gulp-ignore');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
+var cached = require('gulp-cached');
 var addsrc = require('gulp-add-src');
+var wrapper = require('gulp-wrapper');
 var stylish = require('jshint-stylish');
 var sourcemaps = require('gulp-sourcemaps');
 var preprocess = require('gulp-preprocess');
@@ -32,10 +34,16 @@ var angularTemplateCache = require('gulp-angular-templatecache');
  * Package and environment
  */
 var pkg = require('./package.json');
-var env = null;
+var env = require('./env');
+var config = require('./config');
 
-//TODO
-//csslint, environment
+/**
+ * TODO
+ *  - SCSS linting: gulp-scss-lint requires ruby, need a gulp task without this
+ *    dependency.
+ *  - Expose configuration and environment in Angular APP (MyApp.Env module)
+ *  - Preprocessing
+ */
 
 /*****************************************************************************
  * Helpers
@@ -52,32 +60,42 @@ function packageFileName(ext) {
  * Application JS files stream
  */
 function jsAppStream() {
-  return gulp.src([
-    'client/app/**/*.js',
-    'client/common/**/*.js'
-  ]);
+  return gulp.src(config.assets.app.js);
+}
+
+/**
+ * Test JS files stream
+ */
+function jsTestStream() {
+  return gulp.src(config.assets.app.tests);
 }
 
 /**
  * Templates JS module stream
  */
 function jsTemplatesStream() {
-  return gulp.src([
-    'client/app/**/*.html',
-    'client/common/**/*.html'
-  ]).pipe(angularTemplateCache({
-    module: 'Templates',
-    standalone: true
-  }));
+  return gulp.src(config.assets.app.html)
+    .pipe(angularTemplateCache({
+      module: 'Templates',
+      standalone: true
+    }));
 }
 
 /**
  * Vendor JS files stream
  */
 function jsVendorStream() {
-  return gulp.src([
+  return gulp.src(config.assets.vendor.js);
+}
 
-  ]);
+/**
+ * Generate angular wrapper for module files
+ */
+function angularWrapper() {
+  return {
+     header: '(function (window, angular, undefined) {\n\t\'use strict\';\n',
+     footer: '})(window, window.angular);\n'
+  };
 }
 
 /*****************************************************************************
@@ -99,19 +117,15 @@ gulp.task('clean:public', function(callback) {
  * Copy static client assets
  */
 gulp.task('static', ['clean:public'], function() {
-  return gulp.src('client/static/**/*')
-    .pipe(ignore('*.md'))
+  return gulp.src(config.assets.app.static)
     .pipe(gulp.dest('public'));
 });
 
 /**
  * Process application SASS files
- *
- * Uses the main application SASS file as entry point.
- * You can import any other SASS files from within this file.
  */
 gulp.task('sass', function() {
-  return gulp.src('client/app/app.scss')
+  return gulp.src(config.assets.app.scss)
     .pipe(sass().on('error', sass.logError))        //Compile into CSS
     .pipe(sourcemaps.init())                        //Initialize source mapping
       .pipe(autoprefixer({                          //Use auto prefixer
@@ -125,31 +139,60 @@ gulp.task('sass', function() {
 
 /**
  * Process application JS files
- *
- * Does not take file order into account, so make sure every file is
- * it's own Angular module. For examples, see the client/app folder.
  */
 gulp.task('js', function() {
   return es.merge(jsAppStream(), jsTemplatesStream())
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish))
     .pipe(ngAnnotate())
     .pipe(sourcemaps.init())                        //Initialize source mapping
       .pipe(concat(packageFileName('.min.js')))     //Concatenate to one file
+      .pipe(wrapper(angularWrapper()))              //Create wrapper
       .pipe(uglify())                               //Minify jS
     .pipe(sourcemaps.write('./'))                   //Write source map file
     .pipe(gulp.dest('public/js'));                  //Save to public folder
 });
 
 /**
+ * Process vendor javascript files
+ */
+gulp.task('vendor:js', function() {
+  return gulp.src(config.assets.vendor.js)
+    .pipe(sourcemaps.init())                        //Initialize source mapping
+      .pipe(concat('vendor.min.js'))                //Concatenate to one file
+      .pipe(uglify())                               //Minify jS
+    .pipe(sourcemaps.write('./'))                   //Write source map file
+    .pipe(gulp.dest('public/js'));                  //Save to public folder
+});
+
+/**
+ * Process vendor CSS files
+ */
+gulp.task('vendor:css', function() {
+  return gulp.src(config.assets.vendor.css)
+    .pipe(sourcemaps.init())                        //Initialize source mapping
+       .pipe(csso())                                //Optimize and minify CSS
+       .pipe(rename('vendor.min.css'))              //Rename output file
+    .pipe(sourcemaps.write('./'))                   //Write source map file
+    .pipe(gulp.dest('public/css'));                 //Save to public folder
+});
+
+/**
+ * Combined vendor task
+ */
+gulp.task('vendor', ['vendor:js', 'vendor:css']);
+
+/**
  * Build index.html file
  */
-gulp.task('index', ['sass', 'js'], function() {
+gulp.task('index', ['vendor', 'js', 'sass'], function() {
 
-  //Read sources
+  //Read sources (in correct order)
   var sources = gulp.src([
+    'js/vendor.min.js',
     'js/**/*.js',
-    'css/**/*.css'
+    'js/' + packageFileName('.min.js'),
+    'css/vendor.min.css',
+    'css/**/*.css',
+    'css/' + packageFileName('.min.css')
   ], {
     cwd: 'public',
     read: false
@@ -160,10 +203,20 @@ gulp.task('index', ['sass', 'js'], function() {
     .pipe(inject(sources, {         //Inject the sources
       addRootSlash: false
     }))
-    .pipe(preprocess())
+    .pipe(preprocess())             //Preprocess
     .pipe(removeHtmlComments())     //Remove HTML comments
     .pipe(removeEmptyLines())       //Remove empty lines left by comments etc.
     .pipe(gulp.dest('public'));     //Output to public folder
+});
+
+/**
+ * JS linting
+ */
+gulp.task('jslint', function() {
+  return es.merge(jsAppStream(), jsTestStream())
+    .pipe(cached('jslint'))
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish));
 });
 
 /**
@@ -177,17 +230,13 @@ gulp.task('build', ['static', 'index']);
 gulp.task('watch', function() {
 
   //Watch JS/HTML files
-  watch([
-    'client/app/**/*.js',
-    'client/common/**/*.js',
-    'client/app/**/*.html',
-    'client/common/**/*.html'
-  ], batch(function(events, done) {
+  watch(config.assets.watch.js, batch(function(events, done) {
+    gulp.start('jslint', done);
     gulp.start('js', done);
   }));
 
   //Watch SASS files
-  watch('client/app/**/*.scss', batch(function(events, done) {
+  watch(config.assets.watch.scss, batch(function(events, done) {
     gulp.start('sass', done);
   }));
 });

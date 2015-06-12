@@ -35,8 +35,8 @@ angular.module('MyApp', [
  * App constant
  */
 .constant('MyApp', {
-	id: 'MyApp',
-	name: 'My Application',
+	name: 'MyApp',
+	title: 'My Application',
 	version: '1.0.0'
 })
 
