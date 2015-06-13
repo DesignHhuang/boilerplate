@@ -60,7 +60,9 @@ module.exports = {
 			js: {
 				app: [
 					'server/app/**/*.js',
-					'server/common/**/*.js'
+					'server/app/**/*.json',
+					'server/common/**/*.js',
+					'server/common/**/*.json'
 				],
 				tests: [
 
@@ -79,6 +81,9 @@ module.exports = {
 		      'client/app/**/*.spec.js',
 		      'client/common/**/*.spec.js'
 				],
+				karma: [
+					'client/vendor/angular-mocks/angular-mocks.js'
+				],
 				vendor: [
 					'client/vendor/angular/angular.js',
 	        'client/vendor/angular-animate/angular-animate.js',
@@ -91,6 +96,10 @@ module.exports = {
 					'client/vendor/angular-ui-router/release/angular-ui-router.js'
 				]
 			},
+			coffee: [
+				'client/app/**/*.coffee',
+				'client/common/**/*.coffee'
+			],
 			html: [
 				'client/app/**/*.html',
 		    'client/common/**/*.html'

@@ -13,6 +13,7 @@ var sass = require('gulp-sass');
 var csso = require('gulp-csso');
 var es = require('event-stream');
 var batch = require('gulp-batch');
+var karma = require('gulp-karma');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var filter = require('gulp-filter');
@@ -21,6 +22,7 @@ var ignore = require('gulp-ignore');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var cached = require('gulp-cached');
+var coffee = require('gulp-coffee');
 var replace = require('gulp-replace');
 var wrapper = require('gulp-wrapper');
 var nodemon = require('gulp-nodemon');
@@ -39,7 +41,7 @@ var removeHtmlComments = require('gulp-remove-html-comments');
 var angularTemplateCache = require('gulp-angular-templatecache');
 
 /**
- * Package and environment
+ * Package and configuration
  */
 var pkg = require('./package.json');
 var env = require('./env');
@@ -54,7 +56,8 @@ var config = require('./config');
  */
 gulp.task('build', gulp.series(
   gulp.parallel(
-    clean, lintCode
+    clean, lintCode,
+    testClientCode
   ),
   gulp.parallel(
     buildStatic,
@@ -77,6 +80,13 @@ gulp.task('watch', gulp.parallel(
   watchClientTests, watchServerTests,
   watchStyles, watchStatic,
   startLiveReload
+));
+
+/**
+ * Run tests
+ */
+gulp.task('test', gulp.parallel(
+  testClientCode
 ));
 
 /**
@@ -152,6 +162,16 @@ function templatesStream() {
 }
 
 /**
+ * Coffeescript stream
+ */
+function coffeeStream() {
+  return gulp.src(config.assets.client.coffee)
+    .pipe(coffee({
+      bare: true
+    }).on('error', console.log));
+}
+
+/**
  * Environment module stream
  */
 function environmentStream() {
@@ -200,6 +220,7 @@ function buildStatic() {
 function buildAppJs() {
   return es.merge(
     gulp.src(config.assets.client.js.app),
+    coffeeStream(),
     templatesStream(),
     environmentStream()
   )
@@ -302,6 +323,25 @@ function lintCode() {
 }
 
 /*****************************************************************************
+ * Testers
+ ***/
+
+/**
+ * Run client unit tests
+ */
+function testClientCode() {
+  return gulp.src(config.assets.client.js.tests)
+    .pipe(karma({
+      configFile: 'karma.conf.js',
+      action: 'run'
+    }))
+    .on('error', function(err) {
+      //Make sure failed tests cause gulp to exit non-zero
+      throw err;
+    });
+}
+
+/*****************************************************************************
  * Bumpers
  ***/
 
@@ -375,12 +415,14 @@ function tagBump() {
 
 /**
  * Watch client side code
+ *
+ * (You can enable running unit tests on file save as well)
  */
 function watchClientCode() {
   gulp.watch([
     config.assets.client.js.app,
     config.assets.client.html
-  ], gulp.series(lintCode, buildAppJs, buildIndex));
+  ], gulp.series(lintCode, /*testClientCode,*/ buildAppJs, buildIndex));
 }
 
 /**
@@ -398,7 +440,7 @@ function watchServerCode() {
 function watchClientTests() {
   gulp.watch([
     config.assets.client.js.tests
-  ], gulp.series(lintCode));
+  ], gulp.series(lintCode, testClientCode));
 }
 
 /**

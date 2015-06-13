@@ -147,6 +147,9 @@ public
   |_ images
 ```
 
+## FAQ
+Ask away!
+
 ## Todo
 * Gulp SASS file linting. Current existing gulp tasks for this purpose depend on a Ruby gem.
 * Separate build tasks for development without concatenation/minification? Might not be necessary with the use of source maps, however, it would speed up the build tasks significantly.
