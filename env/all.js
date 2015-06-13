@@ -43,12 +43,30 @@ module.exports = {
 		path: './log'
 	},
 
+	/**
+	 * Paths
+	 */
+	paths: {
+		public: 'public',
+		client: 'client',
+		server: 'server'
+	},
+
   /**
    * Asset defintions
    */
 	assets: {
+		server: {
+			js: {
+				app: [
+					'server/app/**/*.js',
+					'server/common/**/*.js'
+				],
+				tests: [
 
-		//Client assets
+				]
+			}
+		},
 		client: {
 			js: {
 				app: [
@@ -57,7 +75,7 @@ module.exports = {
 		      '!client/app/**/*.spec.js',
 		      '!client/common/**/*.spec.js'
 				],
-				test: [
+				tests: [
 		      'client/app/**/*.spec.js',
 		      'client/common/**/*.spec.js'
 				],
@@ -79,8 +97,9 @@ module.exports = {
 			],
 			scss: {
 				app: [
-					'client/app/app.scss'
-				]
+					'client/app/**/*.scss'
+				],
+				main: 'client/app/app.scss'
 			},
 			css: {
 				app: [],
@@ -89,35 +108,6 @@ module.exports = {
 			static: [
 				'client/static/**/*'
 			]
-		},
-
-		//Server assets
-		server: {
-			js: [
-				'server/app/**/*.js',
-				'server/common/**/*.js'
-			]
-		},
-
-		//Watch assets
-		watch: {
-			client: {
-				js: [
-					'client/app/**/*.js',
-			    'client/common/**/*.js',
-			    'client/app/**/*.html',
-			    'client/common/**/*.html'
-				],
-				scss: [
-					'client/app/**/*.scss'
-				]
-			},
-			server: {
-				js: [
-					'server/app/**/*.js',
-					'server/common/**/*.js'
-				]
-			}
 		}
 	}
 };

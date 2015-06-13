@@ -5,7 +5,7 @@
 angular.module('App.Controller', [])
 
 /**
- * Controller
+ * Main application controller
  */
 .controller('AppCtrl', function($scope) {
 

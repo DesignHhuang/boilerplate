@@ -3,13 +3,15 @@
 /**
  * Dependencies
  */
-var es = require('event-stream');
+var fs = require('fs');
 var del = require('del');
 var glob = require('glob');
 var gulp = require('gulp');
+var git = require('gulp-git');
+var bump = require('gulp-bump');
 var sass = require('gulp-sass');
 var csso = require('gulp-csso');
-var watch = require('gulp-watch');
+var es = require('event-stream');
 var batch = require('gulp-batch');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
@@ -19,12 +21,14 @@ var ignore = require('gulp-ignore');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var cached = require('gulp-cached');
+var replace = require('gulp-replace');
 var wrapper = require('gulp-wrapper');
 var nodemon = require('gulp-nodemon');
 var stylish = require('jshint-stylish');
 var vinylBuffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 var preprocess = require('gulp-preprocess');
+var tagVersion = require('gulp-tag-version');
 var ngAnnotate = require('gulp-ng-annotate');
 var ngConstant = require('gulp-ng-constant');
 var autoprefixer = require('gulp-autoprefixer');
@@ -40,23 +44,79 @@ var pkg = require('./package.json');
 var env = require('./env');
 var config = require('./config');
 
-/**
- * Paths
- */
-var paths = {
-  public: 'public'
-};
+/*****************************************************************************
+ * CLI exposed tasks
+ ***/
 
 /**
- * TODO
- *  - SCSS linting: gulp-scss-lint requires ruby, need a gulp task without this
- *    dependency.
- *  - Preprocessing
+ * Build the application
  */
+gulp.task('build', gulp.series(
+  gulp.parallel(
+    clean, lintCode
+  ),
+  gulp.parallel(
+    buildStatic,
+    buildAppJs, buildAppScss,
+    buildVendorJs, buildVendorCss
+  ),
+  buildIndex
+));
+
+/**
+ * Start nodemon
+ */
+gulp.task('start', function () {
+  nodemon({
+    script: 'main.js'
+  });
+});
+
+/**
+ * Watch files for changes
+ */
+gulp.task('watch', gulp.parallel(
+  watchClientCode, watchServerCode,
+  watchClientTests, watchServerTests,
+  watchStyles, watchStatic
+));
+
+/**
+ * Bump version numbers
+ */
+gulp.task('patch', gulp.series(
+  patchBump, updateReadmeVersion, commitBump, tagBump
+));
+gulp.task('minor', gulp.series(
+  minorBump, updateReadmeVersion, commitBump, tagBump
+));
+gulp.task('major', gulp.series(
+  majorBump, updateReadmeVersion, commitBump, tagBump
+));
+
+/**
+ * Default task
+ */
+gulp.task('default', gulp.series(
+  'build', gulp.parallel('watch', 'start')
+));
+
+/**
+ * CLI accessible helper tasks
+ */
+gulp.task('clean', clean);
+gulp.task('static', buildStatic);
 
 /*****************************************************************************
  * Helpers
  ***/
+
+/**
+ * Get package JSON directly from file system
+ */
+function packageJson() {
+  return (pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8')));
+}
 
 /**
  * Get package file name
@@ -118,114 +178,86 @@ function environmentStream() {
 }
 
 /*****************************************************************************
- * Exposed tasks for CLI
- ***/
-
-/**
- * Build the application
- */
-gulp.task('build', gulp.series(
-  clean,
-  gulp.parallel(static, app, vendor),
-  index
-));
-
-/**
- * Clean the public folder
- */
-gulp.task(clean);
-
-/*****************************************************************************
- * Task functions
+ * Builders
  ***/
 
 /**
  * Clean the public folder
  */
 function clean(done) {
-  del(paths.public, done);
+  del(config.paths.public, done);
 }
 
 /**
- * Copy static client assets
+ * Build (copy) static client assets
  */
-function static() {
+function buildStatic() {
   return gulp.src(config.assets.client.static)
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest(config.paths.public));
 }
-
-/**
- * Build application SCSS files
- */
-gulp.task('app:scss', function() {
-  return gulp.src(config.assets.client.scss.app)
-    .pipe(sass().on('error', sass.logError))        //Compile into CSS
-    .pipe(sourcemaps.init())                        //Initialize source mapping
-      .pipe(autoprefixer({                          //Use auto prefixer
-         browsers: ['last 2 versions']
-       }))
-       .pipe(csso())                                //Optimize and minify CSS
-       .pipe(rename(packageFileName('.min.css')))   //Rename output file
-    .pipe(sourcemaps.write('./'))                   //Write source map file
-    .pipe(gulp.dest('public/css'));                 //Save to public folder
-});
 
 /**
  * Build application JS files
  */
-gulp.task('app:js', function() {
+function buildAppJs() {
   return es.merge(
     gulp.src(config.assets.client.js.app),
     templatesStream(),
     environmentStream()
   )
-    .pipe(ngAnnotate())                             //Annotate module dependencies
-    .pipe(sourcemaps.init())                        //Initialize source mapping
-      .pipe(concat(packageFileName('.min.js')))     //Concatenate to one file
-      .pipe(wrapper(angularWrapper()))              //Create wrapper
-      .pipe(uglify())                               //Minify jS
-    .pipe(sourcemaps.write('./'))                   //Write source map file
-    .pipe(gulp.dest('public/js'));                  //Save to public folder
-});
+    .pipe(ngAnnotate())
+    .pipe(sourcemaps.init())
+      .pipe(concat(packageFileName('.min.js')))
+      .pipe(wrapper(angularWrapper()))
+      .pipe(uglify())
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest(config.paths.public + '/js'));
+}
+
+/**
+ * Build application SCSS files
+ */
+function buildAppScss() {
+  return gulp.src(config.assets.client.scss.main)
+    .pipe(sass().on('error', sass.logError))
+    .pipe(sourcemaps.init())
+      .pipe(autoprefixer({
+         browsers: ['last 2 versions']
+       }))
+       .pipe(csso())
+       .pipe(rename(packageFileName('.min.css')))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest(config.paths.public + '/css'));
+}
 
 /**
  * Build vendor javascript files
  */
-gulp.task('vendor:js', function() {
+function buildVendorJs() {
   return gulp.src(config.assets.client.js.vendor)
-    .pipe(sourcemaps.init())                        //Initialize source mapping
-      .pipe(concat('vendor.min.js'))                //Concatenate to one file
-      .pipe(uglify())                               //Minify jS
-    .pipe(sourcemaps.write('./'))                   //Write source map file
-    .pipe(gulp.dest('public/js'));                  //Save to public folder
-});
+    .pipe(sourcemaps.init())
+      .pipe(concat('vendor.min.js'))
+      .pipe(uglify())
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest(config.paths.public + '/js'));
+}
 
 /**
  * Process vendor CSS files
  */
-gulp.task('vendor:css', function() {
+function buildVendorCss() {
   return gulp.src(config.assets.client.css.vendor)
-    .pipe(sourcemaps.init())                        //Initialize source mapping
-       .pipe(csso())                                //Optimize and minify CSS
-       .pipe(rename('vendor.min.css'))              //Rename output file
-    .pipe(sourcemaps.write('./'))                   //Write source map file
-    .pipe(gulp.dest('public/css'));                 //Save to public folder
-});
-
-/**
- * Combined app/vendor build tasks
- */
-gulp.task('app', function() {
-  return gulp.start('app:js', 'app:scss');
-});
-gulp.task('vendor', function() {
-  return gulp.start('vendor:js', 'vendor:css');
-});
+    .pipe(sourcemaps.init())
+       .pipe(csso())
+       .pipe(rename('vendor.min.css'))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest(config.paths.public + '/css'));
+}
 
 /**
  * Build index.html file
  */
-gulp.task('index', ['app', 'vendor'], function() {
+function buildIndex() {
 
   //Read sources (in correct order)
   var sources = gulp.src([
@@ -236,80 +268,163 @@ gulp.task('index', ['app', 'vendor'], function() {
     'css/**/*.css',
     'css/' + packageFileName('.min.css')
   ], {
-    cwd: 'public',
+    cwd: config.paths.public,
     read: false
   });
 
   //Run task
-  return gulp.src('public/index.html')
-    .pipe(inject(sources, {         //Inject the sources
+  return gulp.src(config.paths.public + '/index.html')
+    .pipe(inject(sources, {
       addRootSlash: false
     }))
-    .pipe(preprocess())             //Preprocess
-    .pipe(removeHtmlComments())     //Remove HTML comments
-    .pipe(removeEmptyLines())       //Remove empty lines left by comments etc.
-    .pipe(gulp.dest('public'));     //Output to public folder
-});
+    .pipe(preprocess())
+    .pipe(removeHtmlComments())
+    .pipe(removeEmptyLines())
+    .pipe(gulp.dest(config.paths.public));
+}
 
 /*****************************************************************************
- * Linting tasks
+ * Linters
  ***/
 
 /**
- * JS linting
+ * Code linting
  */
-gulp.task('jslint', function() {
+function lintCode() {
   return es.merge(
-    gulp.src(config.assets.client.js),
-    gulp.src(config.assets.client.test),
-    gulp.src(config.assets.server.js)
+    gulp.src(config.assets.client.js.app),
+    gulp.src(config.assets.client.js.tests),
+    gulp.src(config.assets.server.js.app),
+    gulp.src(config.assets.server.js.tests)
   )
     .pipe(cached('jslint'))
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
-});
+}
 
 /*****************************************************************************
- * Run & watch tasks
+ * Bumpers
  ***/
 
 /**
- * Start nodemon
+ * Bump version number (patch)
  */
-gulp.task('start', function () {
-  nodemon({
-    script: 'main.js'
-  });
-});
+function patchBump() {
+  return gulp.src([
+    './package.json',
+    './bower.json'
+  ]).pipe(bump({type: 'patch'}))
+    .pipe(gulp.dest('./'));
+}
 
 /**
- * Watch task
+ * Bump version number (minor)
  */
-gulp.task('watch', ['build'], function() {
-
-  //Watch static assets
-  watch(config.assets.client.static, batch(function(events, done) {
-    gulp.start('static', done);
-  }));
-
-  //Watch server JS files (these only need to be linted)
-  watch(config.assets.watch.server.js, batch(function(events, done) {
-    gulp.start('jslint', done);
-  }));
-
-  //Watch client JS/HTML files (these need linting and compiling)
-  watch(config.assets.watch.client.js, batch(function(events, done) {
-    gulp.start('jslint', done);
-    gulp.start('js', done);
-  }));
-
-  //Watch SASS files
-  watch(config.assets.watch.client.scss, batch(function(events, done) {
-    gulp.start('sass', done);
-  }));
-});
+function minorBump() {
+  return gulp.src([
+    './package.json',
+    './bower.json'
+  ]).pipe(bump({type: 'minor'}))
+    .pipe(gulp.dest('./'));
+}
 
 /**
- * Default task
+ * Bump version number (major)
  */
-gulp.task('default', ['build', 'watch', 'start']);
+function majorBump() {
+  return gulp.src([
+    './package.json',
+    './bower.json'
+  ]).pipe(bump({type: 'major'}))
+    .pipe(gulp.dest('./'));
+}
+
+/**
+ * Update version in readme
+ */
+function updateReadmeVersion() {
+  return gulp.src([
+    './README.md'
+  ]).pipe(replace({
+    /([0-9]\.[0-9]+\.[0-9]+)/g, packageJson().version
+  })).pipe(gulp.dest('./'));
+}
+
+/**
+ * Commit the version bump
+ */
+function commitBump() {
+  return gulp.src([
+    './package.json',
+    './bower.json',
+    './README.md'
+  ]).pipe(git.commit('Bump version to ' + packageJson().version));
+}
+
+/**
+ * Tag latest commit with current version
+ */
+function tagBump() {
+  return gulp.src([
+    './package.json'
+  ]).pipe(tagVersion());
+}
+
+/*****************************************************************************
+ * Watchers
+ ***/
+
+/**
+ * Watch client side code
+ */
+function watchClientCode() {
+  gulp.watch([
+    config.assets.client.js.app,
+    config.assets.client.html
+  ], gulp.series(lintCode, buildAppJs, buildIndex));
+}
+
+/**
+ * Watch server side code
+ */
+function watchServerCode() {
+  gulp.watch([
+    config.assets.server.js.app
+  ], gulp.series(lintCode));
+}
+
+/**
+ * Watch client side tests
+ */
+function watchClientTests() {
+  gulp.watch([
+    config.assets.client.js.tests
+  ], gulp.series(lintCode));
+}
+
+/**
+ * Watch server side tests
+ */
+function watchServerTests() {
+  gulp.watch([
+    config.assets.server.js.tests
+  ], gulp.series(lintCode));
+}
+
+/**
+ * Watch styles
+ */
+function watchStyles() {
+  gulp.watch([
+    config.assets.client.scss.app
+  ], gulp.series(buildAppScss));
+}
+
+/**
+ * Watch static files
+ */
+function watchStatic() {
+  gulp.watch([
+    config.assets.client.static
+  ], gulp.series(buildStatic));
+}
