@@ -148,7 +148,13 @@ public
 ```
 
 ## FAQ
-Ask away!
+#### How is Meanie different from [MEAN.JS](https://github.com/meanjs/mean)?
+The most important difference is that Meanie uses a modular approach to folder/file structure, whereas MEAN.JS has more of a "sock drawer" approach to organizing files. A modular approach is easier to navigate, easier to reuse and easier to develop with.
+
+Other differences are:
+* Meanie uses Gulp 4 as it's task runner instead of Grunt.
+* Meanie doesn't serve the Angular HTML files as views, but instead leverages powerful Gulp tasks to compile and pre-process these files.
+* Meanie has a simple overarching environment/configuration system that makes it a breeze to use your specific environment configuration options in your server app, client app, and even in your gulpfile and Karma configuration file.
 
 ## Todo
 * Gulp SASS file linting. Current existing gulp tasks for this purpose depend on a Ruby gem.
