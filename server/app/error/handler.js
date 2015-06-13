@@ -1,7 +1,12 @@
 'use strict';
 
 /**
- * Module dependencies
+ * External dependencies
+ */
+var chalk = require('chalk');
+
+/**
+ * Application dependencies
  */
 var config = require('app/config');
 

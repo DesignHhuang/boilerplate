@@ -38,14 +38,18 @@ module.exports = {
 
     //Use rotating log file
     if (config.log.rotate) {
-      fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+			if (!fs.existsSync(logDirectory)) {
+				fs.mkdirSync(logDirectory);
+			}
       config.log.rotate.filename = logDirectory + '/' + config.log.rotate.filename;
       options.stream = fileStreamRotator.getStream(config.log.rotate);
     }
 
     //Use single file
     else if (config.log.filename) {
-      fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+      if (!fs.existsSync(logDirectory)) {
+				fs.mkdirSync(logDirectory);
+			}
       config.log.filename = logDirectory + '/' + config.log.filename;
       options.stream = fs.createWriteStream(config.log.filename, {
         flags: 'a'

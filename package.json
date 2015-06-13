@@ -45,7 +45,7 @@
   "devDependencies": {
     "del": "^1.2.0",
     "event-stream": "^3.3.1",
-    "gulp": "^3.9.0",
+    "gulp": "gulpjs/gulp#4.0",
     "gulp-angular-templatecache": "^1.6.0",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-batch": "^1.0.5",
@@ -58,6 +58,7 @@
     "gulp-jshint": "^1.11.0",
     "gulp-ng-annotate": "^1.0.0",
     "gulp-ng-constant": "^0.3.0",
+    "gulp-nodemon": "^2.0.3",
     "gulp-preprocess": "^1.2.0",
     "gulp-remove-empty-lines": "0.0.2",
     "gulp-remove-html-comments": "^1.0.1",
