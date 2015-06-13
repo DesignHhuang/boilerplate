@@ -92,12 +92,17 @@ module.exports = function() {
 		});
 	});*/
 
-  //Assume 404 since no middleware responded
+  //Send all other requests to Angular
 	app.use(function(req, res) {
-		res.status(404).render('404', {
+
+		//Use res.sendfile, as it streams instead of reading the file into memory.
+  	res.sendfile(path.resolve('./public/index.html'));
+
+		//Or uncomment if you wish to handle 404's on the server
+		/*res.status(404).render('404', {
 			url: req.originalUrl,
 			error: 'Not Found'
-		});
+		});*/
 	});
 
 	//Error handling

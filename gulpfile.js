@@ -292,11 +292,15 @@ function buildIndex() {
   });
 
   //Run task
-  return gulp.src(config.paths.public + '/index.html')
+  return gulp.src(config.assets.client.index)
     .pipe(inject(sources, {
       addRootSlash: false
     }))
-    .pipe(preprocess())
+    .pipe(preprocess({
+      context: {
+        ENV: env
+      }
+    }))
     .pipe(removeHtmlComments())
     .pipe(removeEmptyLines())
     .pipe(gulp.dest(config.paths.public))
@@ -468,6 +472,15 @@ function watchStatic() {
   gulp.watch([
     config.assets.client.static
   ], gulp.series(buildStatic));
+}
+
+/**
+ * Watch index HTML file
+ */
+function watchIndex() {
+  gulp.watch([
+    config.assets.client.index
+  ], gulp.series(buildIndex));
 }
 
 /*****************************************************************************

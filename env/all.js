@@ -115,8 +115,10 @@ module.exports = {
 				vendor: []
 			},
 			static: [
-				'client/static/**/*'
-			]
+				'client/static/**/*',
+				'!client/static/index.html'
+			],
+			index: 'client/static/index.html'
 		}
 	}
 };

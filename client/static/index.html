@@ -21,6 +21,12 @@
 			angular.bootstrap(document.getElementsByTagName('html')[0], ['App']);
 		}, 10);
   });
+	<!-- @if ENV='production' -->
+	//Include Google analytics etc.
+	<!-- @endif -->
 </script>
+<!-- @if ENV='development' -->
+
+<!-- @endif -->
 </body>
 </html>
