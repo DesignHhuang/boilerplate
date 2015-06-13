@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Global environment configuration
+ * Development environment configuration
  */
 module.exports = {
 
@@ -9,8 +9,15 @@ module.exports = {
    * App settings
    */
 	app: {
-		title: 'MyApp (Dev environment)'
+		title: 'Meanie Boilerplate (development environment)'
 	},
+
+	/**
+   * Server settings
+   */
+	server: {
+    port: process.env.PORT || 8080,
+  },
 
   /**
    * Log settings
@@ -22,11 +29,11 @@ module.exports = {
   /**
    * Database settings
    */
-   db: {
- 		uri: 'mongodb://localhost/myapp',
+  db: {
+ 		uri: 'mongodb://localhost/meanie',
  		options: {
  			user: '',
  			pass: ''
  		}
- 	},
+ 	}
 };

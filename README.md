@@ -148,19 +148,26 @@ public
 ```
 
 ## FAQ
-#### How is Meanie different from [MEAN.JS](https://github.com/meanjs/mean)?
-The most important difference is that Meanie uses a modular approach to folder/file structure, whereas MEAN.JS has more of a "sock drawer" approach to organizing files. A modular approach is easier to navigate, easier to reuse and easier to develop with.
+
+#### How is Meanie different from other MEAN boilerplates?
+The most important difference between Meanie and other MEAN boilerplates like [MEAN.JS](https://github.com/meanjs/mean), is that Meanie uses a [modular approach to folder/file structuring](http://cliffmeyers.com/blog/2013/4/21/code-organization-angularjs-javascript), whereas most others use more of a "sock drawer" approach to organizing files. Meanie thinks that a modular approach is easier to navigate, easier to reuse/refactor, and easier to develop with.
 
 Other differences are:
 * Meanie uses Gulp 4 as it's task runner instead of Grunt.
 * Meanie doesn't serve the Angular HTML files as views, but instead leverages powerful Gulp tasks to compile and pre-process these files.
 * Meanie has a simple overarching environment/configuration system that makes it a breeze to use your specific environment configuration options in your server app, client app, and even in your gulpfile and Karma configuration file.
 
+#### Why doesn't Meanie use Yeoman?
+[Yeoman](http://yeoman.io/) prescribes a particular folder structure (e.g. must have /app in your root), whereas Meanie likes to split your code between server/ and client/ first.
+
 ## Todo
+* Create Meanie CLI tool for easy installation of additional modules and initializing new projects.
 * Gulp SASS file linting. Current existing gulp tasks for this purpose depend on a Ruby gem.
 * Separate build tasks for development without concatenation/minification? Might not be necessary with the use of source maps, however, it would speed up the build tasks significantly.
 
 ## Further reading
+* [Modular vs sock drawer folder structure](http://cliffmeyers.com/blog/2013/4/21/code-organization-angularjs-javascript)
 * [Editor config](http://editorconfig.org)
 * [Bower configuration](http://bower.io/docs/config/)
 * [JSHint configuration](http://jshint.com/docs/options/)
+* [Debugging Javascript](https://developer.chrome.com/devtools/docs/javascript-debugging)

@@ -6,7 +6,7 @@
 var pkg = require('../package.json');
 
 /**
- * Global environment configuration
+ * Shared environment configuration
  */
 module.exports = {
 
@@ -16,7 +16,7 @@ module.exports = {
 	app: {
 		name: pkg.name,
 		version: pkg.version,
-    title: 'MyApp',
+    title: 'Meanie Boilerplate',
 		baseUrl: '/',
 		api: {
 			baseUrl: '/api/v1/'
@@ -27,13 +27,6 @@ module.exports = {
 			}
 		}
 	},
-
-  /**
-   * Server settings
-   */
-	server: {
-    port: process.env.PORT || 8080,
-  },
 
   /**
    * Log settings

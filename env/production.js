@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Global environment configuration
+ * Production environment configuration
  */
 module.exports = {
 
@@ -9,7 +9,7 @@ module.exports = {
    * Server settings
    */
 	server: {
-    port: process.env.PORT || 80,
+    port: 80,
   },
 
   /**
@@ -22,5 +22,16 @@ module.exports = {
       frequency: 'daily',
       verbose: false
     }
-	}
+	},
+
+	/**
+   * Database settings
+   */
+  db: {
+ 		uri: 'mongodb://localhost/meanie',
+ 		options: {
+ 			user: '',
+ 			pass: ''
+ 		}
+ 	}
 };
