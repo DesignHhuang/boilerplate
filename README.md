@@ -1,16 +1,83 @@
 # Meanie
 
 ## About
-Meanie is a boilerplate for developing full-stack modular javascript applications using the MEAN stack: MongoDB, Express, AngularJS and Node.js.
+Meanie is a boilerplate for developing full-stack modular javascript applications using the MEAN stack (MongoDB, Express, AngularJS and Node.js) powered by the Gulp task runner.
 
 ## Installation
+```shell
 
+```
 
 ## Gulp tasks
-Meanie comes with fully configured Gulp tasks that just work out of the box.
+Meanie comes with fully configured [Gulp](http://gulpjs.com/) tasks for all common development and build tasks.
 
-### Gulp 4
-The gulpfile for Meanie has been configured for use with Gulp version 4. This version is not officially released yet, but you can install and use the alpha version by following  [these instructions](http://demisx.github.io/gulp4/2015/01/15/install-gulp4.html).
+*Note*: The gulpfile for Meanie has been configured for use with Gulp version 4. This version is not officially released yet, but you can install and use the alpha version by following  [these instructions](http://demisx.github.io/gulp4/2015/01/15/install-gulp4.html).
+
+### Default task
+The default task, which you can run by simply typing `gulp` is to run the thre main tasks, build, watch and start. This is perfect for ongoing development.
+```shell
+$ gulp
+```
+
+### Main tasks
+You can also run the three main tasks individually:
+
+#### Build
+Build the application and populate the public folder with compiled javascript, stylesheets and static assets.
+```shell
+$ gulp build
+```
+
+#### Watch
+Watch your files for changes and runs linters, unit tests and recompiles the application files as needed.
+```shell
+$ gulp watch
+```
+The watch task also comes with livereload, which gets triggered every time the index file is rebuilt. To use it, simply install the [Chrome livereload plugin](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei?hl=en).
+
+#### Start
+Starts the Node server using [Nodemon](http://nodemon.io/).
+```shell
+$ gulp start
+```
+
+### Versioning tasks
+There are three versioning tasks which help you bump your version numbers in your package files and automatically update the version in your README file, as well as commit the bump to the repository and tag it with the new version.
+
+This process uses [semantic versioning](https://github.com/npm/node-semver).
+
+#### Bump patch version
+Bump the patch version number (0.1.0 -> 0.1.1)
+```shell
+$ gulp patch
+```
+
+#### Bump minor version
+Bump the patch version number (0.1.0 -> 0.2.0)
+```shell
+$ gulp minor
+```
+
+#### Bump major version
+Bump the patch version number (0.1.0 -> 1.0.0)
+```shell
+$ gulp major
+```
+
+### Helper tasks
+Some of the helper tasks have also been exposed to the CLI:
+
+#### Clean
+Cleans the public folder.
+```shell
+$ gulp clean
+```
+
+#### Static
+Copy all static assets to the public folder.
+```shell
+$ gulp static
+```
 
 ## Folder structure
 The following is an outline of the folder structure of this boilerplate:
@@ -80,9 +147,11 @@ public
   |_ images
 ```
 
+## Todo
+* Gulp SASS file linting. Current existing gulp tasks for this purpose depend on a Ruby gem.
+* Separate build tasks for development without concatenation/minification? Might not be necessary with the use of source maps, however, it would speed up the build tasks significantly.
+
 ## Further reading
-* [Gulp task runner](http://gulpjs.com/)
-* [Semantic versioning](https://github.com/npm/node-semver)
 * [Editor config](http://editorconfig.org)
 * [Bower configuration](http://bower.io/docs/config/)
 * [JSHint configuration](http://jshint.com/docs/options/)

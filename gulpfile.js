@@ -26,6 +26,7 @@ var wrapper = require('gulp-wrapper');
 var nodemon = require('gulp-nodemon');
 var stylish = require('jshint-stylish');
 var vinylBuffer = require('vinyl-buffer');
+var livereload = require('gulp-livereload');
 var sourcemaps = require('gulp-sourcemaps');
 var preprocess = require('gulp-preprocess');
 var tagVersion = require('gulp-tag-version');
@@ -64,13 +65,9 @@ gulp.task('build', gulp.series(
 ));
 
 /**
- * Start nodemon
+ * Start server
  */
-gulp.task('start', function () {
-  nodemon({
-    script: 'main.js'
-  });
-});
+gulp.task('start', startNodemon);
 
 /**
  * Watch files for changes
@@ -78,7 +75,8 @@ gulp.task('start', function () {
 gulp.task('watch', gulp.parallel(
   watchClientCode, watchServerCode,
   watchClientTests, watchServerTests,
-  watchStyles, watchStatic
+  watchStyles, watchStatic,
+  startLiveReload
 ));
 
 /**
@@ -102,7 +100,7 @@ gulp.task('default', gulp.series(
 ));
 
 /**
- * CLI accessible helper tasks
+ * Helper tasks accessible via CLI
  */
 gulp.task('clean', clean);
 gulp.task('static', buildStatic);
@@ -280,7 +278,8 @@ function buildIndex() {
     .pipe(preprocess())
     .pipe(removeHtmlComments())
     .pipe(removeEmptyLines())
-    .pipe(gulp.dest(config.paths.public));
+    .pipe(gulp.dest(config.paths.public))
+    .pipe(livereload());
 }
 
 /*****************************************************************************
@@ -345,9 +344,9 @@ function majorBump() {
 function updateReadmeVersion() {
   return gulp.src([
     './README.md'
-  ]).pipe(replace({
+  ]).pipe(replace(
     /([0-9]\.[0-9]+\.[0-9]+)/g, packageJson().version
-  })).pipe(gulp.dest('./'));
+  )).pipe(gulp.dest('./'));
 }
 
 /**
@@ -427,4 +426,24 @@ function watchStatic() {
   gulp.watch([
     config.assets.client.static
   ], gulp.series(buildStatic));
+}
+
+/*****************************************************************************
+ * Starters
+ ***/
+
+/**
+ * Start nodemon
+ */
+function startNodemon() {
+  nodemon({
+    script: 'main.js'
+  });
+}
+
+/**
+ * Start live reload
+ */
+function startLiveReload() {
+  livereload.listen();
 }
