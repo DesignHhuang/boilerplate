@@ -1,7 +1,7 @@
 # Meanie Core
 
 ## About
-The Meanie Core module consists of the boilerplate core and is required for all Meanie projects.
+The Meanie Core module consists of the boilerplate core and is required for all [Meanie](https://github.com/meanie/meanie) projects.
 
 ## Installation
 ```shell
@@ -19,4 +19,4 @@ meanie create .
 ## What is Meanie?
 Meanie is a boilerplate for developing full-stack modular javascript applications using the MEAN stack (MongoDB, Express, AngularJS and Node.js) powered by the Gulp task runner.
 
-For more information, see the [Meanie](https://github.com/meanie/meanie) GitHub page.
+For more information, see the main [Meanie](https://github.com/meanie/meanie) page.
