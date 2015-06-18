@@ -1,6 +1,6 @@
 {
-  "name": "meanie",
-  "description": "Meanie is a boilerplate for developing full-stack modular javascript applications using the MEAN stack: MongoDB, Express, AngularJS and Node.js.",
+  "name": "My Application",
+  "description": "",
   "version": "0.0.1",
   "private": false,
   "license": "LicenseRef-LICENSE.md",
@@ -10,24 +10,15 @@
     "email": "me@adambuczynski.com",
     "url": "http://adambuczynski.com/"
   },
-  "contributors": [
-    {
-      "name": "Adam Buczynski",
-      "email": "me@adambuczynski.com",
-      "url": "http://adambuczynski.com/"
-    }
-  ],
+  "contributors": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/meanie/mean"
+    "url": "https://github.com/my/application"
   },
   "bugs": {
-    "url": "https://github.com/meanie/mean/issues"
+    "url": "https://github.com/my/applicaition/issues"
   },
-  "tags": [
-    "mean", "boilerplate", "full-stack", "angular", "mongodb", "node", "express",
-    "meanie-plugin"
-  ],
+  "tags": [],
   "engines": {
     "node": ">=0.12.4",
     "npm": ">=2.10.1",
