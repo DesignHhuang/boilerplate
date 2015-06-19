@@ -59,7 +59,8 @@ var config = require('./config');
 gulp.task('build', gulp.series(
   gulp.parallel(
     clean, lintCode,
-    testClientCode
+    testServerCode,
+    testClientCode 
   ),
   gulp.parallel(
     buildStatic,
