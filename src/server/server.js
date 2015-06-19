@@ -3,7 +3,7 @@
 /**
  * Add server folder to path
  */
-require('app-module-path').addPath(__dirname + '/server');
+require('app-module-path').addPath(__dirname);
 
 /**
  * External dependencies

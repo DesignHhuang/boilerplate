@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Default script, environment and launcher
-script="main.js"
+script="server/server.js"
 launcher="nodemon"
 environment="development"
 
