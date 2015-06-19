@@ -1,9 +1,6 @@
 # Meanie - Boilerplate
 The Meanie Boilerplate module consists of the boilerplate core and is required for all [Meanie](https://github.com/meanie/meanie) projects.
 
-* [Meanie Boilerplate @ npm](https://www.npmjs.com/package/meanie-boilerplate)
-* [Meanie Boilerplate @ github](https://github.com/meanie/meanie-boilerplate)
-
 ## What is Meanie?
 Meanie is a boilerplate for developing full-stack modular javascript applications using the MEAN stack (MongoDB, Express, AngularJS and Node.js), powered by the Gulp task runner.
 

@@ -1,7 +1,7 @@
 {
   "name": "meanie-boilerplate",
   "description": "The Meanie Boilerplate module consists of the boilerplate core and is required for all Meanie projects.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "license": "MIT",
   "author": {
