@@ -9,16 +9,10 @@ angular.module('App.Nav.Menu.Service', [])
  */
 .factory('Menu', function() {
 	return {
-
-		//Main menu items
 		main: [
 			{
-				sref: "home",
-				title: "Home"
-			},
-			{
-				sref: "secure",
-				title: "Secure page"
+				sref: 'home',
+				title: 'Home'
 			}
 		]
 	};
