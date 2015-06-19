@@ -2,7 +2,7 @@
 /**
  * Specifications
  */
-describe('Client app', function() {
+describe('Server app', function() {
 
 	/**
 	 * Main test

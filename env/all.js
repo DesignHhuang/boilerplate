@@ -55,10 +55,13 @@ module.exports = {
 					'server/app/**/*.js',
 					'server/app/**/*.json',
 					'server/common/**/*.js',
-					'server/common/**/*.json'
+					'server/common/**/*.json',
+				  '!server/app/**/*.spec.js',
+		      '!server/common/**/*.spec.js'
 				],
 				tests: [
-
+					'server/app/**/*.spec.js',
+		      'server/common/**/*.spec.js'
 				]
 			}
 		},

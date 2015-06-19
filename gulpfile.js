@@ -26,6 +26,7 @@ var coffee = require('gulp-coffee');
 var replace = require('gulp-replace');
 var wrapper = require('gulp-wrapper');
 var nodemon = require('gulp-nodemon');
+var jasmine = require('gulp-jasmine');
 var stylish = require('jshint-stylish');
 var vinylBuffer = require('vinyl-buffer');
 var livereload = require('gulp-livereload');
@@ -35,6 +36,7 @@ var tagVersion = require('gulp-tag-version');
 var ngAnnotate = require('gulp-ng-annotate');
 var ngConstant = require('gulp-ng-constant');
 var autoprefixer = require('gulp-autoprefixer');
+var jasminereporter = require('jasmine-spec-reporter');
 var vinylSourceStream = require('vinyl-source-stream');
 var removeEmptyLines = require('gulp-remove-empty-lines');
 var removeHtmlComments = require('gulp-remove-html-comments');
@@ -85,9 +87,11 @@ gulp.task('watch', gulp.parallel(
 /**
  * Run tests
  */
-gulp.task('test', gulp.parallel(
-  testClientCode
+gulp.task('test', gulp.series(
+  testServerCode, testClientCode
 ));
+gulp.task('test-server', testServerCode);
+gulp.task('test-client', testClientCode);
 
 /**
  * Bump version numbers
@@ -331,7 +335,7 @@ function lintCode() {
  ***/
 
 /**
- * Run client unit tests
+ * Run client side unit tests
  */
 function testClientCode() {
   return gulp.src(config.assets.client.js.tests)
@@ -343,6 +347,16 @@ function testClientCode() {
       //Make sure failed tests cause gulp to exit non-zero
       throw err;
     });
+}
+
+/**
+ * Run server side unit tests
+ */
+function testServerCode() {
+  return gulp.src(config.assets.server.js.tests)
+    .pipe(jasmine({
+      reporter: new jasminereporter()
+    }));
 }
 
 /*****************************************************************************
