@@ -33,4 +33,4 @@ angular.module('Common.Angular.ScopeExtension', [])
 			func();
 		});
 	};
-})
+});

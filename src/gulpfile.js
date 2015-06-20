@@ -60,7 +60,7 @@ gulp.task('build', gulp.series(
   gulp.parallel(
     clean, lintCode,
     testServerCode,
-    testClientCode 
+    testClientCode
   ),
   gulp.parallel(
     buildStatic,
@@ -507,7 +507,7 @@ function watchIndex() {
  */
 function startNodemon() {
   nodemon({
-    script: 'main.js'
+    script: 'server/server.js'
   });
 }
 

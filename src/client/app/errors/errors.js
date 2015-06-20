@@ -39,8 +39,8 @@ angular.module('App.Errors', [
 
 	//Exception handling
 	$provide.decorator('$exceptionHandler', function($log, $delegate) {
-        return function(exception, cause) {
-        	$delegate(exception, cause);
-        };
-    });
+    return function(exception, cause) {
+    	$delegate(exception, cause);
+    };
+  });
 });

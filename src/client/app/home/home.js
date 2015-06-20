@@ -13,8 +13,8 @@ angular.module('App.Home', [
 
 	//State definition
 	$stateProvider.state('home', {
-		url:			'/',
-		controller:		'HomeCtrl',
-		templateUrl:	'home/home.html'
+		url: '/',
+		controller: 'HomeCtrl',
+		templateUrl: 'home/home.html'
 	});
 });

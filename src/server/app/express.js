@@ -72,9 +72,9 @@ module.exports = function() {
   //Set static folder
 	app.use(express.static(path.resolve('./public')));
 
-	app.get('/', function (req, res) {
+	/*app.get('/', function (req, res) {
   	res.send('Heers');
-	});
+	});*/
 
   /*app.use(function(err, req, res, next) {
 
@@ -92,18 +92,10 @@ module.exports = function() {
 		});
 	});*/
 
-  //Send all other requests to Angular
-	app.use(function(req, res) {
-
-		//Use res.sendfile, as it streams instead of reading the file into memory.
-  	res.sendfile(path.resolve('./public/index.html'));
-
-		//Or uncomment if you wish to handle 404's on the server
-		/*res.status(404).render('404', {
-			url: req.originalUrl,
-			error: 'Not Found'
-		});*/
-	});
+	//Send all other requests to Angular
+  app.all('/*', function(req, res) {
+    res.sendFile(path.resolve('./public/index.html'));
+  });
 
 	//Error handling
 	app.use(function(err, req, res, next) {

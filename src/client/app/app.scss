@@ -1,30 +1,16 @@
 
 /**
- * Variables
+ * Load variables and main layout entry point
  */
-// @import 'layout/variables';
+@import 'layout/variables';
+@import 'layout/layout';
 
 /**
- * Common
+ * Load modules layout
  */
-@import 'layout/common/html5reset';
-@import 'layout/common/fontello';
+@import 'home/home';
 
 /**
- * Site and components
- */
-// @import 'layout/layout';
-// @import 'layout/header';
-// @import 'layout/footer';
-// @import 'layout/ui/forms';
-// @import 'layout/ui/buttons';
-
-/**
- * Modules
- */
-// @import 'user/user';
-
-/**
- * Overrides
+ * Overrides at the end
  */
 @import 'layout/common/overrides';

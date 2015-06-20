@@ -1,0 +1,43 @@
+
+/**
+ * Positioning
+ */
+.pull-left {
+	float: left;
+}
+.pull-right {
+	float: right;
+}
+.clear:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+/**
+ * Utility classes
+ */
+.pointer {
+	cursor: pointer;
+}
+.hidden {
+	display: none;
+}
+.no-whitespace {
+	font-size: 0;
+}
+
+/**
+ * Fade in/out classes
+ */
+.fade {
+	&.ng-hide-remove, &.ng-hide-add.ng-hide-add-active {
+		opacity: 0;
+	}
+	&.ng-hide-add, &.ng-hide-remove.ng-hide-remove-active {
+		opacity: 1;
+	}
+	&.out.ng-hide-add.ng-hide-add-active, &.in.ng-hide-remove.ng-hide-remove-active {
+		transition: opacity .2s linear;
+	}
+}
