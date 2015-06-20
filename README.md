@@ -1,4 +1,7 @@
 # Meanie - Boilerplate
+
+[![npm version](https://badge.fury.io/js/meanie-boilerplate.svg)](http://badge.fury.io/js/meanie-boilerplate) [![Join the chat at https://gitter.im/meanie/meanie](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/meanie/meanie?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 The boilerplate framework for new [Meanie](https://github.com/meanie/meanie) projects.
 
 ## Installation
