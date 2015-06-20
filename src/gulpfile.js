@@ -135,8 +135,12 @@ function packageJson() {
 /**
  * Get package file name
  */
-function packageFileName(ext) {
-  return pkg.name.toLowerCase() + '-' + pkg.version + (ext || '');
+function packageFileName(filename, ext) {
+  if (!ext) {
+    ext = filename;
+    filename = pkg.name.toLowerCase();
+  }
+  return filename + '-' + pkg.version + (ext || '');
 }
 
 /**
@@ -289,7 +293,7 @@ function buildAppScss() {
 function buildVendorJs() {
   return gulp.src(config.assets.client.js.vendor)
     .pipe(sourcemaps.init())
-      .pipe(concat('vendor.min.js'))
+      .pipe(concat(packageFileName('vendor', '.min.js')))
       .pipe(uglify())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(config.paths.public + '/js'));
@@ -302,7 +306,7 @@ function buildVendorCss() {
   return gulp.src(config.assets.client.css.vendor)
     .pipe(sourcemaps.init())
        .pipe(csso())
-       .pipe(rename('vendor.min.css'))
+       .pipe(rename(packageFileName('vendor', '.min.css')))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(config.paths.public + '/css'))
     .pipe(livereload());
@@ -315,10 +319,10 @@ function buildIndex() {
 
   //Read sources (in correct order)
   var sources = gulp.src([
-    'js/vendor.min.js',
+    'js/' + packageFileName('vendor', '.min.js'),
     'js/**/*.js',
     'js/' + packageFileName('.min.js'),
-    'css/vendor.min.css',
+    'css/' + packageFileName('vendor', '.min.css'),
     'css/**/*.css',
     'css/' + packageFileName('.min.css')
   ], {
