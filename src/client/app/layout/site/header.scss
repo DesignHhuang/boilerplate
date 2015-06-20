@@ -27,8 +27,7 @@
 					cursor: pointer;
 					color: $colorWhite;
 					&:hover {
-						text-decoration: none;
-						color: $colorText;
+						text-decoration: underline;
 					}
 				}
 			}

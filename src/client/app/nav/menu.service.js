@@ -12,7 +12,7 @@ angular.module('App.Nav.Menu.Service', [])
 		main: [
 			{
 				sref: 'home',
-				title: 'Home'
+				title: 'home'
 			}
 		]
 	};
