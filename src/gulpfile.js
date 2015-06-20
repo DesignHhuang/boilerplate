@@ -5,20 +5,16 @@
  */
 var fs = require('fs');
 var del = require('del');
-var glob = require('glob');
 var gulp = require('gulp');
 var git = require('gulp-git');
 var bump = require('gulp-bump');
 var sass = require('gulp-sass');
 var csso = require('gulp-csso');
 var es = require('event-stream');
-var batch = require('gulp-batch');
 var karma = require('gulp-karma');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var filter = require('gulp-filter');
 var inject = require('gulp-inject');
-var ignore = require('gulp-ignore');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var cached = require('gulp-cached');
@@ -81,7 +77,7 @@ gulp.task('start', startNodemon);
 gulp.task('watch', gulp.parallel(
   watchClientCode, watchServerCode,
   watchClientTests, watchServerTests,
-  watchVendorCode,
+  watchVendorCode, watchIndex,
   watchStyles, watchStatic,
   startLiveReload
 ));

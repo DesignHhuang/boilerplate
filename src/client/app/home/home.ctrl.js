@@ -7,6 +7,6 @@ angular.module('App.Home.Controller', [])
 /**
  * Controller
  */
-.controller('HomeCtrl', function($scope, $state) {
+.controller('HomeCtrl', function() {
 
 });

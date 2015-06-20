@@ -4,9 +4,8 @@
  * External dependencies
  */
 var express = require('express');
-var chalk = require('chalk');
 var path = require('path');
-var http = require('http');
+//var http = require('http');
 var morgan = require('morgan');
 var compression = require('compression');
 var bodyParser = require('body-parser');
@@ -15,7 +14,7 @@ var methodOverride = require('method-override');
 /**
  * Application dependencies
  */
-var db = require('app/db');
+//var db = require('app/db');
 var config = require('app/config');
 var logger = require('common/request/logger');
 
@@ -98,7 +97,7 @@ module.exports = function() {
   });
 
 	//Error handling
-	app.use(function(err, req, res, next) {
+	app.use(function(/*err, req, res, next*/) {
   	//See http://expressjs.com/guide/error-handling.html
 	});
 

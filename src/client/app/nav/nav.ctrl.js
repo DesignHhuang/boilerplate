@@ -7,6 +7,6 @@ angular.module('App.Nav.Controller', [])
 /**
  * Controller
  */
-.controller('NavCtrl', function($scope, $window) {
+.controller('NavCtrl', function() {
 
 });

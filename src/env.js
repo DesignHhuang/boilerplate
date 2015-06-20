@@ -22,7 +22,7 @@ var detectEnvironment = function() {
   }
 
   //Check if overwritten by command line arguments
-  process.argv.forEach(function (arg, index, array) {
+  process.argv.forEach(function(arg) {
     var parts = arg.split('=');
     if (parts.length === 2) {
       switch (parts[0]) {

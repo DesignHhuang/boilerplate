@@ -37,7 +37,8 @@ var server = app.listen(config.server.port, function() {
   //Remember in config and output success message
   config.server.address = protocol + host + ':' + port;
   console.log(chalk.green('Express server started @ '), chalk.grey(config.server.address));
-}).on('error', errorHandler.server);
+});
+server.on('error', errorHandler.server);
 
 /**
  * Expose app
