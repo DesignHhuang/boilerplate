@@ -3,177 +3,35 @@
  * Site header
  */
 .site-header {
-	position: fixed;
-	z-index: 10;
-	top: 0;
-	left: 0;
-	width: 100%;
 	height: $heightHeader;
 	background: $colorPrimary;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
 
 	/**
 	 * Navigation
 	 */
 	nav {
-		width: 100%;
-		display: none;
+		height: $heightHeader;
+		display: flex;
+		align-items: center;
 		.menu {
 			font-size: 0;
 			> li {
-				&.title {
-					text-transform: uppercase;
-					letter-spacing: 1px;
-					font-size: $fontSizeSmall;
-					color: fadeout($colorWhite, 70%);
-					padding: $marginParagraph 2rem;
-				}
+				display: inline-block;
+				margin: 0 2rem 0 0;
 				list-style:	none;
 				vertical-align: top;
-				border-bottom: 1px solid fadeout($colorWhite, 90%);
 				> a {
 					display: block;
 					position: relative;
 					font-size: $fontSizeNormal;
 					cursor: pointer;
 					color: $colorWhite;
-					padding: $marginParagraph 2rem;
-					transition: all .1s linear;
 					&:hover {
 						text-decoration: none;
-						color: $colorWhite;
-						background: fadeout($colorWhite, 95%);
+						color: $colorText;
 					}
 				}
 			}
 		}
-	}
-
-	/**
-	 * Mobile
-	 */
-	@media (max-width: 767px) {
-		nav {
-			display: block;
-			position: absolute;
-			top: $heightHeader;
-			left: 0;
-			width: 100%;
-			background: #444;
-			transform: translate3d(-100%,0,0);
-
-			/**
-			 * Mobile state enables transitions
-			 * This is necessary to prevent menu transitions when resizing window.
-			 */
-			&.mobile {
-				transition: all .4s ease-out;
-			}
-
-			/**
-			 * Visible state
-			 */
-			&.visible {
-				transform: translate3d(0,0,0);
-			}
-
-			/**
-			 * Links
-			 */
-			a {
-				text-transform: lowercase;
-				padding: 1rem 2rem;
-				border-top: 1px solid fadeout($colorWhite, 80%);
-				&:hover {
-					background: fadeout($colorWhite, 90%);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Desktop
-	 */
-	@media (min-width: 768px) {
-		height: $heightHeaderTall;
-		nav {
-			display: flex;
-			.menu {
-				> li {
-					display: inline-block;
-					margin: 0 2rem 0 0;
-					padding: 0;
-					border: 0;
-					&.title {
-						display: none;
-					}
-					> a {
-						padding: 0;
-						&:hover {
-							background: none;
-							color: $colorText;
-						}
-					}
-				}
-				&.main {
-					flex: 1;
-				}
-				&.user {
-					flex: 1;
-					text-align: right;
-					> li {
-						margin: 0 0 0 2rem;
-					}
-				}
-			}
-		}
-
-		/**
-		 * Compact header
-		 */
-		transition: all .3s linear;
-		&.compact {
-			height: $heightHeader;
-			background: fadeout($colorPrimary, 10%);
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-		}
-	}
-}
-
-/**
- * Menu toggle
- */
-.menu-toggle {
-	width: 2.25rem;
-	cursor: pointer;
-	float: right;
-	span {
-		display: block;
-		width: 100%;
-		height: 4px;
-		margin: 6px 0;
-		background: fadeout($colorWhite, 50%);
-		transition: all .1s linear;
-	}
-	&:hover {
-		span {
-			background: fadeout($colorWhite, 40%);
-		}
-	}
-	&.toggled {
-		span {
-			width: 75%;
-			margin-left: 25%;
-		}
-	}
-
-	/**
-	 * Media query
-	 */
-	@media (min-width: 768px) {
-		display: none;
 	}
 }

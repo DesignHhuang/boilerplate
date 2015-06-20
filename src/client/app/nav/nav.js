@@ -4,15 +4,12 @@
  */
 angular.module('App.Nav', [
 	'App.Nav.Controller',
-	'App.Nav.Menu.Service',
-	'App.Nav.IsActiveSref.Directive'
+	'App.Nav.Menu.Service'
 ])
 
 /**
- * Constant definition
+ * Run logic
  */
 .run(function($rootScope, Menu) {
-
-	//Set menu in rootscope
 	$rootScope.Menu = Menu;
 });

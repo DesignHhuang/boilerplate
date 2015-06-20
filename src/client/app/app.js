@@ -37,7 +37,10 @@ angular.module('App', [
 
 /**
  * Run logic
+ *
+ * The $state service is injected here to fix a strange issue with the route
+ * not being loaded initially. See https://github.com/angular-ui/ui-router/issues/2051
  */
-.run(function($rootScope, App) {
+.run(function($rootScope, App, $state) {
 	$rootScope.App = App;
 });

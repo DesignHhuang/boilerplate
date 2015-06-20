@@ -9,7 +9,8 @@
   ],
   "verbose": false,
   "watch": [
-    "server"
+    "server",
+    "env"
   ],
   "ext": "js json",
   "env": {

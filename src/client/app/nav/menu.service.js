@@ -5,7 +5,7 @@
 angular.module('App.Nav.Menu.Service', [])
 
 /**
- * Factory definition
+ * Simple menu service
  */
 .factory('Menu', function() {
 	return {

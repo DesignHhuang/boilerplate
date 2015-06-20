@@ -81,6 +81,7 @@ gulp.task('start', startNodemon);
 gulp.task('watch', gulp.parallel(
   watchClientCode, watchServerCode,
   watchClientTests, watchServerTests,
+  watchVendorCode,
   watchStyles, watchStatic,
   startLiveReload
 ));
@@ -152,6 +153,32 @@ function angularWrapper() {
   return {
      header: '(function (window, angular, undefined) {\n\t\'use strict\';\n',
      footer: '})(window, window.angular);\n'
+  };
+}
+
+/**
+ * Generate banner wrapper for compiled files
+ */
+function bannerWrapper() {
+
+  //Get date and author
+  var today = new Date(),
+      date = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear(),
+      author = pkg.author.name + ' <' + pkg.author.email + '>';
+
+  //Format banner
+  var banner =
+    '/**\n' +
+  	' * ' + pkg.name + ' - v' + pkg.version + ' - ' + date + '\n' +
+  	' * ' + pkg.homepage + '\n' +
+  	' *\n' +
+  	' * Copyright (c) ' + today.getFullYear() + ' ' + author + '\n' +
+  	' */\n';
+
+  //Return wrapper
+  return {
+    header: banner,
+    footer: ''
   };
 }
 
@@ -235,6 +262,7 @@ function buildAppJs() {
       .pipe(wrapper(angularWrapper()))
       .pipe(uglify())
     .pipe(sourcemaps.write('./'))
+    .pipe(wrapper(bannerWrapper()))
     .pipe(gulp.dest(config.paths.public + '/js'));
 }
 
@@ -251,7 +279,8 @@ function buildAppScss() {
        .pipe(csso())
        .pipe(rename(packageFileName('.min.css')))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(config.paths.public + '/css'));
+    .pipe(gulp.dest(config.paths.public + '/css'))
+    .pipe(livereload());
 }
 
 /**
@@ -275,7 +304,8 @@ function buildVendorCss() {
        .pipe(csso())
        .pipe(rename('vendor.min.css'))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(config.paths.public + '/css'));
+    .pipe(gulp.dest(config.paths.public + '/css'))
+    .pipe(livereload());
 }
 
 /**
@@ -469,6 +499,15 @@ function watchServerTests() {
   gulp.watch([
     config.assets.server.js.tests
   ], gulp.series(lintCode));
+}
+
+/**
+ * Watch vendor code
+ */
+function watchVendorCode() {
+  gulp.watch([
+    config.assets.client.js.vendor
+  ], gulp.series(buildVendorJs, buildIndex));
 }
 
 /**

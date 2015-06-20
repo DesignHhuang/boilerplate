@@ -2,9 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('App.Errors', [
-	'App.Errors.Constant'
-])
+angular.module('App.Errors', [])
 
 /**
  * Configuration

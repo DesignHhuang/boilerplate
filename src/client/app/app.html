@@ -1,21 +1,8 @@
-<header class="site-header" ng-controller="NavCtrl" ng-class="{compact: isScrolled}">
+<header class="site-header" ng-controller="NavCtrl">
 	<div class="container">
-		<button type="button" class="menu-toggle" ng-click="toggleMenu()" ng-class="{toggled: isMenuVisible}">
-			<span></span>
-			<span></span>
-			<span></span>
-		</button>
-		<nav ng-class="{visible: isMenuVisible, mobile: isMobile}" ng-click="toggleMenu(false)">
-			<menu class="menu main" ng-cloak>
-				<li class="title">Main</li>
+		<nav>
+			<menu class="menu" ng-cloak>
 				<li ng-repeat="item in Menu.main"><a ui-sref="{{item.sref}}" ui-sref-active="active">{{item.title}}</a></li>
-			</menu>
-			<menu class="menu user" ng-cloak>
-				<li class="title">User</li>
-				<li ng-if="User.isPresent()"><a ui-sref="user.profile">{{User.data.name}}</a></li>
-				<li ng-if="User.isPresent()"><a ng-click="doLogout()">Logout</a></li>
-				<li ng-if="!User.isPresent()"><a ui-sref="user.register">Register</a></li>
-				<li ng-if="!User.isPresent()"><a ng-click="doLogin()">Login</a></li>
 			</menu>
 		</nav>
 	</div>

@@ -9,7 +9,7 @@ module.exports = {
    * App settings
    */
 	app: {
-		title: 'Meanie Boilerplate (development environment)'
+		title: 'My Application (dev)'
 	},
 
 	/**

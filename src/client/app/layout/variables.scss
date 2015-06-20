@@ -25,6 +25,10 @@ $fontSizeSmall: .9rem;
 /* Line height */
 $lineHeight: 1.7rem;
 
+/* Vertical margins */
+$marginParagraph: $lineHeight;
+$marginSection: 2rem;
+
 /*****************************************************************************
  * Colors
  ***/
@@ -32,12 +36,12 @@ $lineHeight: 1.7rem;
 /* Basic colors */
 $colorBlack: #000;
 $colorWhite: #fff;
-$colorPrimary: #128dd3;
+$colorPrimary: #c2195f;
 
 /* Text colors */
 $colorText: #333;
 $colorTextMuted: #ccc;
-$colorTextLink: #128dd3;
+$colorTextLink: $colorPrimary;
 
 /* Border colors */
 $colorBorders: #e2e2e2;
@@ -51,13 +55,8 @@ $colorLinkedIn: #007bb6;
 $colorWhatsapp: #2e8a06;
 
 /*****************************************************************************
- * Spacing and dimensions
+ * Specific elements
  ***/
 
-/* Vertical margins */
-$marginParagraph: $lineHeight;
-$marginSection: 2rem;
-
 /* Header */
-$heightHeader: 3rem;
-$heightHeaderTall: 4.5rem;
+$heightHeader: 4.5rem;

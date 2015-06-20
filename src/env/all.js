@@ -16,7 +16,7 @@ module.exports = {
 	app: {
 		name: pkg.name,
 		version: pkg.version,
-    title: 'Meanie Boilerplate',
+    title: 'My Application',
 		baseUrl: '/',
 		api: {
 			baseUrl: '/api/v1/'
