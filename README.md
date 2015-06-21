@@ -26,7 +26,7 @@ meanie create ~/some/path
 Please report all bugs, issues, suggestions and feature requests in the project [issue tracker](https://github.com/meanie/meanie-boilerplate/issues).
 
 ## What is Meanie?
-Meanie is a boilerplate for developing full-stack modular javascript applications using the MEAN stack (MongoDB, Express, AngularJS and Node.js), powered by the Gulp task runner.
+Meanie is a boilerplate for developing, testing and building full-stack modular javascript applications using MEAN (MongoDB, Express, AngularJS and Node.js). Meanie is powered by the Gulp task runner.
 
 * [Meanie @ npm](https://www.npmjs.com/package/meanie)
 * [Meanie @ github](https://github.com/meanie/meanie)
