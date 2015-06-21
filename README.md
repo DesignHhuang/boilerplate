@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/meanie-boilerplate.svg)](https://www.npmjs.com/package/meanie-boilerplate)
 [![node dependencies](https://david-dm.org/meanie/boilerplate.svg)](https://david-dm.org/meanie/boilerplate)
 [![github issues](https://img.shields.io/github/issues/meanie/boilerplate.svg)](https://github.com/meanie/boilerplate/issues)
-[![codacy](https://img.shields.io/codacy/5747187f70884e0b9c4a687f9f4518d8.svg)](https://www.codacy.com/app/meanie/boilerplate)
+[![codacy](https://img.shields.io/codacy/2e67bf9f6baa468e84dd099842d1000a.svg)](https://www.codacy.com/app/meanie/boilerplate)
 [![gitter](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/meanie/meanie?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 The boilerplate framework for new [Meanie](https://github.com/meanie/meanie) projects.
