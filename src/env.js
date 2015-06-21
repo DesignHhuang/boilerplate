@@ -36,8 +36,13 @@ var detectEnvironment = function() {
   //Still no environment?
   if (env === '') {
     env = 'development';
-    console.warn(chalk.yellow('Environment not specified, using default development environment.'));
-    console.info(chalk.grey('To set your NODE_ENV, add "export NODE_ENV=development" to your bash profile, or run the application with the -env=environment flag.'));
+    console.warn(chalk.yellow(
+      'Environment not specified, using default development environment.'
+    ));
+    console.info(chalk.grey(
+      'To set your NODE_ENV, add "export NODE_ENV=development" to your bash profile,',
+      'or run the application with the -env=environment flag.'
+    ));
   }
 
   //Return value
