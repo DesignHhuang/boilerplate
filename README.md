@@ -98,9 +98,9 @@ The following is an outline of the folder structure of the Meanie boilerplate:
 ```
 
 ## Issues & feature requests
-Any bugs, issues, suggestions and feature requests for the Meanie Boilerplate should go in the  [Meanie Boilerplate issue tracker](https://github.com/meanie/boilerplate/issues).
-
-Issues with the Meanie CLI tool should be reported in the main [Meanie issue tracker](https://github.com/meanie/meanie/issues).
+Please report any bugs, issues, suggestions and feature requests in the appropriate issue tracker:
+* [Meanie Boilerplate issue tracker](https://github.com/meanie/boilerplate/issues)
+* [Meanie CLI issue tracker](https://github.com/meanie/meanie/issues)
 
 ## Contributing
 If you would like to contribute to Meanie, please check out the [Meanie contributing guidelines](https://github.com/meanie/meanie/blob/master/CONTRIBUTING.md).
