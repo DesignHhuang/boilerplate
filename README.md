@@ -8,7 +8,7 @@
 
 Meanie is a boilerplate for developing, testing and building full-stack modular javascript applications using MEAN (MongoDB, Express, AngularJS and Node.js). Meanie is powered by the Gulp task runner.
 
-This package/repository contains the boilerplate framework for new [Meanie](https://github.com/meanie/meanie) projects.
+This package/repository contains the boilerplate framework for new [Meanie](https://github.com/meanie/meanie) projects. To find out more about the Meanie CLI, please check the [Meanie CLI GitHub repository](https://github.com/meanie/meanie) or the [Meanie CLI npm page](https://www.npmjs.com/package/meanie).
 
 ## Installation
 The boilerplate is automatically installed when you create a new project using the [Meanie CLI](https://www.npmjs.com/package/meanie) `create` command:
