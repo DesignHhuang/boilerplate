@@ -1,7 +1,7 @@
 {
-  "name": "Mean-Stack",
-	"description": "A module based boilerplate for developing full-stack javascript applications using MongoDB, Express, AngularJS and Node.js.",
-	"version": "0.1.0",
+  "name": "MyApplication",
+	"description": "",
+	"version": "0.0.1",
 	"dependencies": {
 		"angular": "~1.4",
     "angular-animate": "~1.4",

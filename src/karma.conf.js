@@ -16,25 +16,8 @@ module.exports = function(config) {
     //Frameworks to use (see https://npmjs.org/browse/keyword/karma-adapter)
     frameworks: ['jasmine'],
 
-    //List of files / patterns to load in the browser
-    files: [
-      assets.client.js.vendor,
-      assets.client.js.karma,
-      assets.client.js.app
-    ],
-
-    //List of files to exclude
-    exclude: [
-
-    ],
-
-    //Preprocessors (see https://npmjs.org/browse/keyword/karma-preprocessor)
-    preprocessors: {
-
-    },
-
     //Test results reporter to use (see https://npmjs.org/browse/keyword/karma-reporter)
-    reporters: ['dots'],
+    reporters: ['spec'],
 
     //Web server port
     port: 9876,
