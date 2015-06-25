@@ -49,6 +49,11 @@ module.exports = {
    * Asset defintions
    */
 	assets: {
+		env: {
+			js: [
+				'env/*.js'
+			]
+		},
 		server: {
 			js: {
 				app: [

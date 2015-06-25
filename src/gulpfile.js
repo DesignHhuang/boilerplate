@@ -86,10 +86,15 @@ gulp.task('watch', gulp.parallel(
  * Run tests
  */
 gulp.task('test', gulp.series(
-  testServerCode, testClientCode
+  lintServerCode, testServerCode,
+  lintClientCode, testClientCode
 ));
-gulp.task('test-server', testServerCode);
-gulp.task('test-client', testClientCode);
+gulp.task('test-server', gulp.series(
+  lintServerCode, testServerCode
+));
+gulp.task('test-client', gulp.series(
+  lintClientCode, testClientCode
+));
 
 /**
  * Bump version numbers
@@ -347,12 +352,39 @@ function buildIndex() {
  ***/
 
 /**
- * Code linting
+ * Lint all code at once
  */
 function lintCode() {
   return es.merge(
+    gulp.src(config.assets.env.js),
     gulp.src(config.assets.client.js.app),
     gulp.src(config.assets.client.js.tests),
+    gulp.src(config.assets.server.js.app),
+    gulp.src(config.assets.server.js.tests)
+  )
+    .pipe(cached('jslint'))
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish));
+}
+
+/**
+ * Lint only client code
+ */
+function lintClientCode() {
+  return es.merge(
+    gulp.src(config.assets.client.js.app),
+    gulp.src(config.assets.client.js.tests)
+  )
+    .pipe(cached('jslint'))
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish));
+}
+
+/**
+ * Lint only server code
+ */
+function lintServerCode() {
+  return es.merge(
     gulp.src(config.assets.server.js.app),
     gulp.src(config.assets.server.js.tests)
   )

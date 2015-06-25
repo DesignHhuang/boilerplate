@@ -11,7 +11,7 @@ angular.module('App', [
 	'ui.router',
 
 	//Common modules
-	'Common.Angular.ScopeExtension',
+	'Angular.ScopeExtension',
 
 	//Core modules
 	'App.Env',
