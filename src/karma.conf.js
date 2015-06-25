@@ -1,10 +1,5 @@
 
 /**
- * Read assets from our configuration
- */
-var assets = require('./config').assets;
-
-/**
  * Karma configuration
  */
 module.exports = function(config) {
@@ -35,9 +30,7 @@ module.exports = function(config) {
     autoWatch: false,
 
     //Start these browsers (see https://npmjs.org/browse/keyword/karma-launcher)
-    browsers: [
-      'PhantomJS'
-    ],
+    browsers: ['PhantomJS'],
 
     //Continuous integration mode
     singleRun: false
