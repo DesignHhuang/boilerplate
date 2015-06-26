@@ -4,8 +4,8 @@
  * Module dependencies
  */
 var fs = require('fs');
-var _ = require('lodash');
 var chalk = require('chalk');
+var obj = require('obj-tools');
 
 /**
  * Helper to get specific environment config
@@ -27,7 +27,7 @@ var getCombinedConfig = function() {
 
 	//Detect environment and create config
 	var env = require('./env');
-	var config = _.merge(
+	var config = obj.merge(
 		getEnvConfig('all'),
 		getEnvConfig(env),
 		getEnvConfig('local')

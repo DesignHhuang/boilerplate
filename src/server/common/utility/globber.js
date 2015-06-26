@@ -3,7 +3,6 @@
  * Module dependencies
  */
 var glob = require('glob');
-var _ = require('lodash');
 
 /**
  * Globber
@@ -21,15 +20,15 @@ module.exports = {
   	var output = [];
 
   	//If glob pattern is array, we use each pattern in a recursive way, otherwise we use glob
-  	if (_.isArray(globPatterns)) {
+  	if (Array.isArray(globPatterns)) {
   		globPatterns.forEach(function(globPattern) {
-  			output = _.union(output, self(globPattern, removeRoot));
+        output = output.concat(self(globPattern, removeRoot));
   		});
       return output;
   	}
 
     //Just string
-    else if (_.isString(globPatterns)) {
+    else if (typeof globPatterns === 'string') {
 
       //Test if URL
   		if (urlRegex.test(globPatterns)) {
@@ -48,10 +47,12 @@ module.exports = {
 			}
 
       //Set output
-			output = _.union(output, files);
+			output = output.concat(files);
   	}
 
-    //Return output
-  	return output;
+    //Return unique files
+  	return output.filter(function(value, index, self) {
+      return self.indexOf(value) === index;
+    });
   }
 };

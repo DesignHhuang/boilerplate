@@ -44,7 +44,7 @@
     "express-session": "^1.11.2",
     "file-stream-rotator": "0.0.6",
     "glob": "^5.0.10",
-    "lodash": "^3.9.3",
+    "obj-tools": "^0.2.1",
     "method-override": "^2.3.3",
     "mongoose": "^4.0.5",
     "morgan": "^1.5.3",

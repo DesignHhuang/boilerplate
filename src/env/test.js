@@ -3,12 +3,12 @@
 /**
  * Extend development environment
  */
-var _ = require('lodash');
+var obj = require('obj-tools');
 var dev = require('./development');
 
 /**
  * Test environment configuration (extend development environment)
  */
-module.exports = _.merge(dev, {
+module.exports = obj.merge(dev, {
 
 });
