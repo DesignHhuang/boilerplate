@@ -1,4 +1,3 @@
-/*jshint latedef: nofunc */
 'use strict';
 
 /**
@@ -11,8 +10,10 @@ var git = require('gulp-git');
 var bump = require('gulp-bump');
 var sass = require('gulp-sass');
 var csso = require('gulp-csso');
+var jscs = require('gulp-jscs');
 var es = require('event-stream');
 var karma = require('gulp-karma');
+var babel = require('gulp-babel');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
@@ -45,83 +46,6 @@ var angularTemplateCache = require('gulp-angular-templatecache');
 var pkg = require('./package.json');
 var env = require('./env');
 var config = require('./config');
-
-/*****************************************************************************
- * CLI exposed tasks
- ***/
-
-/**
- * Build the application
- */
-gulp.task('build', gulp.series(
-  gulp.parallel(
-    clean, lintCode,
-    testServerCode,
-    testClientCode
-  ),
-  gulp.parallel(
-    buildStatic,
-    buildAppJs, buildAppScss,
-    buildVendorJs, buildVendorCss
-  ),
-  buildIndex
-));
-
-/**
- * Start server
- */
-gulp.task('start', startNodemon);
-
-/**
- * Watch files for changes
- */
-gulp.task('watch', gulp.parallel(
-  watchClientCode, watchServerCode,
-  watchClientTests, watchServerTests,
-  watchVendorCode, watchIndex,
-  watchStyles, watchStatic,
-  startLiveReload
-));
-
-/**
- * Run tests
- */
-gulp.task('test', gulp.series(
-  lintServerCode, testServerCode,
-  lintClientCode, testClientCode
-));
-gulp.task('test-server', gulp.series(
-  lintServerCode, testServerCode
-));
-gulp.task('test-client', gulp.series(
-  lintClientCode, testClientCode
-));
-
-/**
- * Bump version numbers
- */
-gulp.task('patch', gulp.series(
-  patchBump, updateReadmeVersion, commitBump, tagBump
-));
-gulp.task('minor', gulp.series(
-  minorBump, updateReadmeVersion, commitBump, tagBump
-));
-gulp.task('major', gulp.series(
-  majorBump, updateReadmeVersion, commitBump, tagBump
-));
-
-/**
- * Default task
- */
-gulp.task('default', gulp.series(
-  'build', gulp.parallel('watch', 'start')
-));
-
-/**
- * Helper tasks accessible via CLI
- */
-gulp.task('clean', clean);
-gulp.task('static', buildStatic);
 
 /*****************************************************************************
  * Helpers
@@ -264,6 +188,9 @@ function buildAppJs() {
   )
     .pipe(ngAnnotate())
     .pipe(sourcemaps.init())
+      .pipe(babel({
+        nonStandard: false //https://babeljs.io/docs/usage/options/
+      }))
       .pipe(concat(packageFileName('.min.js')))
       .pipe(wrapper(angularWrapper()))
       .pipe(uglify())
@@ -363,7 +290,8 @@ function lintCode() {
     gulp.src(config.assets.server.js.app),
     gulp.src(config.assets.server.js.tests)
   )
-    .pipe(cached('jslint'))
+    .pipe(cached('lintAll'))
+    .pipe(jscs())
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
 }
@@ -376,7 +304,8 @@ function lintClientCode() {
     gulp.src(config.assets.client.js.app),
     gulp.src(config.assets.client.js.tests)
   )
-    .pipe(cached('jslint'))
+    .pipe(cached('lintClient'))
+    .pipe(jscs())
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
 }
@@ -389,7 +318,8 @@ function lintServerCode() {
     gulp.src(config.assets.server.js.app),
     gulp.src(config.assets.server.js.tests)
   )
-    .pipe(cached('jslint'))
+    .pipe(cached('lintServer'))
+    .pipe(jscs())
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
 }
@@ -589,3 +519,80 @@ function startNodemon() {
 function startLiveReload() {
   livereload.listen();
 }
+
+/*****************************************************************************
+ * CLI exposed tasks
+ ***/
+
+/**
+ * Build the application
+ */
+gulp.task('build', gulp.series(
+  gulp.parallel(
+    clean, lintCode,
+    testServerCode,
+    testClientCode
+  ),
+  gulp.parallel(
+    buildStatic,
+    buildAppJs, buildAppScss,
+    buildVendorJs, buildVendorCss
+  ),
+  buildIndex
+));
+
+/**
+ * Start server
+ */
+gulp.task('start', startNodemon);
+
+/**
+ * Watch files for changes
+ */
+gulp.task('watch', gulp.parallel(
+  watchClientCode, watchServerCode,
+  watchClientTests, watchServerTests,
+  watchVendorCode, watchIndex,
+  watchStyles, watchStatic,
+  startLiveReload
+));
+
+/**
+ * Run tests
+ */
+gulp.task('test', gulp.series(
+  lintServerCode, testServerCode,
+  lintClientCode, testClientCode
+));
+gulp.task('test-server', gulp.series(
+  lintServerCode, testServerCode
+));
+gulp.task('test-client', gulp.series(
+  lintClientCode, testClientCode
+));
+
+/**
+ * Bump version numbers
+ */
+gulp.task('patch', gulp.series(
+  patchBump, updateReadmeVersion, commitBump, tagBump
+));
+gulp.task('minor', gulp.series(
+  minorBump, updateReadmeVersion, commitBump, tagBump
+));
+gulp.task('major', gulp.series(
+  majorBump, updateReadmeVersion, commitBump, tagBump
+));
+
+/**
+ * Default task
+ */
+gulp.task('default', gulp.series(
+  'build', gulp.parallel('watch', 'start')
+));
+
+/**
+ * Helper tasks accessible via CLI
+ */
+gulp.task('clean', clean);
+gulp.task('static', buildStatic);

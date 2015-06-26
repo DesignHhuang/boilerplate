@@ -1,0 +1,17 @@
+{
+    "preset": "google",
+    "fileExtensions": [".js"],
+    "excludeFiles": [
+      "public/**",
+      "node_modules/**",
+      "client/vendor/**"
+    ],
+
+    "requireParenthesesAroundIIFE": true,
+    "maximumLineLength": 100,
+    "validateLineBreaks": "LF",
+    "validateIndentation": 2,
+    "disallowSpacesInsideObjectBrackets": null,
+    "disallowImplicitTypeConversion": ["string"],
+    "safeContextKeyword": "self"
+}
