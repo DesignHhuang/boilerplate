@@ -39,7 +39,7 @@
     "src"
   ],
   "scripts": {
-    "pretest": "./node_modules/jshint/bin/jshint --reporter=node_modules/jshint-stylish src/",
+    "pretest": "./node_modules/jshint/bin/jshint --reporter=node_modules/jshint-stylish src",
     "test": "node test.js"
   },
   "devDependencies": {
