@@ -1,3 +1,4 @@
+/*jshint latedef: nofunc */
 'use strict';
 
 /**
@@ -14,7 +15,6 @@ var es = require('event-stream');
 var karma = require('gulp-karma');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var inject = require('gulp-inject');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var cached = require('gulp-cached');
@@ -25,6 +25,7 @@ var nodemon = require('gulp-nodemon');
 var jasmine = require('gulp-jasmine');
 var stylish = require('jshint-stylish');
 var vinylBuffer = require('vinyl-buffer');
+var injectInHtml = require('gulp-inject');
 var livereload = require('gulp-livereload');
 var sourcemaps = require('gulp-sourcemaps');
 var preprocess = require('gulp-preprocess');
@@ -333,7 +334,7 @@ function buildIndex() {
 
   //Run task
   return gulp.src(config.assets.client.index)
-    .pipe(inject(sources, {
+    .pipe(injectInHtml(sources, {
       addRootSlash: false
     }))
     .pipe(preprocess({

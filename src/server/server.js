@@ -43,4 +43,4 @@ server.on('error', errorHandler.server);
 /**
  * Expose app
  */
-exports = module.exports = app;
+module.exports = app;
