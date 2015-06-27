@@ -20,6 +20,7 @@ var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var cached = require('gulp-cached');
 var coffee = require('gulp-coffee');
+var filter = require('gulp-filter');
 var replace = require('gulp-replace');
 var wrapper = require('gulp-wrapper');
 var nodemon = require('gulp-nodemon');
@@ -181,6 +182,7 @@ function buildStatic() {
  * Build application JS files
  */
 function buildAppJs() {
+  var mapFilter = filter(['!*.map']);
   return es.merge(
     gulp.src(config.assets.client.js.app),
     coffeeStream(),
@@ -196,7 +198,9 @@ function buildAppJs() {
       .pipe(wrapper(angularWrapper()))
       .pipe(uglify())
     .pipe(sourcemaps.write('./'))
+    .pipe(mapFilter)
     .pipe(wrapper(bannerWrapper()))
+    .pipe(mapFilter.restore())
     .pipe(gulp.dest(config.paths.public + '/js'));
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "meanie-boilerplate",
   "description": "The boilerplate framework for new Meanie projects.",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "homepage": "https://github.com/meanie/#readme",
   "author": {
     "name": "Adam Buczynski",
