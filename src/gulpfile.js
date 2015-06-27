@@ -81,8 +81,8 @@ function angularModuleName(module) {
  */
 function angularWrapper() {
   return {
-     header: '(function (window, angular, undefined) {\n\t\'use strict\';\n',
-     footer: '})(window, window.angular);\n'
+    header: '(function (window, angular, undefined) {\n\t\'use strict\';\n',
+    footer: '})(window, window.angular);\n'
   };
 }
 
@@ -92,18 +92,18 @@ function angularWrapper() {
 function bannerWrapper() {
 
   //Get date and author
-  var today = new Date(),
-      date = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear(),
-      author = pkg.author.name + ' <' + pkg.author.email + '>';
+  var today = new Date();
+  var date = today.getDate() + '-' + today.getMonth() + '-' + today.getFullYear();
+  var author = pkg.author.name + ' <' + pkg.author.email + '>';
 
   //Format banner
   var banner =
     '/**\n' +
-  	' * ' + pkg.name + ' - v' + pkg.version + ' - ' + date + '\n' +
-  	' * ' + pkg.homepage + '\n' +
-  	' *\n' +
-  	' * Copyright (c) ' + today.getFullYear() + ' ' + author + '\n' +
-  	' */\n';
+    ' * ' + pkg.name + ' - v' + pkg.version + ' - ' + date + '\n' +
+    ' * ' + pkg.homepage + '\n' +
+    ' *\n' +
+    ' * Copyright (c) ' + today.getFullYear() + ' ' + author + '\n' +
+    ' */\n';
 
   //Return wrapper
   return {
