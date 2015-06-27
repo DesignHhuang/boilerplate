@@ -4,6 +4,5 @@
  */
 angular.module('App.Config', [
 
-	//Add other global configuration modules as dependencies here
-	
+  //Add other global configuration modules as dependencies here
 ]);

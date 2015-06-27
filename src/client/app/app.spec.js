@@ -4,10 +4,10 @@
  */
 describe('Client app', function() {
 
-	/**
-	 * Main test
-	 */
-	it('should run this test', function() {
-		expect(true).toBe(true);
-	});
+  /**
+   * Main test
+   */
+  it('should run this test', function() {
+    expect(true).toBe(true);
+  });
 });

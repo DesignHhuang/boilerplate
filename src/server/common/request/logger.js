@@ -24,23 +24,23 @@ module.exports = {
   /**
    * Get log format
    */
-	format: function() {
-		return config.log.format;
-	},
+  format: function() {
+    return config.log.format;
+  },
 
   /**
    * Get log options
    */
-	options: function() {
+  options: function() {
 
     //Initialize options
     var options = config.log.options || {};
 
     //Use rotating log file
     if (config.log.rotate) {
-			if (!fs.existsSync(logDirectory)) {
-				fs.mkdirSync(logDirectory);
-			}
+      if (!fs.existsSync(logDirectory)) {
+        fs.mkdirSync(logDirectory);
+      }
       config.log.rotate.filename = logDirectory + '/' + config.log.rotate.filename;
       options.stream = fileStreamRotator.getStream(config.log.rotate);
     }
@@ -48,15 +48,15 @@ module.exports = {
     //Use single file
     else if (config.log.filename) {
       if (!fs.existsSync(logDirectory)) {
-				fs.mkdirSync(logDirectory);
-			}
+        fs.mkdirSync(logDirectory);
+      }
       config.log.filename = logDirectory + '/' + config.log.filename;
       options.stream = fs.createWriteStream(config.log.filename, {
         flags: 'a'
       });
     }
 
-		//Return options
-		return options;
-	}
+    //Return options
+    return options;
+  }
 };

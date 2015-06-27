@@ -15,43 +15,43 @@ module.exports = {
   files: function(globPatterns, removeRoot) {
 
     //Get self
-  	var self = this;
-  	var urlRegex = new RegExp('^(?:[a-z]+:)?\/\/', 'i');
-  	var output = [];
+    var self = this;
+    var urlRegex = new RegExp('^(?:[a-z]+:)?\/\/', 'i');
+    var output = [];
 
-  	//If glob pattern is array, we use each pattern in a recursive way, otherwise we use glob
-  	if (Array.isArray(globPatterns)) {
-  		globPatterns.forEach(function(globPattern) {
+    //If glob pattern is array, we use each pattern in a recursive way, otherwise we use glob
+    if (Array.isArray(globPatterns)) {
+      globPatterns.forEach(function(globPattern) {
         output = output.concat(self(globPattern, removeRoot));
-  		});
+      });
       return output;
-  	}
+    }
 
     //Just string
     else if (typeof globPatterns === 'string') {
 
       //Test if URL
-  		if (urlRegex.test(globPatterns)) {
-  			output.push(globPatterns);
+      if (urlRegex.test(globPatterns)) {
+        output.push(globPatterns);
         return output;
-  		}
+      }
 
       //Get files
-			var files = glob.sync(globPatterns);
+      var files = glob.sync(globPatterns);
 
       //Remove root?
-			if (removeRoot) {
-				files = files.map(function(file) {
-					return file.replace(removeRoot, '');
-				});
-			}
+      if (removeRoot) {
+        files = files.map(function(file) {
+          return file.replace(removeRoot, '');
+        });
+      }
 
       //Set output
-			output = output.concat(files);
-  	}
+      output = output.concat(files);
+    }
 
     //Return unique files
-  	return output.filter(function(value, index, self) {
+    return output.filter(function(value, index, self) {
       return self.indexOf(value) === index;
     });
   }

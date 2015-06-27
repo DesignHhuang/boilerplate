@@ -4,25 +4,25 @@
  */
 angular.module('App', [
 
-	//Angular & 3rd party
-	'ngAnimate',
-	'ngSanitize',
-	'ngMessages',
-	'ui.router',
+  //Angular & 3rd party
+  'ngAnimate',
+  'ngSanitize',
+  'ngMessages',
+  'ui.router',
 
-	//Common modules
-	'Angular.ScopeExtension',
+  //Common modules
+  'Angular.ScopeExtension',
 
-	//Core modules
-	'App.Env',
-	'App.Config',
-	'App.Errors',
-	'App.Templates',
-	'App.Controller',
+  //Core modules
+  'App.Env',
+  'App.Config',
+  'App.Errors',
+  'App.Templates',
+  'App.Controller',
 
-	//App modules
-	'App.Nav',
-	'App.Home'
+  //App modules
+  'App.Nav',
+  'App.Home'
 ])
 
 /**
@@ -30,9 +30,9 @@ angular.module('App', [
  */
 .config(function($locationProvider, $urlRouterProvider) {
 
-	//Enable HTML 5 mode browsing and set default route
-	$locationProvider.html5Mode(true);
-	$urlRouterProvider.otherwise('/');
+  //Enable HTML 5 mode browsing and set default route
+  $locationProvider.html5Mode(true);
+  $urlRouterProvider.otherwise('/');
 })
 
 /**
@@ -42,5 +42,5 @@ angular.module('App', [
  * not being loaded initially. See https://github.com/angular-ui/ui-router/issues/2051
  */
 .run(function($rootScope, App, $state) {
-	$rootScope.App = App;
+  $rootScope.App = App;
 });

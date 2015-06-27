@@ -34,7 +34,7 @@ mongoose.connection.on('connected', function() {
 console.log('Loading model files...');
 globber.files('./**/*.model.js').forEach(function(modelPath) {
   console.log(' - %s', modelPath.replace('./server/', ''));
-	require(path.resolve(modelPath));
+  require(path.resolve(modelPath));
 });
 
 /**

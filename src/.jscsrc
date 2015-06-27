@@ -6,7 +6,8 @@
   "excludeFiles": [
     "public/**",
     "node_modules/**",
-    "client/vendor/**"
+    "client/vendor/**",
+    "client/static/**"
   ],
 
   "requireParenthesesAroundIIFE": true,

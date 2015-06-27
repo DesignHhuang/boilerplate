@@ -11,13 +11,13 @@ var obj = require('obj-tools');
  * Helper to get specific environment config
  */
 function getEnvConfig(env) {
-	if (!env || !fs.existsSync('./env/' + env + '.js')) {
-		if (env !== 'local') {
-				console.warn(chalk.yellow('Config file for environment "%s" not found!'), env);
-		}
-		return {};
-	}
-	return require('./env/' + env) || {};
+  if (!env || !fs.existsSync('./env/' + env + '.js')) {
+    if (env !== 'local') {
+      console.warn(chalk.yellow('Config file for environment "%s" not found!'), env);
+    }
+    return {};
+  }
+  return require('./env/' + env) || {};
 }
 
 /**
@@ -25,17 +25,17 @@ function getEnvConfig(env) {
  */
 var getCombinedConfig = function() {
 
-	//Detect environment and create config
-	var env = require('./env');
-	var config = obj.merge(
-		getEnvConfig('all'),
-		getEnvConfig(env),
-		getEnvConfig('local')
-	);
+  //Detect environment and create config
+  var env = require('./env');
+  var config = obj.merge(
+    getEnvConfig('all'),
+    getEnvConfig(env),
+    getEnvConfig('local')
+  );
 
-	//Append environment
-	config.app.env = env;
-	return config;
+  //Append environment
+  config.app.env = env;
+  return config;
 };
 
 /**

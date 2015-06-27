@@ -22,7 +22,7 @@ var logger = require('common/request/logger');
  * Define mime types
  */
 express.static.mime.define({
-	'application/json': ['map']
+  'application/json': ['map']
 });
 
 /**
@@ -31,24 +31,24 @@ express.static.mime.define({
 module.exports = function() {
 
   //Initialize express app
-	var app = express();
+  var app = express();
 
   //Set local application variables
   app.locals.name = config.app.name;
-	app.locals.title = config.app.title;
+  app.locals.title = config.app.title;
 
   //Pass the request url to environment locals
-	app.use(function(req, res, next) {
-		res.locals.url = req.protocol + '://' + req.headers.host + req.url;
-		next();
-	});
+  app.use(function(req, res, next) {
+    res.locals.url = req.protocol + '://' + req.headers.host + req.url;
+    next();
+  });
 
   //Compression
-	app.use(compression({
+  app.use(compression({
     level: 3,
-		filter: function(req, res) {
-			return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
-		}
+    filter: function(req, res) {
+      return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
+    }
   }));
 
   //Use morgan to log access
@@ -56,50 +56,50 @@ module.exports = function() {
 
   //Parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({
-		extended: true
-	}));
+    extended: true
+  }));
 
-	//Parse application/json
-	app.use(bodyParser.json());
+  //Parse application/json
+  app.use(bodyParser.json());
   app.use(bodyParser.json({
-		type: 'application/vnd.api+json'
-	}));
+    type: 'application/vnd.api+json'
+  }));
 
-	//Use method overriding	in case only POST/GET allowed
+  //Use method overriding in case only POST/GET allowed
   app.use(methodOverride('X-HTTP-Method-Override'));
 
   //Set static folder
-	app.use(express.static(path.resolve('./public')));
+  app.use(express.static(path.resolve('./public')));
 
-	/*app.get('/', function (req, res) {
-  	res.send('Heers');
-	});*/
+  /*app.get('/', function (req, res) {
+    res.send('Heers');
+  });*/
 
   /*app.use(function(err, req, res, next) {
 
     //If the error object doesn't exists
-		if (!err) {
+    if (!err) {
       return next();
     }
 
-		//Log it
-		console.error(err.stack);
+    //Log it
+    console.error(err.stack);
 
-		//Error page
-		res.status(500).render('500', {
-			error: err.stack
-		});
-	});*/
+    //Error page
+    res.status(500).render('500', {
+      error: err.stack
+    });
+  });*/
 
-	//Send all other requests to Angular
+  //Send all other requests to Angular
   app.all('/*', function(req, res) {
     res.sendFile(path.resolve('./public/index.html'));
   });
 
-	//Error handling
-	app.use(function(/*err, req, res, next*/) {
-  	//See http://expressjs.com/guide/error-handling.html
-	});
+  //Error handling
+  app.use(function(/*err, req, res, next*/) {
+    //See http://expressjs.com/guide/error-handling.html
+  });
 
   //Return express server instance
   return app;

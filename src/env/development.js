@@ -8,32 +8,32 @@ module.exports = {
   /**
    * App settings
    */
-	app: {
-		title: 'My Application (dev)'
-	},
+  app: {
+    title: 'My Application (dev)'
+  },
 
-	/**
+  /**
    * Server settings
    */
-	server: {
+  server: {
     port: process.env.PORT || 8080,
   },
 
   /**
    * Log settings
    */
-	log: {
-		format: 'dev'
-	},
+  log: {
+    format: 'dev'
+  },
 
   /**
    * Database settings
    */
   db: {
- 		uri: 'mongodb://localhost/meanie',
- 		options: {
- 			user: '',
- 			pass: ''
- 		}
- 	}
+    uri: 'mongodb://localhost/meanie',
+    options: {
+      user: '',
+      pass: ''
+    }
+  }
 };

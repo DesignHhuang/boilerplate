@@ -35,6 +35,6 @@ module.exports = {
   db: function(error) {
     console.error(chalk.red('Database error:'));
     console.error(chalk.red(error));
-   	process.exit(-1);
+    process.exit(-1);
   },
 };
