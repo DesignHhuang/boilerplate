@@ -26,7 +26,7 @@ function getEnvConfig(env) {
 var getCombinedConfig = function() {
 
   //Detect environment and create config
-  var env = require('./env');
+  var env = require('./env')(true);
   var config = obj.merge(
     getEnvConfig('all'),
     getEnvConfig(env),

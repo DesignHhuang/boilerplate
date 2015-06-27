@@ -1,6 +1,3 @@
-/**
- * Detect the application environment and return it
- */
 'use strict';
 
 /**
@@ -11,7 +8,7 @@ var chalk = require('chalk');
 /**
  * Detect environment
  */
-var detectEnvironment = function() {
+module.exports = function detectEnvironment(verbose) {
 
   //Initialize
   var env = '';
@@ -36,20 +33,17 @@ var detectEnvironment = function() {
   //Still no environment?
   if (env === '') {
     env = 'development';
-    console.warn(chalk.yellow(
-      'Environment not specified, using default development environment.'
-    ));
-    console.info(chalk.grey(
-      'To set your NODE_ENV, add "export NODE_ENV=development" to your bash profile,',
-      'or run the application with the -env=environment flag.'
-    ));
+    if (verbose) {
+      console.warn(chalk.yellow(
+        'Environment not specified, using default development environment.'
+      ));
+      console.info(chalk.grey(
+        'To set your NODE_ENV, add "export NODE_ENV=development" to your bash profile,',
+        'or run the application with the -env=environment flag.'
+      ));
+    }
   }
 
   //Return value
   return env;
 };
-
-/**
- * Module export
- */
-module.exports = detectEnvironment();

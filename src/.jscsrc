@@ -2,7 +2,7 @@
   "preset": "google",
   "fileExtensions": [".js"],
   "maxErrors": 100,
-  "verbose": true,
+  "verbose": false,
   "excludeFiles": [
     "public/**",
     "node_modules/**",

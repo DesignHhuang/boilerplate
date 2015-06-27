@@ -24,9 +24,9 @@ var replace = require('gulp-replace');
 var wrapper = require('gulp-wrapper');
 var nodemon = require('gulp-nodemon');
 var jasmine = require('gulp-jasmine');
-var stylish = require('jshint-stylish');
 var vinylBuffer = require('vinyl-buffer');
 var injectInHtml = require('gulp-inject');
+var stylish = require('gulp-jscs-stylish');
 var livereload = require('gulp-livereload');
 var sourcemaps = require('gulp-sourcemaps');
 var preprocess = require('gulp-preprocess');
@@ -44,8 +44,9 @@ var angularTemplateCache = require('gulp-angular-templatecache');
  * Package and configuration
  */
 var pkg = require('./package.json');
-var env = require('./env');
+var env = require('./env')();
 var config = require('./config');
+var noop = function() {};
 
 /*****************************************************************************
  * Helpers
@@ -291,9 +292,11 @@ function lintCode() {
     gulp.src(config.assets.server.js.tests)
   )
     .pipe(cached('lintAll'))
-    .pipe(jscs())
     .pipe(jshint())
-    .pipe(jshint.reporter(stylish));
+    .pipe(jscs())
+    .on('error', noop)
+    .pipe(stylish.combineWithHintResults())
+    .pipe(jshint.reporter('jshint-stylish'));
 }
 
 /**
@@ -305,9 +308,11 @@ function lintClientCode() {
     gulp.src(config.assets.client.js.tests)
   )
     .pipe(cached('lintClient'))
-    .pipe(jscs())
     .pipe(jshint())
-    .pipe(jshint.reporter(stylish));
+    .pipe(jscs())
+    .on('error', noop)
+    .pipe(stylish.combineWithHintResults())
+    .pipe(jshint.reporter('jshint-stylish'));
 }
 
 /**
@@ -319,9 +324,11 @@ function lintServerCode() {
     gulp.src(config.assets.server.js.tests)
   )
     .pipe(cached('lintServer'))
-    .pipe(jscs())
     .pipe(jshint())
-    .pipe(jshint.reporter(stylish));
+    .pipe(jscs())
+    .on('error', noop)
+    .pipe(stylish.combineWithHintResults())
+    .pipe(jshint.reporter('jshint-stylish'));
 }
 
 /*****************************************************************************
@@ -427,14 +434,12 @@ function tagBump() {
 
 /**
  * Watch client side code
- *
- * (You can enable running unit tests on file save as well)
  */
 function watchClientCode() {
   gulp.watch([
     config.assets.client.js.app,
     config.assets.client.html
-  ], gulp.series(lintCode, /*testClientCode,*/ buildAppJs, buildIndex));
+  ], gulp.series(lintCode, testClientCode, buildAppJs, buildIndex));
 }
 
 /**
@@ -558,18 +563,20 @@ gulp.task('watch', gulp.parallel(
 ));
 
 /**
+ * Run code linting
+ */
+gulp.task('lint', lintCode);
+gulp.task('lint-server', lintServerCode);
+gulp.task('lint-client', lintClientCode);
+
+/**
  * Run tests
  */
 gulp.task('test', gulp.series(
-  lintServerCode, testServerCode,
-  lintClientCode, testClientCode
+  testServerCode, testClientCode
 ));
-gulp.task('test-server', gulp.series(
-  lintServerCode, testServerCode
-));
-gulp.task('test-client', gulp.series(
-  lintClientCode, testClientCode
-));
+gulp.task('test-server', testServerCode);
+gulp.task('test-client', testClientCode);
 
 /**
  * Bump version numbers
