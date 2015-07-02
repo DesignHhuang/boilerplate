@@ -509,6 +509,15 @@ function watchIndex() {
   ], gulp.series(buildIndex));
 }
 
+/**
+ * Watch environment files
+ */
+function watchEnv() {
+  gulp.watch([
+    config.assets.env.js
+  ], gulp.series(lintCode, testClientCode, buildAppJs, buildIndex));
+}
+
 /*****************************************************************************
  * Starters
  ***/
@@ -562,7 +571,7 @@ gulp.task('watch', gulp.parallel(
   watchClientCode, watchServerCode,
   watchClientTests, watchServerTests,
   watchVendorCode, watchIndex,
-  watchStyles, watchStatic,
+  watchStyles, watchStatic, watchEnv,
   startLiveReload
 ));
 
