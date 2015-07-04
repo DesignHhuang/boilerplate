@@ -1,13 +1,13 @@
 <header class="site-header" ng-controller="NavCtrl">
-	<div class="container">
-		<nav>
-			<menu class="menu" ng-cloak>
-				<li ng-repeat="item in Menu.main"><a ui-sref="{{item.sref}}" ui-sref-active="active">{{item.title}}</a></li>
-			</menu>
-		</nav>
-	</div>
+  <div class="container">
+    <nav>
+      <menu class="menu" ng-cloak>
+        <li ng-repeat="item in Menu.main"><a ui-sref="{{item.sref}}" ui-sref-active="active">{{item.title}}</a></li>
+      </menu>
+    </nav>
+  </div>
 </header>
 <main class="site-contents">
-	<div class="container" ui-view></div>
+  <div class="container" ui-view></div>
 </main>
 <footer class="site-footer"></footer>

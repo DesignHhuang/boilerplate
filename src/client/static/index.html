@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html ng-controller="AppCtrl">
 <head>
-	<base href="/">
-	<title ng-bind="App.title">My Application</title>
-	<meta charset="utf-8">
-	<meta name="author" content="">
-	<meta name="description" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<link rel="shortcut icon" href="favicon.png">
-	<!-- inject:css -->
+  <base href="/">
+  <title ng-bind="App.title">My Application</title>
+  <meta charset="utf-8">
+  <meta name="author" content="">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="favicon.png">
+  <!-- inject:css -->
   <!-- endinject -->
-	<!-- inject:js -->
+  <!-- inject:js -->
   <!-- endinject -->
 </head>
 <body lang="en">
   <ng-include src="'app.html'"></ng-include>
 <script>
-	angular.element(document).ready(function() {
-		setTimeout(function() {
-			angular.bootstrap(document.getElementsByTagName('html')[0], ['App']);
-		}, 10);
+  angular.element(document).ready(function() {
+    setTimeout(function() {
+      angular.bootstrap(document.getElementsByTagName('html')[0], ['App']);
+    }, 10);
   });
-	<!-- @if ENV='production' -->
-	//Include Google analytics etc.
-	<!-- @endif -->
+  <!-- @if ENV='production' -->
+  //Include Google analytics etc.
+  <!-- @endif -->
 </script>
 <!-- @if ENV='development' -->
 
