@@ -190,12 +190,12 @@ function buildAppJs() {
     environmentStream()
   )
     .pipe(ngAnnotate())
+    .pipe(wrapper(angularWrapper()))
     .pipe(sourcemaps.init())
       .pipe(babel({
         nonStandard: false //https://babeljs.io/docs/usage/options/
       }))
       .pipe(concat(packageFileName('.min.js')))
-      .pipe(wrapper(angularWrapper()))
       .pipe(uglify())
     .pipe(sourcemaps.write('./'))
     .pipe(mapFilter)
