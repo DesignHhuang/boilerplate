@@ -154,6 +154,11 @@ function environmentStream() {
       name: angularModuleName('Env'),
       stream: true,
       constants: {
+        Env: {
+          name: env,
+          isDevelopment: env !== 'production',
+          isProduction: env === 'production'
+        },
         App: config.app
       }
     }));

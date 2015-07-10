@@ -35,7 +35,6 @@ module.exports = function() {
 
   //Set local application variables
   app.locals.name = config.app.name;
-  app.locals.title = config.app.title;
 
   //Pass the request url to environment locals
   app.use(function(req, res, next) {
