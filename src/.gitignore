@@ -11,4 +11,4 @@ npm-debug.log
 env/local.js
 client/vendor/
 public/
-log/
+logs/

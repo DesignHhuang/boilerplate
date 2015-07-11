@@ -33,7 +33,7 @@ module.exports = {
    */
   log: {
     format: 'combined',
-    path: './log'
+    path: './logs'
   },
 
   /**
