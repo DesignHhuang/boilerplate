@@ -2,9 +2,8 @@
 /**
  * Module definition and dependencies
  */
-angular.module('App.Errors', [
-  'App.Errors.Logger.Service',
-  'App.Errors.HttpInterceptor.Service'
+angular.module('App.Error', [
+  'App.Error.HttpInterceptor.Service'
 ])
 
 /**
@@ -13,7 +12,7 @@ angular.module('App.Errors', [
 .config(function($provide) {
 
   //Exception handling
-  $provide.decorator('$exceptionHandler', ['Logger', '$delegate', function(Logger, $delegate) {
+  $provide.decorator('$exceptionHandler', ['$log', '$delegate', function($log, $delegate) {
     return function(exception, cause) {
       $delegate(exception, cause);
     };
@@ -23,10 +22,10 @@ angular.module('App.Errors', [
 /**
  * Run logic
  */
-.run(function($rootScope, App, Logger) {
+.run(function($rootScope, $log, App) {
 
   //Log state changes
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams) {
-    Logger.log('STATE:', toState.name, Object.keys(toParams).length ? toParams : '');
+    $log.log('STATE:', toState.name, Object.keys(toParams).length ? toParams : '');
   });
 });

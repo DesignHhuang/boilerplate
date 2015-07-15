@@ -15,7 +15,7 @@ angular.module('App', [
 
   //Core modules
   'App.Env',
-  'App.Errors',
+  'App.Error',
   'App.Analytics',
   'App.Templates',
   'App.Controller',

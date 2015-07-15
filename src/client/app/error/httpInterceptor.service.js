@@ -2,19 +2,19 @@
 /**
  * Module definition and dependencies
  */
-angular.module('App.Errors.HttpInterceptor.Service', [])
+angular.module('App.Error.HttpInterceptor.Service', [])
 
 /**
  * Config
  */
 .config(function($httpProvider) {
-  $httpProvider.interceptors.push('ErrorsHttpInterceptor');
+  $httpProvider.interceptors.push('ErrorHttpInterceptor');
 })
 
 /**
  * Interceptor service
  */
-.factory('ErrorsHttpInterceptor', function($rootScope, $q, Logger) {
+.factory('ErrorHttpInterceptor', function($rootScope, $q, $log) {
 
   /**
    * Determine if this is a HTML template request
@@ -35,7 +35,7 @@ angular.module('App.Errors.HttpInterceptor.Service', [])
 
       //Log non-template requests
       if (!isTemplateRequest(request)) {
-        Logger.info(request.method, request.url, '...');
+        $log.info(request.method, request.url, '...');
       }
 
       //Return for further handling
@@ -52,8 +52,8 @@ angular.module('App.Errors.HttpInterceptor.Service', [])
 
       //Log non template request responses
       if (request && !isTemplateRequest(request)) {
-        Logger.log(request.method, request.url, response.status, response.statusText);
-        Logger.debug(response.data);
+        $log.log(request.method, request.url, response.status, response.statusText);
+        $log.debug(response.data);
       }
 
       //Return response
@@ -70,18 +70,18 @@ angular.module('App.Errors.HttpInterceptor.Service', [])
 
       //Log non template request responses
       if (request && !isTemplateRequest(request)) {
-        Logger.warn(request.method, request.url, response.status, response.statusText);
-        Logger.debug(response.data);
+        $log.warn(request.method, request.url, response.status, response.statusText);
+        $log.debug(response.data);
       }
 
       //Handle server errors
       if (response.status >= 500 && response.status <= 599) {
-        //$rootScope.$broadcast('error.httpServerError', response.data);
+        $rootScope.$broadcast('error.httpServerError', response.data);
       }
 
       //Handle client errors
       if (response.status >= 400 && response.status <= 499) {
-        //$rootScope.$broadcast('error.httpClientError', response.data);
+        $rootScope.$broadcast('error.httpClientError', response.data);
       }
 
       //Return rejection

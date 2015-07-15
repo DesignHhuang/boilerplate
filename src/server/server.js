@@ -13,8 +13,8 @@ var chalk = require('chalk');
 /**
  * Application dependencies
  */
-var config = require('app/config');
-var errorHandler = require('app/error/handler');
+var config = require('app/config.js');
+var errorHandler = require('app/error/handler.js');
 
 /**
  * Log
@@ -26,7 +26,7 @@ console.log('Running application', chalk.grey(config.app.name),
  * Initialize express application
  */
 console.log('Starting Express server...');
-var app = require('app/express')();
+var app = require('app/app')();
 var server = app.listen(config.server.port, function() {
 
   //Determine address
@@ -38,7 +38,7 @@ var server = app.listen(config.server.port, function() {
   config.server.address = protocol + host + ':' + port;
   console.log(chalk.green('Express server started @ '), chalk.grey(config.server.address));
 });
-server.on('error', errorHandler.server);
+server.on('error', errorHandler.express);
 
 /**
  * Expose app

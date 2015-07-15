@@ -51,19 +51,13 @@ The following is an outline of the folder structure of the Meanie boilerplate:
     # filters that don't belong to one specific module reside here.
     └─ shared
 
-  # Common (non packaged) services, directives and filters are arranged
-  # in this folder. Everything in here is not specific to a particular
-  # application and could be recycled in other projects.
-  ├─ common
-
   # Static assets for your client application go here. This is a good
   # place to store fonts, images, audio files, etc. Anything in here
   # will be copied as-is to the public folder.
   ├─ static
 
-  # Vendor resources reside here. Bower is configured to download all
-  # 3rd party resources into this folder, and this folder is excluded
-  # from the GIT repository.
+  # 3rd party resources reside here. Bower is configured to download
+  # resources into this folder. It is excluded from version control.
   └─ vendor
 
 # Server side code and assets
