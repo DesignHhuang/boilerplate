@@ -71,9 +71,16 @@ module.exports = function() {
   //Set static folder
   app.use(express.static(path.resolve('./public')));
 
-  /*app.get('/', function (req, res) {
-    res.send('Heers');
-  });*/
+  //API routes go through their own router
+  var api = express.Router();
+  console.log('Loading routes...');
+  globber.files('./server/app/**/*.routes.js').forEach(function(routePath) {
+    console.log(' - %s', routePath.replace('./server/', ''));
+    require(path.resolve(routePath))(api);
+  });
+
+  //Prefix API routes with API base url
+  app.use(config.app.api.baseUrl, api);
 
   /*app.use(function(err, req, res, next) {
 
