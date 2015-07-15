@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Secure environment configuration
+ * Environment configuration (secure)
  */
 module.exports = {
 

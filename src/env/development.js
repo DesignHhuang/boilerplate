@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Development environment configuration
+ * Environment configuration (development)
  */
 module.exports = {
 
@@ -24,6 +24,15 @@ module.exports = {
    */
   log: {
     format: 'dev'
+  },
+
+  /**
+   * oAuth settings
+   */
+  oAuth: {
+    Google: {
+      clientId: ''
+    }
   },
 
   /**

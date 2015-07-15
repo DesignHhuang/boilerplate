@@ -1,12 +1,20 @@
 'use strict';
 
 /**
+ * Environment files contain environment specific configuration, like API keys, database
+ * passwords, etc. You can create as many environment files as needed. If you want to
+ * create a local environment file (for local keys/passwords that won't be included in
+ * version control), please run `meanie env`. To create any other named environment, run
+ * `meanie env environment-name`.
+ */
+
+/**
  * Get package info
  */
 var pkg = require('../package.json');
 
 /**
- * Shared environment configuration
+ * Environment configuration (shared/base configuration)
  */
 module.exports = {
 
@@ -20,11 +28,6 @@ module.exports = {
     baseUrl: '/',
     api: {
       baseUrl: '/api/v1/'
-    },
-    oAuth: {
-      Google: {
-        clientId: ''
-      }
     }
   },
 

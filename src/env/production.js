@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Production environment configuration
+ * Environment configuration (production)
  */
 module.exports = {
 
@@ -21,6 +21,15 @@ module.exports = {
       filename: 'access.%DATE%.log',
       frequency: 'daily',
       verbose: false
+    }
+  },
+
+  /**
+   * oAuth settings
+   */
+  oAuth: {
+    Google: {
+      clientId: ''
     }
   },
 
