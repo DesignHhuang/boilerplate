@@ -432,13 +432,18 @@ function commitBump() {
  */
 function tagBump(cb) {
   var version = packageJson().version;
-  git.tag(version, 'Tag version ' + version, function(error) {
+  git.checkout('master', function(error) {
     if (error) {
       return cb(error);
     }
-    git.push('origin', 'master', {
-      args: '--tags'
-    }, cb);
+    git.tag(version, 'Tag version ' + version, function(error) {
+      if (error) {
+        return cb(error);
+      }
+      git.push('origin', 'master', {
+        args: '--tags'
+      }, cb);
+    });
   });
 }
 
