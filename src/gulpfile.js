@@ -83,8 +83,8 @@ function angularModuleName(module) {
  */
 function angularWrapper() {
   return {
-    header: '(function (window, angular, undefined) {\n\t\'use strict\';\n',
-    footer: '})(window, window.angular);\n'
+    header: '(function (window, angular, undefined) {\n  \'use strict\';\n',
+    footer: '\n})(window, window.angular);\n'
   };
 }
 

@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('App.Shared.KeyCodes.Constant', [])
+angular.module('Events.KeyCodes.Constant', [])
 
 /**
  * Constant definition
