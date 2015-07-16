@@ -434,7 +434,9 @@ function commitBump() {
 function tagBump() {
   return gulp.src([
     './package.json'
-  ]).pipe(tagVersion());
+  ]).pipe(tagVersion({
+    prefix: ''
+  }));
 }
 
 /*****************************************************************************
