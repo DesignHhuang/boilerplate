@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Angular.ScopeExtension', [])
+angular.module('App.Shared.ScopeExtension', [])
 
 /**
  * Rootscope extension

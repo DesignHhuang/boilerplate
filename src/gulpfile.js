@@ -31,7 +31,6 @@ var stylish = require('gulp-jscs-stylish');
 var livereload = require('gulp-livereload');
 var sourcemaps = require('gulp-sourcemaps');
 var preprocess = require('gulp-preprocess');
-var tagVersion = require('gulp-tag-version');
 var ngAnnotate = require('gulp-ng-annotate');
 var ngConstant = require('gulp-ng-constant');
 var autoprefixer = require('gulp-autoprefixer');
@@ -83,8 +82,8 @@ function angularModuleName(module) {
  */
 function angularWrapper() {
   return {
-    header: '(function (window, angular, undefined) {\n\t\'use strict\';\n',
-    footer: '})(window, window.angular);\n'
+    header: '(function (window, angular, undefined) {\n  \'use strict\';\n',
+    footer: '\n})(window, window.angular);\n'
   };
 }
 
@@ -431,10 +430,21 @@ function commitBump() {
 /**
  * Tag latest commit with current version
  */
-function tagBump() {
-  return gulp.src([
-    './package.json'
-  ]).pipe(tagVersion());
+function tagBump(cb) {
+  var version = packageJson().version;
+  git.checkout('master', function(error) {
+    if (error) {
+      return cb(error);
+    }
+    git.tag(version, 'Tag version ' + version, function(error) {
+      if (error) {
+        return cb(error);
+      }
+      git.push('origin', 'master', {
+        args: '--tags'
+      }, cb);
+    });
+  });
 }
 
 /*****************************************************************************

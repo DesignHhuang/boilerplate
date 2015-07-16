@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 
 /**
  * External dependencies
@@ -14,10 +14,10 @@ var methodOverride = require('method-override');
 /**
  * Application dependencies
  */
-//var db = require('app/db');
-var config = require('app/config');
-var logger = require('common/request/logger');
-var globber = require('common/utility/globber');
+//var db = require('app/db.js');
+var config = require('app/config.js');
+var logger = require('app/shared/utility/logger.js');
+var globber = require('app/shared/utility/globber.js');
 
 /**
  * Define mime types

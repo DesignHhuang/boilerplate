@@ -10,19 +10,19 @@ angular.module('App', [
   'ngMessages',
   'ui.router',
 
-  //Common modules
-  'Angular.ScopeExtension',
-
   //Core modules
   'App.Env',
-  'App.Errors',
+  'App.Error',
   'App.Analytics',
   'App.Templates',
   'App.Controller',
 
   //App modules
   'App.Nav',
-  'App.Home'
+  'App.Home',
+  
+  //Shared modules
+  'App.Shared.ScopeExtension'
 ])
 
 /**

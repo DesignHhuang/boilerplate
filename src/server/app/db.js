@@ -10,9 +10,9 @@ var path = require('path');
 /**
  * Application dependencies
  */
-var config = require('app/config');
-var errorHandler = require('app/error/handler');
-var globber = require('common/utility/globber');
+var config = require('app/config.js');
+var globber = require('common/utility/globber.js');
+var errorHandler = require('app/error/handler.js');
 
 /**
  * Connect to database

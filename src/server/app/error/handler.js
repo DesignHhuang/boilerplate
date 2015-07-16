@@ -11,14 +11,23 @@ var chalk = require('chalk');
 var config = require('app/config');
 
 /**
- * Module export
+ * Error handlers
  */
 module.exports = {
 
   /**
+   * Database errors
+   */
+  db: function(error) {
+    console.error(chalk.red('Database error:'));
+    console.error(chalk.red(error));
+    process.exit(-1);
+  },
+
+  /**
    * Express server errors
    */
-  server: function(error) {
+  express: function(error) {
     if (error.errno === 'EADDRINUSE') {
       console.error(chalk.red('Web server port %s is already in use'), config.server.port);
     }
@@ -27,14 +36,5 @@ module.exports = {
       console.error(chalk.red(error));
     }
     process.exit(-1);
-  },
-
-  /**
-   * Databse errors
-   */
-  db: function(error) {
-    console.error(chalk.red('Database error:'));
-    console.error(chalk.red(error));
-    process.exit(-1);
-  },
+  }
 };

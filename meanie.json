@@ -1,5 +1,5 @@
 {
-	"cliVersion": "0.5.0",
-	"instructions": "https://github.com/meanie/boilerplate#usage",
-	"postInstall": "Shiny boilerplate installed"
+	"cliVersion": "0.6.0",
+	"packageType": "meanie",
+	"instructions": "https://github.com/meanie/boilerplate#usage"
 }
