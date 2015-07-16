@@ -8,9 +8,10 @@
 
 Meanie is a boilerplate for developing, testing and building full-stack modular javascript applications using MEAN (MongoDB, Express, AngularJS and Node.js). Meanie is powered by the Gulp task runner.
 
-This package/repository contains the boilerplate framework for new [Meanie](https://github.com/meanie/meanie) projects. To find out more about the Meanie CLI, please check the [Meanie CLI GitHub repository](https://github.com/meanie/meanie) or the [Meanie CLI npm page](https://www.npmjs.com/package/meanie).
+This package/repository contains the boilerplate framework for new [Meanie](https://github.com/meanie/meanie) projects. To find out more about Meanie, please check the [Meanie CLI GitHub repository](https://github.com/meanie/meanie) or the [Meanie CLI npm page](https://www.npmjs.com/package/meanie).
 
 ## Installation
+
 The boilerplate is automatically installed when you create a new project using the [Meanie CLI](https://www.npmjs.com/package/meanie) `create` command:
 
 ```shell
@@ -25,6 +26,7 @@ meanie create ~/some/path
 ```
 
 ## Folder structure
+
 The following is an outline of the folder structure of the Meanie boilerplate:
 
 ```shell
@@ -92,14 +94,19 @@ The following is an outline of the folder structure of the Meanie boilerplate:
 ```
 
 ## Issues & feature requests
+
 Please report any bugs, issues, suggestions and feature requests in the appropriate issue tracker:
 * [Meanie Boilerplate issue tracker](https://github.com/meanie/boilerplate/issues)
 * [Meanie CLI issue tracker](https://github.com/meanie/meanie/issues)
 
 ## Contributing
+
+Pull requests are welcome! Please create them against the [dev branch](https://github.com/meanie/boilerplate/tree/dev) of the repository.
+
 If you would like to contribute to Meanie, please check out the [Meanie contributing guidelines](https://github.com/meanie/meanie/blob/master/CONTRIBUTING.md).
 
 ## License
+
 (MIT License)
 
 Copyright 2015, [Adam Buczynski](http://adambuczynski.com)
