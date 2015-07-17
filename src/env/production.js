@@ -9,7 +9,7 @@ module.exports = {
    * Server settings
    */
   server: {
-    port: 80,
+    port: 80
   },
 
   /**

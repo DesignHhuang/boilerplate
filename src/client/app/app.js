@@ -20,7 +20,7 @@ angular.module('App', [
   //App modules
   'App.Nav',
   'App.Home',
-  
+
   //Shared modules
   'App.Shared.ScopeExtension'
 ])

@@ -16,7 +16,7 @@ module.exports = {
    * Server settings
    */
   server: {
-    port: process.env.PORT || 8080,
+    port: process.env.PORT || 8080
   },
 
   /**

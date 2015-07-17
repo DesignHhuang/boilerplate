@@ -163,6 +163,20 @@ function environmentStream() {
     }));
 }
 
+/**
+ * Helper to merge sources
+ */
+function mergeSources() {
+  var sources = arguments;
+  var merged = [];
+  for (var s = 0; s < sources.length; s++) {
+    if (sources[s] && Array.isArray(sources[s])) {
+      merged = merged.concat(merged, sources[s]);
+    }
+  }
+  return merged;
+}
+
 /*****************************************************************************
  * Builders
  ***/
@@ -294,14 +308,13 @@ function buildIndex() {
  * Lint all code at once
  */
 function lintCode() {
-  return es.merge(
-    gulp.src(config.assets.env.js),
-    gulp.src(config.assets.client.js.app),
-    gulp.src(config.assets.client.js.tests),
-    gulp.src(config.assets.server.js.app),
-    gulp.src(config.assets.server.js.tests)
-  )
-    .pipe(cached('lintAll'))
+  return gulp.src(mergeSources(
+    config.assets.env.js,
+    config.assets.client.js.app,
+    config.assets.client.js.tests,
+    config.assets.server.js.app,
+    config.assets.server.js.tests
+  )).pipe(cached('lintAll'))
     .pipe(jshint())
     .pipe(jscs())
     .on('error', noop)
@@ -313,11 +326,10 @@ function lintCode() {
  * Lint only client code
  */
 function lintClientCode() {
-  return es.merge(
-    gulp.src(config.assets.client.js.app),
-    gulp.src(config.assets.client.js.tests)
-  )
-    .pipe(cached('lintClient'))
+  return gulp.src(mergeSources(
+    config.assets.client.js.app,
+    config.assets.client.js.tests
+  )).pipe(cached('lintClient'))
     .pipe(jshint())
     .pipe(jscs())
     .on('error', noop)
@@ -329,11 +341,10 @@ function lintClientCode() {
  * Lint only server code
  */
 function lintServerCode() {
-  return es.merge(
-    gulp.src(config.assets.server.js.app),
-    gulp.src(config.assets.server.js.tests)
-  )
-    .pipe(cached('lintServer'))
+  return gulp.src(mergeSources(
+    config.assets.server.js.app,
+    config.assets.server.js.tests
+  )).pipe(cached('lintServer'))
     .pipe(jshint())
     .pipe(jscs())
     .on('error', noop)
@@ -349,8 +360,12 @@ function lintServerCode() {
  * Run client side unit tests
  */
 function testClientCode() {
-  return gulp.src(config.assets.client.js.tests)
-    .pipe(karma({
+  return gulp.src(mergeSources(
+    config.assets.client.js.vendor,
+    config.assets.client.js.karma,
+    config.assets.client.js.app,
+    config.assets.client.js.tests
+  )).pipe(karma({
       configFile: 'karma.conf.js',
       action: 'run'
     }))
