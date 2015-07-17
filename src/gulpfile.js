@@ -1,3 +1,4 @@
+/* jscs: disable requireCamelCaseOrUpperCaseIdentifiers */
 'use strict';
 
 /**
@@ -34,7 +35,7 @@ var preprocess = require('gulp-preprocess');
 var ngAnnotate = require('gulp-ng-annotate');
 var ngConstant = require('gulp-ng-constant');
 var autoprefixer = require('gulp-autoprefixer');
-var jasminereporter = require('jasmine-spec-reporter');
+var Jasminereporter = require('jasmine-spec-reporter');
 var vinylSourceStream = require('vinyl-source-stream');
 var removeEmptyLines = require('gulp-remove-empty-lines');
 var removeHtmlComments = require('gulp-remove-html-comments');
@@ -381,7 +382,7 @@ function testClientCode() {
 function testServerCode() {
   return gulp.src(config.assets.server.js.tests)
     .pipe(jasmine({
-      reporter: new jasminereporter()
+      reporter: new Jasminereporter()
     }));
 }
 
