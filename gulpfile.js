@@ -120,18 +120,13 @@ function commitBump() {
  */
 function tagBump(cb) {
   var version = packageJson().version;
-  git.checkout('master', function(error) {
+  git.tag(version, 'Tag version ' + version, function(error) {
     if (error) {
       return cb(error);
     }
-    git.tag(version, 'Tag version ' + version, function(error) {
-      if (error) {
-        return cb(error);
-      }
-      git.push('origin', 'master', {
-        args: '--tags'
-      }, cb);
-    });
+    git.push('origin', 'master', {
+      args: '--tags'
+    }, cb);
   });
 }
 
