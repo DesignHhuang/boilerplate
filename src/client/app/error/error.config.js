@@ -22,7 +22,7 @@ angular.module('App.Error', [
 /**
  * Run logic
  */
-.run(function($rootScope, $log, App) {
+.run(function($rootScope, $log) {
 
   //Log state changes
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams) {

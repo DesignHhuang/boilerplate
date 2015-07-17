@@ -193,7 +193,9 @@ function buildAppJs() {
     templatesStream(),
     environmentStream()
   )
-    .pipe(ngAnnotate())
+    .pipe(ngAnnotate({
+      single_quotes: true
+    }))
     .pipe(wrapper(angularWrapper()))
     .pipe(sourcemaps.init())
       .pipe(babel({
