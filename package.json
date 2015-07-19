@@ -17,6 +17,8 @@
   "bugs": {
     "url": "https://github.com/meanie/boilerplate/issues"
   },
+  "packageType": "full-stack",
+	"instructions": "https://github.com/meanie/boilerplate#usage",
   "keywords": [
     "meanie",
     "meanie-module",
@@ -37,8 +39,7 @@
     "npm": ">=2.10.1"
   },
   "files": [
-    "src",
-    "meanie.json"
+    "src"
   ],
   "scripts": {
     "pretest": "gulp lint",
