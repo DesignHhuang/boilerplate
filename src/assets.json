@@ -9,14 +9,10 @@
       "app": [
         "server/app/**/*.js",
         "server/app/**/*.json",
-        "server/common/**/*.js",
-        "server/common/**/*.json",
-        "!server/app/**/*.spec.js",
-        "!server/common/**/*.spec.js"
+        "!server/app/**/*.spec.js"
       ],
       "tests": [
-        "server/app/**/*.spec.js",
-        "server/common/**/*.spec.js"
+        "server/app/**/*.spec.js"
       ]
     }
   },
@@ -24,13 +20,10 @@
     "js": {
       "app": [
         "client/app/**/*.js",
-        "client/common/**/*.js",
-        "!client/app/**/*.spec.js",
-        "!client/common/**/*.spec.js"
+        "!client/app/**/*.spec.js"
       ],
       "tests": [
-        "client/app/**/*.spec.js",
-        "client/common/**/*.spec.js"
+        "client/app/**/*.spec.js"
       ],
       "karma": [
         "client/vendor/angular-mocks/angular-mocks.js"

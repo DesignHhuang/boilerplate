@@ -3,7 +3,7 @@
  * Module definition and dependencies
  */
 angular.module('Filters.String.Dasherize.Filter', [
-  'Utility.Convert.Service'
+  'Convert.Service'
 ])
 
 /**
