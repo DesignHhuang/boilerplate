@@ -38,7 +38,7 @@ module.exports = function() {
       User.findById(payload.id).then(function(user) {
         if (!user) {
           return cb(null, false, {
-            error: 'User not found'
+            error: 'INVALID_USER'
           });
         }
         return cb(null, user);

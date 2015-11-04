@@ -85,7 +85,11 @@ module.exports = {
 
       //No user found?
       if (!user) {
-        return next(new UnauthenticatedError('INVALID_CREDENTIALS'));
+        var errorCode;
+        if (grantType === 'password') {
+          errorCode = 'INVALID_CREDENTIALS';
+        }
+        return next(new UnauthenticatedError(errorCode));
       }
 
       //User suspended?
