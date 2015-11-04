@@ -10,11 +10,11 @@
     "angular-resource": "^1.4.7",
     "angular-sanitize": "^1.4.7",
     "angular-ui-router": "^0.2.15",
-    "meanie-angular-api": "^1.0.0",
-    "meanie-angular-log": "^1.0.0",
-    "meanie-angular-url": "^1.0.0",
-    "meanie-angular-convert": "^1.0.0",
-    "meanie-angular-storage": "^1.0.0",
-    "meanie-angular-http-buffer": "^1.0.0"
+    "meanie-angular-api": "^1.0.2",
+    "meanie-angular-log": "^1.0.1",
+    "meanie-angular-url": "^1.0.5",
+    "meanie-angular-convert": "^1.0.1",
+    "meanie-angular-storage": "^1.0.3",
+    "meanie-angular-http-buffer": "^1.0.1"
   }
 }
