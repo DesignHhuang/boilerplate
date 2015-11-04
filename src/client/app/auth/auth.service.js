@@ -201,7 +201,7 @@ angular.module('App.Auth.Service', [
 
         //Verify against server?
         if (isAuthenticated && verifyAgainstServer) {
-          return this.verify().finally(function() {
+          return Auth.verify().finally(function() {
             broadcastAuthStatus({
               isAuthenticated: Auth.isAuthenticated(),
               isInitial: true
@@ -211,7 +211,7 @@ angular.module('App.Auth.Service', [
 
         //Not authenticated but using refresh tokens?
         if (!isAuthenticated && refreshEnabled) {
-          return this.refresh().finally(function() {
+          return Auth.refresh(true).finally(function() {
             broadcastAuthStatus({
               isAuthenticated: Auth.isAuthenticated(),
               isInitial: true
@@ -278,7 +278,7 @@ angular.module('App.Auth.Service', [
 
         //Process access token
         if (!model.fromToken(accessToken)) {
-          this.logout(true);
+          Auth.logout(true);
           return $q.reject(new Error('Invalid access token'));
         }
 
