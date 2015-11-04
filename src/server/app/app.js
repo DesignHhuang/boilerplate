@@ -3,28 +3,36 @@
 /**
  * External dependencies
  */
-var express = require('express');
 var path = require('path');
-//var http = require('http');
+var i18n = require('i18n');
 var morgan = require('morgan');
-var compression = require('compression');
+var express = require('express');
 var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
+var compression = require('compression');
+var serveStatic = require('serve-static');
+var cookieParser = require('cookie-parser');
+
+/**
+ * Compatibility
+ */
+require('app/compatibility.js');
 
 /**
  * Application dependencies
  */
-//var db = require('app/db.js');
+var db = require('app/db.js');
+var auth = require('app/auth.js');
 var config = require('app/config.js');
+var router = require('app/router.js');
 var logger = require('app/shared/utility/logger.js');
-var globber = require('app/shared/utility/globber.js');
 
 /**
- * Define mime types
+ * Error handling middleware
  */
-express.static.mime.define({
-  'application/json': ['map']
-});
+var normalizeError = require('app/error/middleware/normalizeError.js');
+var logError = require('app/error/middleware/logError.js');
+var storeError = require('app/error/middleware/storeError.js');
+var sendError = require('app/error/middleware/sendError.js');
 
 /**
  * Export module
@@ -34,14 +42,8 @@ module.exports = function() {
   //Initialize express app
   var app = express();
 
-  //Set local application variables
-  app.locals.name = config.app.name;
-
-  //Pass the request url to environment locals
-  app.use(function(req, res, next) {
-    res.locals.url = req.protocol + '://' + req.headers.host + req.url;
-    next();
-  });
+  //Setup database
+  db(app);
 
   //Compression
   app.use(compression({
@@ -65,48 +67,30 @@ module.exports = function() {
     type: 'application/vnd.api+json'
   }));
 
-  //Use method overriding in case only POST/GET allowed
-  app.use(methodOverride('X-HTTP-Method-Override'));
+  //Add cookie parser middleware
+  app.use(cookieParser());
 
-  //Set static folder
-  app.use(express.static(path.resolve('./public')));
+  //Configure i18n and use 'accept-language' header to guess language settings
+  i18n.configure(config.i18n);
+  app.use(i18n.init);
 
-  //API routes go through their own router
-  var api = express.Router();
-  console.log('Loading routes...');
-  globber.files('./server/app/**/*.routes.js').forEach(function(routePath) {
-    console.log(' - %s', routePath.replace('./server/', ''));
-    require(path.resolve(routePath))(api);
-  });
+  //Set static folders
+  app.use(serveStatic(path.resolve('./public')));
+  app.use(serveStatic(path.resolve('./data')));
 
-  //Prefix API routes with API base url
-  app.use(config.app.api.baseUrl, api);
+  //Load authentication
+  auth(app);
 
-  /*app.use(function(err, req, res, next) {
+  //Load router
+  router(app);
 
-    //If the error object doesn't exists
-    if (!err) {
-      return next();
-    }
-
-    //Log it
-    console.error(err.stack);
-
-    //Error page
-    res.status(500).render('500', {
-      error: err.stack
-    });
-  });*/
-
-  //Send all other requests to Angular
-  app.all('/*', function(req, res) {
-    res.sendFile(path.resolve('./public/index.html'));
-  });
-
-  //Error handling
-  app.use(function(/*err, req, res, next*/) {
-    //See http://expressjs.com/guide/error-handling.html
-  });
+  //Error handlers
+  app.use([
+    normalizeError,
+    logError,
+    storeError,
+    sendError
+  ]);
 
   //Return express server instance
   return app;

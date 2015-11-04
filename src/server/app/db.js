@@ -3,41 +3,55 @@
 /**
  * External dependencies
  */
-var mongoose = require('mongoose');
-var chalk = require('chalk');
 var path = require('path');
+var chalk = require('chalk');
+var mongoose = require('mongoose');
+
+//Mongoose extend just needs to be loaded
+require('mongoose-schema-extend');
+
+//Add string to object ID method
+String.prototype.toObjectId = function() {
+  return new mongoose.Types.ObjectId(this.toString());
+};
 
 /**
  * Application dependencies
  */
 var config = require('app/config.js');
-var globber = require('common/utility/globber.js');
-var errorHandler = require('app/error/handler.js');
-
-/**
- * Connect to database
- */
-console.log('Connecting to database...');
-var db = mongoose.connect(config.db.uri, config.db.options);
-
-/**
- * Handle connection events
- */
-mongoose.connection.on('error', errorHandler.db);
-mongoose.connection.on('connected', function() {
-  console.log(chalk.green('Database connected @'), chalk.grey(config.db.uri));
-});
-
-/**
- * Load model files
- */
-console.log('Loading model files...');
-globber.files('./**/*.model.js').forEach(function(modelPath) {
-  console.log(' - %s', modelPath.replace('./server/', ''));
-  require(path.resolve(modelPath));
-});
+var globber = require('app/shared/utility/globber.js');
+var dbErrorHandler = require('app/error/handlers/db.js');
 
 /**
  * Export
  */
-module.exports = db;
+module.exports = function(app) {
+
+  //Set debugging on or off
+  mongoose.set('debug', config.db.debug);
+
+  //Connect to database
+  console.log('Connecting to database', chalk.magenta(config.db.uri), '...');
+  var db = mongoose.connect(config.db.uri, config.db.options);
+
+  //Handle connection events
+  mongoose.connection.on('error', dbErrorHandler);
+  mongoose.connection.on('connected', function() {
+    console.log(chalk.green('Database connected @'), chalk.magenta(config.db.uri));
+  });
+
+  //Load models
+  console.log('Loading model files...');
+  globber.files('./server/app/**/*.model.js').forEach(function(modelPath) {
+    console.log(chalk.grey(' - %s'), modelPath.replace('./server/app/', ''));
+    require(path.resolve(modelPath));
+  });
+
+  //Append to app if given
+  if (app) {
+    app.db = db;
+  }
+
+  //Return the database instance
+  return db;
+};

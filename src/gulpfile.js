@@ -6,29 +6,32 @@
  */
 var fs = require('fs');
 var del = require('del');
+var ncp = require('ncp');
+var path = require('path');
 var gulp = require('gulp');
+var async = require('async');
+var karma = require('karma');
 var git = require('gulp-git');
 var bump = require('gulp-bump');
 var sass = require('gulp-sass');
 var csso = require('gulp-csso');
 var jscs = require('gulp-jscs');
-var es = require('event-stream');
-var karma = require('gulp-karma');
 var babel = require('gulp-babel');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var cached = require('gulp-cached');
-var coffee = require('gulp-coffee');
 var filter = require('gulp-filter');
 var replace = require('gulp-replace');
 var wrapper = require('gulp-wrapper');
 var nodemon = require('gulp-nodemon');
 var jasmine = require('gulp-jasmine');
 var vinylBuffer = require('vinyl-buffer');
+var mergeStream = require('merge-stream');
 var injectInHtml = require('gulp-inject');
 var stylish = require('gulp-jscs-stylish');
+// var typescript = require('gulp-typescript');
 var livereload = require('gulp-livereload');
 var sourcemaps = require('gulp-sourcemaps');
 var preprocess = require('gulp-preprocess');
@@ -48,6 +51,14 @@ var pkg = require('./package.json');
 var env = require('./env')();
 var config = require('./config');
 var noop = function() {};
+
+/**
+ * Helper vars
+ */
+var isWin = /^win/.test(process.platform);
+var isDeploying = false;
+var destination = config.paths.public;
+var watchDebounceDelay = 2000;
 
 /*****************************************************************************
  * Helpers
@@ -83,7 +94,7 @@ function angularModuleName(module) {
  */
 function angularWrapper() {
   return {
-    header: '(function (window, angular, undefined) {\n  \'use strict\';\n',
+    header: '(function(window, angular, undefined) {\n  \'use strict\';\n',
     footer: '\n})(window, window.angular);\n'
   };
 }
@@ -126,26 +137,14 @@ function templatesStream() {
 }
 
 /**
- * Coffeescript stream
- */
-function coffeeStream() {
-  return gulp.src(config.assets.client.coffee)
-    .pipe(coffee({
-      bare: true
-    }).on('error', console.log));
-}
-
-/**
  * Environment module stream
  */
 function environmentStream() {
 
   //Create new stream and write config object as JSON string
-  var stream = vinylSourceStream('app.env.js');
+  var fileName = 'app.env.js';
+  var stream = vinylSourceStream(fileName);
   stream.write(JSON.stringify({}));
-  stream.on('finish', function() {
-    stream.end();
-  });
 
   //Turn into angular constant module JS file
   return stream
@@ -161,7 +160,8 @@ function environmentStream() {
         },
         App: config.app
       }
-    }));
+    }))
+    .pipe(rename(fileName));
 }
 
 /**
@@ -171,11 +171,82 @@ function mergeSources() {
   var sources = arguments;
   var merged = [];
   for (var s = 0; s < sources.length; s++) {
-    if (sources[s] && Array.isArray(sources[s])) {
-      merged = merged.concat(merged, sources[s]);
+    if (sources[s]) {
+      if (Array.isArray(sources[s])) {
+        merged = merged.concat(merged, sources[s]);
+      }
+      else if (typeof sources[s] === 'string') {
+        merged.push(sources[s]);
+      }
     }
   }
   return merged;
+}
+
+/*****************************************************************************
+ * Deployers
+ ***/
+
+/**
+ * Initialize deployment
+ */
+function initDeployment() {
+  isDeploying = true;
+  destination = path.join(config.paths.deploy, destination);
+  return del(config.paths.deploy);
+}
+
+/**
+ * Copy deploy assets
+ */
+function copyDeployAssets(done) {
+
+  //Stuff to copy
+  var toCopy = [
+    config.paths.server,
+    config.paths.env,
+    'assets.json',
+    'package.json',
+    'config.js',
+    'env.js',
+    'LICENSE.md',
+    'README.md',
+    '.modulusignore'
+  ];
+
+  //Create tasks for stuff to copy
+  var tasks = [];
+  toCopy.forEach(function(source) {
+    tasks.push(function(cb) {
+      ncp(source, path.join(config.paths.deploy, source), cb);
+    });
+  });
+
+  //Run tasks in parallel
+  return async.parallel(tasks, done);
+}
+
+/**
+ * Deploy on modulus
+ */
+function deployOnModulus(done) {
+
+  //Prepare
+  var exec = require('child_process').exec;
+  var modulusPath = isWin ? 'modulus' : path.relative(
+    process.cwd(), path.join(__dirname, '../', 'node_modules', 'modulus', 'bin', 'modulus')
+  );
+
+  //Spawn child process (TODO: project should be depending on what kind of deploy is done)
+  var child = exec(modulusPath + ' deploy -p ' + pkg.name, {
+    cwd: path.resolve(config.paths.deploy)
+  }, function(err) {
+    done(err);
+  });
+
+  //Pipe output
+  child.stdout.pipe(process.stdout);
+  child.stderr.pipe(process.stderr);
 }
 
 /*****************************************************************************
@@ -185,8 +256,8 @@ function mergeSources() {
 /**
  * Clean the public folder
  */
-function clean(done) {
-  del(config.paths.public, done);
+function clean() {
+  return del(destination);
 }
 
 /**
@@ -194,51 +265,86 @@ function clean(done) {
  */
 function buildStatic() {
   return gulp.src(config.assets.client.static)
-    .pipe(gulp.dest(config.paths.public));
+    .pipe(gulp.dest(destination));
 }
 
 /**
  * Build application JS files
  */
 function buildAppJs() {
-  var mapFilter = filter(['!*.map']);
-  return es.merge(
+
+  //Create stream
+  var stream = mergeStream(
     gulp.src(config.assets.client.js.app),
-    coffeeStream(),
     templatesStream(),
     environmentStream()
-  )
-    .pipe(ngAnnotate({
-      single_quotes: true
-    }))
-    .pipe(wrapper(angularWrapper()))
-    .pipe(sourcemaps.init())
+  ).pipe(ngAnnotate())
+   .pipe(wrapper(angularWrapper()));
+
+  //Deploying? Don't create source maps
+  if (isDeploying) {
+    stream = stream
       .pipe(babel({
-        nonStandard: false //https://babeljs.io/docs/usage/options/
+        //https://babeljs.io/docs/usage/options/
+        nonStandard: false,
+        compact: false
       }))
+      // .pipe(typescript({
+      //   noImplicitAny: true
+      // }))
       .pipe(concat(packageFileName('.min.js')))
       .pipe(uglify())
-    .pipe(sourcemaps.write('./'))
-    .pipe(mapFilter)
-    .pipe(wrapper(bannerWrapper()))
-    .pipe(mapFilter.restore())
-    .pipe(gulp.dest(config.paths.public + '/js'));
+      .pipe(wrapper(bannerWrapper()));
+  }
+
+  //Minifying?
+  else if (config.build.app.js.minify) {
+    var mapFilter = filter(['!*.map']);
+    stream = stream
+      .pipe(sourcemaps.init())
+        .pipe(babel({
+          nonStandard: false,
+          compact: false
+        }))
+        // .pipe(typescript({
+        //   noImplicitAny: true
+        // }))
+        .pipe(concat(packageFileName('.min.js')))
+        .pipe(uglify())
+      .pipe(sourcemaps.write('./'))
+      .pipe(mapFilter)
+      .pipe(wrapper(bannerWrapper()))
+      .pipe(mapFilter.restore());
+  }
+
+  //Write to public folder and return
+  return stream.pipe(gulp.dest(destination + '/js'));
 }
 
 /**
  * Build application SCSS files
  */
 function buildAppScss() {
-  return gulp.src(config.assets.client.scss.main)
-    .pipe(sass().on('error', sass.logError))
-    .pipe(sourcemaps.init())
-      .pipe(autoprefixer({
-         browsers: ['last 2 versions']
-       }))
-       .pipe(csso())
-       .pipe(rename(packageFileName('.min.css')))
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(config.paths.public + '/css'))
+
+  //Create stream
+  var stream = gulp.src(config.assets.client.scss.main)
+    .pipe(sass().on('error', sass.logError));
+
+  //Minifying?
+  if (isDeploying || config.build.app.css.minify) {
+    stream = stream
+      .pipe(sourcemaps.init())
+        .pipe(autoprefixer({
+           browsers: ['last 2 versions']
+         }))
+         .pipe(csso())
+         .pipe(rename(packageFileName('.min.css')))
+      .pipe(sourcemaps.write('./'));
+  }
+
+  //Write to public folder and return
+  return stream
+    .pipe(gulp.dest(destination + '/css'))
     .pipe(livereload());
 }
 
@@ -246,24 +352,68 @@ function buildAppScss() {
  * Build vendor javascript files
  */
 function buildVendorJs() {
-  return gulp.src(config.assets.client.js.vendor)
-    .pipe(sourcemaps.init())
+
+  //Create stream
+  var stream = gulp.src(mergeSources(
+    config.assets.client.js.vendor,
+    './node_modules/babel-core/browser-polyfill.js'
+  ));
+  var dest = destination + '/js';
+
+  //Deploying? Don't create source maps
+  if (isDeploying) {
+    stream = stream
       .pipe(concat(packageFileName('vendor', '.min.js')))
-      .pipe(uglify())
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(config.paths.public + '/js'));
+      .pipe(uglify());
+  }
+
+  //Minifying?
+  else if (config.build.vendor.js.minify) {
+    stream = stream
+      .pipe(sourcemaps.init())
+        .pipe(concat(packageFileName('vendor', '.min.js')))
+        .pipe(uglify())
+      .pipe(sourcemaps.write('./'));
+  }
+
+  //Otherwise dump in vendor folder
+  else {
+    dest += '/vendor';
+  }
+
+  //Write to public folder and return
+  return stream.pipe(gulp.dest(dest));
 }
 
 /**
  * Process vendor CSS files
  */
-function buildVendorCss() {
-  return gulp.src(config.assets.client.css.vendor)
-    .pipe(sourcemaps.init())
-       .pipe(csso())
-       .pipe(rename(packageFileName('vendor', '.min.css')))
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(config.paths.public + '/css'))
+function buildVendorCss(done) {
+
+  //No CSS?
+  if (!config.assets.client.css.vendor.length) {
+    return done();
+  }
+
+  //Get stream
+  var stream = gulp.src(config.assets.client.css.vendor);
+  var dest = destination + '/css';
+
+  //Minifying?
+  if (isDeploying || config.build.vendor.css.minify) {
+    stream = stream
+      .pipe(sourcemaps.init())
+        .pipe(concat(packageFileName('vendor', '.min.css')))
+        .pipe(csso())
+      .pipe(sourcemaps.write('./'));
+  }
+  else {
+    dest += '/vendor';
+  }
+
+  //Write to public folder and return
+  return stream
+    .pipe(gulp.dest(dest))
     .pipe(livereload());
 }
 
@@ -272,16 +422,46 @@ function buildVendorCss() {
  */
 function buildIndex() {
 
-  //Read sources (in correct order)
-  var sources = gulp.src([
-    'js/' + packageFileName('vendor', '.min.js'),
-    'js/**/*.js',
-    'js/' + packageFileName('.min.js'),
-    'css/' + packageFileName('vendor', '.min.css'),
-    'css/**/*.css',
-    'css/' + packageFileName('.min.css')
-  ], {
-    cwd: config.paths.public,
+  //Prepare files in the correct order
+  var files = [];
+
+  //Minified vendor JS
+  if (isDeploying || config.build.vendor.js.minify) {
+    files.push('js/' + packageFileName('vendor', '.min.js'));
+  }
+  else {
+    files.push('js/vendor/**/*.js');
+  }
+
+  //All other javascript
+  files.push('js/**/*.js');
+
+  //Minified app JS
+  if (isDeploying || config.build.app.js.minify) {
+    files.push('js/' + packageFileName('.min.js'));
+  }
+
+  //Minified vendor CSS
+  if (config.assets.client.css.vendor.length > 0) {
+    if (isDeploying || config.build.vendor.css.minify) {
+      files.push('css/' + packageFileName('vendor', '.min.css'));
+    }
+    else {
+      files.push('css/vendor/**/*.css');
+    }
+  }
+
+  //All other css
+  files.push('css/**/*.css');
+
+  //Minified app CSS
+  if (isDeploying || config.build.app.css.minify) {
+    files.push('css/' + packageFileName('.min.css'));
+  }
+
+  //Read sources
+  var sources = gulp.src(files, {
+    cwd: destination,
     read: false
   });
 
@@ -292,12 +472,13 @@ function buildIndex() {
     }))
     .pipe(preprocess({
       context: {
-        ENV: env
+        ENV: env,
+        APP: config.app
       }
     }))
     .pipe(removeHtmlComments())
     .pipe(removeEmptyLines())
-    .pipe(gulp.dest(config.paths.public))
+    .pipe(gulp.dest(destination))
     .pipe(livereload());
 }
 
@@ -360,20 +541,17 @@ function lintServerCode() {
 /**
  * Run client side unit tests
  */
-function testClientCode() {
-  return gulp.src(mergeSources(
-    config.assets.client.js.vendor,
-    config.assets.client.js.karma,
-    config.assets.client.js.app,
-    config.assets.client.js.tests
-  )).pipe(karma({
-      configFile: 'karma.conf.js',
-      action: 'run'
-    }))
-    .on('error', function(err) {
-      //Make sure failed tests cause gulp to exit non-zero
-      throw err;
-    });
+function testClientCode(done) {
+  new karma.Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true,
+    files: mergeSources(
+      config.assets.client.js.vendor,
+      config.assets.client.js.karma,
+      config.assets.client.js.app,
+      config.assets.client.js.tests
+    )
+  }, done).start();
 }
 
 /**
@@ -473,82 +651,80 @@ function tagBump(cb) {
  * Watch client side code
  */
 function watchClientCode() {
-  gulp.watch([
+  gulp.watch(mergeSources(
     config.assets.client.js.app,
     config.assets.client.html
-  ], gulp.series(lintCode, testClientCode, buildAppJs, buildIndex));
+  ), {
+    debounceDelay: watchDebounceDelay
+  }, gulp.series(lintCode, testClientCode, buildAppJs, buildIndex));
 }
 
 /**
  * Watch server side code
  */
 function watchServerCode() {
-  gulp.watch([
-    config.assets.server.js.app
-  ], gulp.series(lintCode));
+  gulp.watch(config.assets.server.js.app, {
+    debounceDelay: watchDebounceDelay
+  }, gulp.series(lintCode));
 }
 
 /**
  * Watch client side tests
  */
 function watchClientTests() {
-  gulp.watch([
-    config.assets.client.js.tests
-  ], gulp.series(lintCode, testClientCode));
+  gulp.watch(config.assets.client.js.tests, {
+    debounceDelay: watchDebounceDelay
+  }, gulp.series(lintCode, testClientCode));
 }
 
 /**
  * Watch server side tests
  */
 function watchServerTests() {
-  gulp.watch([
-    config.assets.server.js.tests
-  ], gulp.series(lintCode));
+  gulp.watch(config.assets.server.js.tests, {
+    debounceDelay: watchDebounceDelay
+  }, gulp.series(lintCode));
 }
 
 /**
  * Watch vendor code
  */
 function watchVendorCode() {
-  gulp.watch([
-    config.assets.client.js.vendor
-  ], gulp.series(buildVendorJs, buildIndex));
+  gulp.watch(config.assets.client.js.vendor, {
+    debounceDelay: watchDebounceDelay
+  }, gulp.series(buildVendorJs, buildIndex));
 }
 
 /**
  * Watch styles
  */
 function watchStyles() {
-  gulp.watch([
-    config.assets.client.scss.app
-  ], gulp.series(buildAppScss));
+  gulp.watch(config.assets.client.scss.app, {
+    debounceDelay: watchDebounceDelay
+  }, gulp.series(buildAppScss));
 }
 
 /**
  * Watch static files
  */
 function watchStatic() {
-  gulp.watch([
-    config.assets.client.static
-  ], gulp.series(buildStatic));
+  gulp.watch(config.assets.client.static, {
+    debounceDelay: watchDebounceDelay
+  }, gulp.series(buildStatic));
 }
 
 /**
  * Watch index HTML file
  */
 function watchIndex() {
-  gulp.watch([
-    config.assets.client.index
-  ], gulp.series(buildIndex));
+  gulp.watch(config.assets.client.index, gulp.series(buildIndex));
 }
 
 /**
  * Watch environment files
  */
 function watchEnv() {
-  gulp.watch([
-    config.assets.env.js
-  ], gulp.series(lintCode, testClientCode, buildAppJs, buildIndex));
+  gulp.watch(config.assets.env.js, gulp.series(lintCode, testClientCode, buildAppJs, buildIndex));
 }
 
 /*****************************************************************************
@@ -579,17 +755,20 @@ function startLiveReload() {
  * Build the application
  */
 gulp.task('build', gulp.series(
-  gulp.parallel(
-    clean, lintCode,
-    testServerCode,
-    testClientCode
-  ),
+  clean,
   gulp.parallel(
     buildStatic,
     buildAppJs, buildAppScss,
     buildVendorJs, buildVendorCss
   ),
   buildIndex
+));
+
+/**
+ * Build for deployment
+ */
+gulp.task('deploy', gulp.series(
+  initDeployment, 'build', copyDeployAssets, deployOnModulus
 ));
 
 /**
@@ -641,7 +820,7 @@ gulp.task('major', gulp.series(
  * Default task
  */
 gulp.task('default', gulp.series(
-  'build', gulp.parallel('watch', 'start')
+  gulp.parallel('lint', 'test'), 'build', gulp.parallel('watch', 'start')
 ));
 
 /**

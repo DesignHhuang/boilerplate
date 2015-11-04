@@ -1,0 +1,42 @@
+<!-- user/password/reset/reset.html -->
+<section ng-show="!isSubmitted && !isInvalidToken">
+  <h1>Reset your password</h1>
+  <p>Use the form below to reset your password.</p>
+
+  <form name="resetPasswordForm" class="form-horizontal" ng-submit="resetPassword(credentials)" novalidate>
+
+    <div class="form-group required" ng-class="{'has-error': hasError(resetPasswordForm.password, resetPasswordForm)}">
+      <label class="control-label" for="password">New password</label>
+      <div class="form-input">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Desired password" ng-model="credentials.password" required ng-minlength="7" ng-model-options="{updateOn: 'blur'}" />
+
+        <div class="form-notifications" ng-show="resetPasswordForm.$submitted || resetPasswordForm.password.$dirty" ng-messages="resetPasswordForm.password.$error">
+          <p class="bg-danger text-danger" ng-message="required">Please choose a password.</p>
+          <p class="bg-danger text-danger" ng-message="minlength">Please choose a password with at least 7 characters.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group required" ng-class="{'has-error': hasError(resetPasswordForm.passwordConfirm, resetPasswordForm)}">
+      <label class="control-label" for="passwordConfirm">Confirm password</label>
+      <div class="form-input">
+        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm your password" ng-model="passwordConfirm" required match="credentials.password" ng-model-options="{updateOn: 'blur'}" />
+
+        <div class="form-notifications" ng-show="resetPasswordForm.$submitted || resetPasswordForm.passwordConfirm.$dirty" ng-messages="  resetPasswordForm.passwordConfirm.$error">
+          <p class="bg-danger text-danger" ng-message="required">Please confirm your password.</p>
+          <p class="bg-danger text-danger" ng-message="match">The two passwords do not match.</p>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" ng-disabled="isSubmitting">Change password</button>
+  </form>
+</section>
+<section ng-show="isInvalidToken">
+  <h1>Reset your password</h1>
+  <p>Invalid or expired password reset link. Please <a class="pointer" ng-click="forgotPassword()">try again</a>.</p>
+</section>
+<section ng-show="isSubmitted">
+  <h1>Password reset</h1>
+  <p>You can now use your new password to <a class="pointer" ng-click="doLogin()">sign in</a>.</p>
+</section>

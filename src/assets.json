@@ -36,14 +36,15 @@
         "client/vendor/angular-mocks/angular-mocks.js",
         "client/vendor/angular-resource/angular-resource.js",
         "client/vendor/angular-sanitize/angular-sanitize.js",
-        "client/vendor/angular-touch/angular-touch.js",
-        "client/vendor/angular-ui-router/release/angular-ui-router.js"
+        "client/vendor/angular-ui-router/release/angular-ui-router.js",
+        "client/vendor/meanie-angular-api/release/meanie-angular-api.js",
+        "client/vendor/meanie-angular-log/release/meanie-angular-log.js",
+        "client/vendor/meanie-angular-url/release/meanie-angular-url.js",
+        "client/vendor/meanie-angular-convert/release/meanie-angular-convert.js",
+        "client/vendor/meanie-angular-storage/release/meanie-angular-storage.js",
+        "client/vendor/meanie-angular-http-buffer/release/meanie-angular-http-buffer.js"
       ]
     },
-    "coffee": [
-      "client/app/**/*.coffee",
-      "client/common/**/*.coffee"
-    ],
     "html": [
       "client/app/**/*.html",
       "client/common/**/*.html"
@@ -55,7 +56,6 @@
       "main": "client/app/app.scss"
     },
     "css": {
-      "app": [],
       "vendor": []
     },
     "static": [

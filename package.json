@@ -47,16 +47,16 @@
   },
   "devDependencies": {
     "gulp": "gulpjs/gulp#4.0",
-    "gulp-bump": "^0.3.1",
+    "gulp-bump": "^1.0.0",
     "gulp-cached": "^1.1.0",
-    "gulp-git": "^1.2.4",
-    "gulp-jasmine": "^2.0.1",
-    "gulp-jscs": "^1.6.0",
-    "gulp-jscs-stylish": "^1.1.0",
+    "gulp-git": "^1.6.0",
+    "gulp-jasmine": "^2.1.0",
+    "gulp-jscs": "^3.0.1",
+    "gulp-jscs-stylish": "^1.2.1",
     "gulp-jshint": "^1.11.0",
     "jasmine-core": "^2.3.4",
     "jasmine-spec-reporter": "^2.2.3",
-    "jscs": "^1.13.1",
+    "jscs": "^2.3.5",
     "jshint": "^2.8.0",
     "jshint-stylish": "^2.0.1"
   }

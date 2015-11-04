@@ -1,0 +1,40 @@
+<!-- user/login/login.html -->
+<section>
+  <h1>Sign in to {{App.name}}</h1>
+  <p>Sign in using the form below, or <a class="pointer" ng-click="register()">register</a> first.</p>
+
+  <form name="loginForm" ng-submit="loginWithCredentials(credentials, credentials.remember)" novalidate>
+    <div class="form-group required" ng-class="{'has-error': hasError(loginForm.email, loginForm)}">
+      <label class="control-label" for="email">Email address</label>
+      <input class="form-control" type="email" id="email" name="email" placeholder="Email address" ng-model="credentials.email" required ng-keydown="resetValidity()" ng-model-options="{updateOn: 'blur'}" />
+    </div>
+    <div class="form-notifications" ng-show="loginForm.$submitted || loginForm.email.$dirty" ng-messages="loginForm.email.$error">
+      <p class="bg-danger text-danger" ng-message="required">Enter your email address.</p>
+      <p class="bg-danger text-danger" ng-message="email">Enter a valid email address.</p>
+      <p class="bg-danger text-danger" ng-message="suspended">This account has been suspended.</p>
+    </div>
+
+    <div class="form-group required" ng-class="{'has-error': hasError(loginForm.password, loginForm)}">
+      <label class="control-label" for="password">Password</label>
+      <input class="form-control" type="password" id="password" name="password" placeholder="Password" ng-model="credentials.password" required ng-keydown="resetValidity()" ng-model-options="{updateOn: 'blur'}" />
+    </div>
+    <div class="form-notifications" ng-show="loginForm.$submitted || loginForm.password.$dirty" ng-messages="loginForm.password.$error">
+      <p class="bg-danger text-danger" ng-message="required">Enter your password.</p>
+      <p class="bg-danger text-danger" ng-message="credentials">Invalid login, please double check your email address and password.</p>
+    </div>
+    <p>
+      <a class="pointer" ng-click="forgotPassword()">Forgot password?</a>
+    </p>
+
+    <div class="form-group">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="remember" ng-model="credentials.remember" />
+          Remember me on this computer
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" ng-disabled="isLoggingIn">Sign in</button>
+  </form>
+</section>

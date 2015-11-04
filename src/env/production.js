@@ -6,10 +6,23 @@
 module.exports = {
 
   /**
+   * App settings
+   */
+  app: {
+    baseUrl: 'http://my-application.com',
+
+    //Analytics
+    analytics: {
+      enabled: true,
+      trackingId: ''
+    }
+  },
+
+  /**
    * Server settings
    */
   server: {
-    port: 80
+    port: process.env.PORT || 80
   },
 
   /**
@@ -25,15 +38,6 @@ module.exports = {
   },
 
   /**
-   * oAuth settings
-   */
-  oAuth: {
-    Google: {
-      clientId: ''
-    }
-  },
-
-  /**
    * Database settings
    */
   db: {
@@ -41,6 +45,15 @@ module.exports = {
     options: {
       user: '',
       pass: ''
+    }
+  },
+
+  /**
+   * Sendgrid settings
+   */
+  sendgrid: {
+    auth: {
+      api_key: ''
     }
   }
 };

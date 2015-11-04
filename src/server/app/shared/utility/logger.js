@@ -9,7 +9,7 @@ var fs = require('fs');
 /**
  * Application dependencies
  */
-var config = require('app/config');
+var config = require('app/config.js');
 
 /**
  * Log directory

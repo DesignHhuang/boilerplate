@@ -1,0 +1,63 @@
+<!-- user/register/register.html -->
+<section ng-show="!isRegistered">
+  <h1>Register</h1>
+  <p class="error bg-danger text-danger" ng-show="error" ng-click="error=null">Registration failed</p>
+
+  <form name="registerForm" ng-submit="register(User)" novalidate>
+    <div class="form-group required" ng-class="{'has-error': registerForm.name.hasError()}">
+      <label class="control-label" for="name">Name</label>
+      <div class="form-input">
+        <input type="text" class="form-control" id="name" name="name" placeholder="Your name" ng-model="User.name" required ng-model-options="{updateOn: 'blur'}" />
+
+        <div class="form-notifications" ng-show="registerForm.$submitted || registerForm.name.$dirty" ng-messages="registerForm.name.$error">
+          <p class="bg-danger text-danger" ng-message="required">Please fill out your name.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group required" ng-class="{'has-error': registerForm.email.hasError()}">
+      <label class="control-label" for="email">Email address</label>
+      <div class="form-input">
+        <input class="form-control" type="email" id="email" name="email" placeholder="Email address" ng-model="User.email" required user-exists ng-model-options="{updateOn: 'blur'}" />
+
+        <div class="form-notifications" ng-show="registerForm.$submitted || registerForm.email.$dirty" ng-messages="registerForm.email.$error">
+          <p class="bg-danger text-danger" ng-message="required">Enter your email address.</p>
+          <p class="bg-danger text-danger" ng-message="email">Enter a valid email address.</p>
+          <p class="bg-danger text-danger" ng-message="exists">This email address is already in use.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group required" ng-class="{'has-error': hasError(registerForm.password, registerForm)}">
+      <label class="control-label" for="password">Password</label>
+      <div class="form-input">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Desired password" ng-model="User.password" required ng-minlength="7" ng-model-options="{updateOn: 'blur'}" />
+
+        <div class="form-notifications" ng-show="registerForm.$submitted || registerForm.password.$dirty" ng-messages="registerForm.password.$error">
+          <p class="bg-danger text-danger" ng-message="required">Please choose a password.</p>
+          <p class="bg-danger text-danger" ng-message="minlength">Please choose a password with at least 7 characters.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group required" ng-class="{'has-error': hasError(registerForm.passwordConfirm, registerForm)}">
+      <label class="control-label" for="passwordConfirm">Confirm password</label>
+      <div class="form-input">
+        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm your password" ng-model="passwordConfirm" required match="User.password" ng-model-options="{updateOn: 'blur'}" />
+
+        <div class="form-notifications" ng-show="registerForm.$submitted || registerForm.passwordConfirm.$dirty" ng-messages="registerForm.passwordConfirm.$error">
+          <p class="bg-danger text-danger" ng-message="required">Please confirm your password.</p>
+          <p class="bg-danger text-danger" ng-message="match">The two passwords do not match.</p>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" ng-disabled="isSaving">Register</button>
+  </form>
+</section>
+<section ng-show="isRegistered">
+  <h1>Thanks for registering, {{User.name}}.</h1>
+  <p ng-if="isLoggingIn">Please wait while we log you in...</p>
+  <p ng-if="isLoggedIn">Your registration is complete and you have been logged in.</p>
+  <p ng-if="needsManualLogin">You can now <a ui-sref='user.login'>login</a>.</p>
+</section>

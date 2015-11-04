@@ -1,0 +1,25 @@
+{
+  "user": {
+		"verification": {
+			"mail": {
+				"subject": "Verify your email address",
+				"text": "Please verify your email address by clicking on the following link: {{link}}",
+				"html": "<p>Please verify your email address by clicking on the following link: <a href='{{link}}'>verify my email address</a></p>"
+			}
+		},
+		"resetPassword": {
+			"mail": {
+				"subject": "Reset your password",
+				"text": "Reset your password by clicking on the following link: {{link}}\n\nThis link is only valid for {{validity}} hours.\n\nIf you did not request to change your password, you can ignore this email.",
+				"html": "<p>Reset your password by clicking on the following link: <a href='{{link}}'>reset password</a></p><p>This link is only valid for {{validity}} hours.</p><p>If you did not request to change your password, you can ignore this email.</p>"
+			}
+		},
+		"resetPasswordConfirm": {
+			"mail": {
+				"subject": "Your password has been reset",
+				"text": "Your password for My Application has been reset.",
+				"html": "<p>Your password for My Application has been reset.</p>"
+			}
+		}
+	}
+}

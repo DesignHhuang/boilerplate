@@ -27,8 +27,86 @@ module.exports = {
     version: pkg.version,
     title: 'My Application',
     baseUrl: '/',
+
+    //API
     api: {
       baseUrl: '/api/v1/'
+    },
+
+    //Authentication
+    auth: {
+      clientIdentifier: pkg.name
+    },
+
+    //Analytics
+    analytics: {
+      enabled: false,
+      trackingId: ''
+    }
+  },
+
+  /**
+   * Authentication settings
+   */
+  auth: {
+    refreshToken: {
+      httpsOnly: true,
+      maxAge: 30 * 24 * 3600 //seconds
+    }
+  },
+
+  /**
+   * Token settings
+   */
+  token: {
+    audience: 'http://my-application.com/app',
+    issuer: 'http://my-application.com/api',
+    types: {
+      access: {
+        secret: '',
+        expiration: 3600 //seconds
+      },
+      refresh: {
+        secret: '',
+        expiration: 30 * 24 * 3600 //seconds
+      },
+      verifyEmail: {
+        secret: '',
+        expiration: 48 * 3600 //seconds
+      },
+      resetPassword: {
+        secret: '',
+        expiration: 24 * 3600 //seconds
+      }
+    }
+  },
+
+  /**
+   * Cryptography settings
+   */
+  bcrypt: {
+    rounds: 10
+  },
+
+  /**
+   * Internationalization settings
+   */
+  i18n: {
+    directory: './server/app/locales',
+    locales: ['en'],
+    defaultLocale: 'en',
+    objectNotation: true
+  },
+
+  /**
+   * Mailer settings
+   */
+  mailer: {
+    from: {
+      noreply: 'My Application <no-reply@my-application.com>'
+    },
+    to: {
+      admin: 'Admin <admin@my-application.com>'
     }
   },
 
@@ -46,7 +124,32 @@ module.exports = {
   paths: {
     public: 'public',
     client: 'client',
-    server: 'server'
+    server: 'server',
+    deploy: 'deploy',
+    data: 'data',
+    env: 'env'
+  },
+
+  /**
+   * Build settings
+   */
+  build: {
+    app: {
+      js: {
+        minify: true
+      },
+      css: {
+        minify: true
+      }
+    },
+    vendor: {
+      js: {
+        minify: true
+      },
+      css: {
+        minify: true
+      }
+    }
   },
 
   /**

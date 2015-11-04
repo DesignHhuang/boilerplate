@@ -1,0 +1,68 @@
+<!-- user/profile/profile.html -->
+<section>
+  <h1>Profile</h1>
+  <p>You can update your user profile and change your password here.</p>
+
+  <form name="profileForm" class="form-horizontal" ng-submit="save(user)" novalidate>
+
+    <div class="form-group required" ng-class="{'has-error': hasError(profileForm.name, profileForm)}">
+      <label class="control-label" for="name">Name</label>
+      <div class="form-input">
+        <input type="text" class="form-control" id="name" name="name" placeholder="Your name" ng-model="user.name" required ng-model-options="{updateOn: 'blur'}" />
+
+        <div class="form-notifications" ng-show="profileForm.$submitted || profileForm.name.$dirty" ng-messages="profileForm.name.$error">
+          <p class="bg-danger text-danger" ng-message="required">Please fill out your name.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group required" ng-class="{'has-error': hasError(profileForm.email, profileForm)}">
+      <label class="control-label" for="email">Email address</label>
+      <div class="form-input">
+        <input class="form-control" type="email" id="email" name="email" placeholder="Email address" ng-model="user.email" required ng-model-options="{updateOn: 'blur'}" />
+
+        <div class="form-notifications">
+          <p class="bg-warning text-warning" ng-show="!User.isEmailVerified">
+            <span ng-show="isSendingVerificationMail">
+              Sending verification email... <span class="loader right">Loading...</span>
+            </span>
+            <span ng-show="!isSendingVerificationMail">
+              Email address not verified yet.
+              <a ng-click="resendVerificationEmail()" class="pointer">Resend verification email.</a>
+            </span>
+          </p>
+        </div>
+        <div class="form-notifications" ng-show="profileForm.$submitted || profileForm.email.$dirty" ng-messages="profileForm.email.$error">
+          <p class="bg-danger text-danger" ng-message="required">Enter your email address.</p>
+          <p class="bg-danger text-danger" ng-message="email">Enter a valid email address.</p>
+          <p class="bg-danger text-danger" ng-message="exists">This email address is already in use.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': hasError(profileForm.password, profileForm)}">
+      <label class="control-label" for="password">New password</label>
+      <div class="form-input">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Desired password" ng-model="user.password" ng-minlength="7" ng-model-options="{updateOn: 'blur'}" />
+
+        <div class="form-notifications" ng-show="profileForm.$submitted || profileForm.password.$dirty" ng-messages="profileForm.password.$error">
+          <p class="bg-danger text-danger" ng-message="minlength">Please choose a password with at least 7 characters.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': hasError(profileForm.passwordConfirm, profileForm)}">
+      <label class="control-label" for="passwordConfirm">Confirm password</label>
+      <div class="form-input">
+        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm your password" ng-model="passwordConfirm" ng-required="user.password" match="user.password" ng-model-options="{updateOn: 'blur'}" />
+
+        <div class="form-notifications" ng-show="profileForm.$submitted || profileForm.passwordConfirm.$dirty" ng-messages="profileForm.passwordConfirm.$error">
+          <p class="bg-danger text-danger" ng-message="required">Please confirm your password.</p>
+          <p class="bg-danger text-danger" ng-message="match">The two passwords do not match.</p>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" ng-disabled="isSaving">Save</button>
+  </form>
+</section>

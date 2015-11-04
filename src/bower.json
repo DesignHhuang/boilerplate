@@ -2,14 +2,19 @@
   "name": "MyApplication",
   "version": "0.0.1",
   "dependencies": {
-    "angular": "^1.4.3",
-    "angular-animate": "^1.4.3",
-    "angular-cookies": "^1.4.3",
-    "angular-messages": "^1.4.3",
-    "angular-mocks": "^1.4.3",
-    "angular-resource": "^1.4.3",
-    "angular-sanitize": "^1.4.3",
-    "angular-touch": "^1.4.3",
-    "angular-ui-router": "^0.2.15"
+    "angular": "^1.4.7",
+    "angular-animate": "^1.4.7",
+    "angular-cookies": "^1.4.7",
+    "angular-messages": "^1.4.7",
+    "angular-mocks": "^1.4.7",
+    "angular-resource": "^1.4.7",
+    "angular-sanitize": "^1.4.7",
+    "angular-ui-router": "^0.2.15",
+    "meanie-angular-api": "^1.0.0",
+    "meanie-angular-log": "^1.0.0",
+    "meanie-angular-url": "^1.0.0",
+    "meanie-angular-convert": "^1.0.0",
+    "meanie-angular-storage": "^1.0.0",
+    "meanie-angular-http-buffer": "^1.0.0"
   }
 }

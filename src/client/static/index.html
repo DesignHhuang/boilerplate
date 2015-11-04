@@ -21,12 +21,9 @@
       angular.bootstrap(document.getElementsByTagName('html')[0], ['App']);
     }, 10);
   });
-  <!-- @if ENV='production' -->
-  //Include Google analytics etc.
-  <!-- @endif -->
 </script>
-<!-- @if ENV='development' -->
-
+<!-- @if ENV='production' -->
+<script async src='//www.google-analytics.com/analytics.js'></script>
 <!-- @endif -->
 </body>
 </html>

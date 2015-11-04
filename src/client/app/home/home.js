@@ -13,6 +13,7 @@ angular.module('App.Home', [
 
   //State definition
   $stateProvider.state('home', {
+    parent: 'app',
     url: '/',
     controller: 'HomeCtrl',
     templateUrl: 'home/home.html'

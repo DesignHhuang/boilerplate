@@ -4,12 +4,14 @@
   "maxErrors": 100,
   "verbose": false,
   "excludeFiles": [
+    "**/*.json",
     "public/**",
     "node_modules/**",
     "client/vendor/**",
     "client/static/**"
   ],
   "requireParenthesesAroundIIFE": true,
+  "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
   "maximumLineLength": 100,
   "validateLineBreaks": "LF",
   "validateIndentation": 2,

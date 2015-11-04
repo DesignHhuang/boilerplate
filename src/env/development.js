@@ -9,7 +9,8 @@ module.exports = {
    * App settings
    */
   app: {
-    title: 'My Application (dev)'
+    title: 'My Application (dev)',
+    baseUrl: 'http://localhost:' + (process.env.PORT || 8080)
   },
 
   /**
@@ -27,22 +28,45 @@ module.exports = {
   },
 
   /**
-   * oAuth settings
-   */
-  oAuth: {
-    Google: {
-      clientId: ''
-    }
-  },
-
-  /**
    * Database settings
    */
   db: {
     uri: 'mongodb://localhost/meanie',
+    debug: true,
     options: {
       user: '',
       pass: ''
+    }
+  },
+
+  /**
+   * Authentication settings
+   */
+  auth: {
+    refreshToken: {
+      httpsOnly: false
+    }
+  },
+
+  /**
+   * Build settings
+   */
+  build: {
+    app: {
+      js: {
+        minify: false
+      },
+      css: {
+        minify: false
+      }
+    },
+    vendor: {
+      js: {
+        minify: true
+      },
+      css: {
+        minify: true
+      }
     }
   }
 };

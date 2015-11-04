@@ -1,0 +1,13 @@
+<!-- user/email/verify/verify.html -->
+<section ng-show="!isVerified && !isInvalid">
+  <h1>Verifying email address</h1>
+  <p>Please hang on while we verify your email address...</p>
+</section>
+<section ng-show="isVerified">
+  <h1>Verified</h1>
+  <p>Thank you for verifying your email address.</p>
+</section>
+<section ng-show="isInvalid">
+  <h1>Invalid or expired link</h1>
+  <p>That link is either invalid or expired.</p>
+</section>
