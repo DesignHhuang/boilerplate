@@ -542,15 +542,25 @@ function lintServerCode() {
  * Run client side unit tests
  */
 function testClientCode(done) {
+
+  //Get files for testing (karma doesn't like negated globs and throws a warning)
+  var files = mergeSources(
+    config.assets.client.js.vendor,
+    config.assets.client.js.karma,
+    config.assets.client.js.app,
+    config.assets.client.js.tests
+  ).filter(function(glob) {
+    if (glob && glob[0] === '!') {
+      return false;
+    }
+    return true;
+  });
+
+  //Run karma server
   new karma.Server({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true,
-    files: mergeSources(
-      config.assets.client.js.vendor,
-      config.assets.client.js.karma,
-      config.assets.client.js.app,
-      config.assets.client.js.tests
-    )
+    files: files
   }, done).start();
 }
 
