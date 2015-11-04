@@ -1,7 +1,7 @@
 <!-- user/login/login.html -->
 <section>
-  <h1>Sign in to {{App.name}}</h1>
-  <p>Sign in using the form below, or <a class="pointer" ng-click="register()">register</a> first.</p>
+  <h1>Login to {{App.name}}</h1>
+  <p>Login using the form below, or <a class="pointer" ng-click="register()">register</a> first.</p>
 
   <form name="loginForm" ng-submit="loginWithCredentials(credentials, credentials.remember)" novalidate>
     <div class="form-group required" ng-class="{'has-error': hasError(loginForm.email, loginForm)}">
@@ -35,6 +35,6 @@
       </div>
     </div>
 
-    <button type="submit" class="btn btn-primary" ng-disabled="isLoggingIn">Sign in</button>
+    <button type="submit" class="btn btn-primary" ng-disabled="isLoggingIn">Login</button>
   </form>
 </section>

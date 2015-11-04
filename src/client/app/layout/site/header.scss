@@ -13,6 +13,7 @@
 		height: $heightHeader;
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		.menu {
 			font-size: 0;
 			> li {
@@ -30,6 +31,9 @@
 						text-decoration: underline;
 					}
 				}
+			}
+			&.right > li {
+				margin: 0 0 0 2rem;
 			}
 		}
 	}

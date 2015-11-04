@@ -52,8 +52,9 @@ button, input, select, textarea {
 /**
  * Import rest of site layout components
  */
-@import 'site/text';
-@import 'site/utility';
+@import 'common/utility';
+@import 'ui/text';
+@import 'ui/animations';
 @import 'site/header';
 @import 'site/footer';
 @import 'site/contents';

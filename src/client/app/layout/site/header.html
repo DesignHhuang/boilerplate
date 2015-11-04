@@ -1,0 +1,15 @@
+<div class="container">
+  <nav>
+    <menu class="menu" ng-cloak>
+      <li ng-repeat="item in Menu.main"><a ui-sref="{{item.sref}}" ui-sref-active="active">{{item.title}}</a></li>
+    </menu>
+    <menu class="menu right" ng-cloak ng-if="!Auth.isAuthenticated()">
+      <li><a ui-sref="user.register" ui-sref-active="active">register</a></li>
+      <li><a ng-click="doLogin()">login</a></li>
+    </menu>
+    <menu class="menu right" ng-cloak ng-if="Auth.isAuthenticated()">
+      <li><a ui-sref="user.profile" ui-sref-active="active">profile</a></li>
+      <li><a ng-click="doLogout()">logout</a></li>
+    </menu>
+  </nav>
+</div>

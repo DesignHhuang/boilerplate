@@ -33,7 +33,7 @@ angular.module('App.User.Login.Service', [])
         postLoginParams = redirectParams || {};
 
         //Redirect to login state
-        $state.go('login');
+        $state.go('user.login');
       },
 
       /**
