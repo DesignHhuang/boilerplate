@@ -4,6 +4,7 @@
  * External dependencies
  */
 var jwt = require('jsonwebtoken');
+var chalk = require('chalk');
 
 /**
  * Application dependenices
@@ -13,13 +14,23 @@ var config = require('app/config.js');
 /**
  * Get token config for a certain type
  */
-function getTokenConfig(type) {
-  var tokenConfig = config.token.types[type] || {};
-  tokenConfig.expiration = tokenConfig.expiration || config.token.expiration;
-  tokenConfig.audience = tokenConfig.audience || config.token.audience;
-  tokenConfig.issuer = tokenConfig.issuer || config.token.issuer;
-  tokenConfig.secret = tokenConfig.secret || config.token.secret;
-  return tokenConfig;
+function getConfig(type) {
+  var cfg = config.token.types[type] || {};
+  cfg.expiration = cfg.expiration || config.token.expiration;
+  cfg.audience = cfg.audience || config.token.audience;
+  cfg.issuer = cfg.issuer || config.token.issuer;
+  cfg.secret = cfg.secret || config.token.secret;
+  return cfg;
+}
+
+/**
+ * Ensure token config is valid
+ */
+function ensureValidConfig(cfg) {
+  if (!cfg.secret || !cfg.audience || !cfg.issuer) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -31,11 +42,15 @@ module.exports = {
    * Generate a token
    */
   generate: function(type, claims) {
-    var tokenConfig = getTokenConfig(type);
-    return jwt.sign(claims || {}, tokenConfig.secret, {
-      audience: tokenConfig.audience,
-      issuer: tokenConfig.issuer,
-      expiresInSeconds: tokenConfig.expiration
+    var cfg = getConfig(type);
+    if (!ensureValidConfig(cfg)) {
+      console.warn(chalk.yellow('Missing secret for token configuration of type', type));
+      return '';
+    }
+    return jwt.sign(claims || {}, cfg.secret, {
+      audience: cfg.audience,
+      issuer: cfg.issuer,
+      expiresIn: cfg.expiration
     });
   },
 
@@ -43,10 +58,14 @@ module.exports = {
    * Validate a token
    */
   validate: function(type, token, cb) {
-    var tokenConfig = getTokenConfig(type);
-    jwt.verify(token, tokenConfig.secret, {
-      audience: tokenConfig.audience,
-      issuer: tokenConfig.issuer
+    var cfg = getConfig(type);
+    if (!ensureValidConfig(cfg)) {
+      console.warn(chalk.yellow('Missing secret for token configuration of type', type));
+      return '';
+    }
+    jwt.verify(token, cfg.secret, {
+      audience: cfg.audience,
+      issuer: cfg.issuer
     }, cb);
   }
 };

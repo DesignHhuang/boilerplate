@@ -7,11 +7,11 @@ angular.module('App.Nav.Menu.Service', [])
 /**
  * Simple menu service
  */
-.factory('Menu', function() {
+.factory('Menu', function(App) {
   return {
     main: [
       {
-        sref: 'home',
+        sref: App.state.home,
         title: 'home'
       }
     ]

@@ -45,8 +45,10 @@ angular.module('App.Error.LogInterceptor.Service', [])
 
       //Log non template request responses
       if (request && !isTemplateRequest(request)) {
-        $log.log(request.method, request.url, response.status, response.statusText);
-        $log.debug(response.data);
+        $log.log(request.method, request.url, response.status, response.statusText || '');
+        if (response.data && Object.keys(response.data).length > 0) {
+          $log.debug(response.data);
+        }
       }
 
       //Return response
@@ -63,8 +65,10 @@ angular.module('App.Error.LogInterceptor.Service', [])
 
       //Log non template request responses
       if (request && !isTemplateRequest(request)) {
-        $log.error(request.method, request.url, rejection.status, rejection.statusText);
-        $log.debug(rejection.data);
+        $log.error(request.method, request.url, rejection.status, rejection.statusText || '');
+        if (rejection.data && Object.keys(rejection.data).length > 0) {
+          $log.debug(rejection.data);
+        }
       }
 
       //Return rejection

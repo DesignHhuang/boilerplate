@@ -18,7 +18,6 @@ angular.module('Directives.ngModel.Directive', [])
        * the forms submitted state, in addition to the field's $invalid state.
        */
       ngModel.hasError = function() {
-        console.log(this);
         if (!this.$$parentForm.$submitted && !this.$dirty) {
           return false;
         }

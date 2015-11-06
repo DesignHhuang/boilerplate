@@ -50,7 +50,7 @@ module.exports = {
    * Verify authentication
    */
   verify: function(req, res) {
-    res.sendStatus(200);
+    res.end();
   },
 
   /**
@@ -61,7 +61,7 @@ module.exports = {
       secure: REFRESH_TOKEN_COOKIE_SECURE,
       httpOnly: true
     });
-    res.sendStatus(200);
+    res.end();
   },
 
   /**

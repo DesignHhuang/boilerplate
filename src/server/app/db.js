@@ -5,6 +5,7 @@
  */
 var path = require('path');
 var chalk = require('chalk');
+var obj = require('obj-tools');
 var mongoose = require('mongoose');
 
 //Mongoose extend just needs to be loaded
@@ -25,30 +26,35 @@ var dbErrorHandler = require('app/error/handlers/db.js');
 /**
  * Export
  */
-module.exports = function(app) {
+module.exports = function(app, options) {
+
+  //Options given?
+  options = obj.extend(config.db, options || {});
 
   //Set debugging on or off
-  mongoose.set('debug', config.db.debug);
+  mongoose.set('debug', options.debug);
 
   //Connect to database
-  console.log('Connecting to database', chalk.magenta(config.db.uri), '...');
-  var db = mongoose.connect(config.db.uri, config.db.options);
+  console.log('Connecting to database', chalk.magenta(options.uri), '...');
+  var db = mongoose.connect(options.uri, options.options);
 
   //Handle connection events
   mongoose.connection.on('error', dbErrorHandler);
   mongoose.connection.on('connected', function() {
-    console.log(chalk.green('Database connected @'), chalk.magenta(config.db.uri));
+    console.log(chalk.green('Database connected @'), chalk.magenta(options.uri));
   });
 
-  //Load models
-  console.log('Loading model files...');
-  globber.files('./server/app/**/*.model.js').forEach(function(modelPath) {
-    console.log(chalk.grey(' - %s'), modelPath.replace('./server/app/', ''));
-    require(path.resolve(modelPath));
-  });
-
-  //Append to app if given
+  //Loading within app?
   if (app) {
+
+    //Load models
+    console.log('Loading model files...');
+    globber.files('./server/app/**/*.model.js').forEach(function(modelPath) {
+      console.log(chalk.grey(' - %s'), modelPath.replace('./server/app/', ''));
+      require(path.resolve(modelPath));
+    });
+
+    //Append to app
     app.db = db;
   }
 

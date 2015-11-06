@@ -11,7 +11,7 @@ angular.module('App.User.Profile.Controller', [
  * Controller
  */
 .controller('UserProfileCtrl', function(
-  $scope, $state, $modal, User, ngToast
+  $scope, $state, User
 ) {
 
   //Copy user model
@@ -41,7 +41,6 @@ angular.module('App.User.Profile.Controller', [
     //Update user details
     user.save().then(function() {
       User.fromObject(user.toObject());
-      ngToast.success('Your details have been saved');
     }, function(error) {
 
       //Ignore 401's
@@ -76,20 +75,7 @@ angular.module('App.User.Profile.Controller', [
     //Resend verification email
     $scope.isSendingVerificationMail = true;
     User.sendVerificationEmail().then(function() {
-      $modal.open({
-        templateUrl: 'shared/modals/alert.html',
-        controller: 'ModalAlertCtrl',
-        size: 'sm',
-        resolve: {
-          options: function() {
-            return {
-              alert: 'A new verification email has been sent to your email address.',
-              title: 'Email sent',
-              buttonLabel: 'Ok'
-            };
-          }
-        }
-      });
+
     }).finally(function() {
       $scope.isSendingVerificationMail = false;
     });

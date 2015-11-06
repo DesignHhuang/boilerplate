@@ -55,14 +55,12 @@ module.exports = {
    */
   me: function(req, res, next) {
 
-    //Find user again, populating children
-    User.findById(req.user._id).populate('children').then(function(user) {
+    //Find user again, populating extra data
+    User.findById(req.user._id).then(function(user) {
       if (!user) {
         return next(new BadRequestError());
       }
-      user.loadExtendedDetails().then(function(userJson) {
-        res.json(userJson);
-      });
+      res.json(user.toJSON());
     }, function(error) {
       next(error);
     });
@@ -89,14 +87,15 @@ module.exports = {
 
       //Generate access token for immediate login
       user.accessToken = tokenizer.generate('access', user.toJSON());
-      user.save().then(function() {
-        user.loadExtendedDetails().then(function(userJson) {
+      user.save().then(function(user) {
 
-          //Manually append access token now to allow the user to login,
-          //because the model deletes it from JSON form by default
-          userJson.accessToken = user.accessToken;
-          res.status(201).json(userJson);
-        });
+        //Convert to json
+        var userJson = user.toJSON();
+
+        //Manually append access token now to allow the user to login,
+        //because the model deletes it from JSON form by default
+        userJson.accessToken = user.accessToken;
+        res.status(201).json(userJson);
       }, function(error) {
         next(error);
       });
@@ -115,7 +114,7 @@ module.exports = {
     var user = req.user;
 
     //Update data
-    var cantUpdate = ['roles', 'isSuspended', 'isEmailVerified', 'children'];
+    var cantUpdate = ['roles', 'isSuspended', 'isEmailVerified'];
     for (var key in data) {
       if (data.hasOwnProperty(key) && cantUpdate.indexOf(key) === -1) {
         user[key] = data[key];
@@ -123,16 +122,8 @@ module.exports = {
     }
 
     //Save user
-    user.save().then(function() {
-
-      //TODO: this doesn't get called as promise, find a way around it / report issue
-      user.populate('children', function() {
-        user.loadExtendedDetails().then(function(userJson) {
-          res.json(userJson);
-        }, function(error) {
-          next(error);
-        });
-      });
+    user.save().then(function(user) {
+      res.json(user.toJSON());
     }, function(error) {
       next(new ValidationError(error));
     });
@@ -150,7 +141,7 @@ module.exports = {
   },
 
   /**
-   * Query users (for admin)
+   * Query users
    */
   query: function(req, res, next) {
     User.find({
@@ -189,7 +180,7 @@ module.exports = {
 
     //Send mail
     mailer.sendMail(email).then(function() {
-      res.sendStatus(200);
+      res.end();
     }, function(error) {
       next(new ServerError(error));
     });
@@ -231,9 +222,7 @@ module.exports = {
 
           //Send confirmation mail (allow failure)
           mailer.sendMail(email);
-
-          //Send response
-          res.sendStatus(200);
+          res.end();
         }, function(error) {
           next(new ValidationError(error));
         });
@@ -248,7 +237,7 @@ module.exports = {
 
     //Send mail
     sendVerificationEmail(req, res).then(function() {
-      res.sendStatus(200);
+      res.end();
     }, function(error) {
       next(new ServerError(error));
     });

@@ -123,7 +123,7 @@ angular.module('App.User', [
     //If this was a user initiated logout, go to the home page
     if (auth.isUserInitiated) {
       $log.log('User initiated logout, going to home page.');
-      return $state.go(App.home);
+      return $state.go(App.state.home);
     }
 
     //If the current state requires authentication, browse away from it,
@@ -133,7 +133,7 @@ angular.module('App.User', [
         'State', $state.current.name, 'requires authentication.',
         'Going to login.'
       );
-      $state.go(App.home);
+      $state.go(App.state.home);
       return Login.now($state.current.name, $state.params);
     }
 
@@ -176,7 +176,7 @@ angular.module('App.User', [
         //page directly. Otherwise, navigation is simply prevented and the current
         //page the user was on remains visible.
         if (fromState.name === '') {
-          $state.go(App.home);
+          $state.go(App.state.home);
         }
       }
     }

@@ -42,6 +42,11 @@ module.exports = {
     analytics: {
       enabled: false,
       trackingId: ''
+    },
+
+    //Common states
+    state: {
+      home: 'home'
     }
   },
 

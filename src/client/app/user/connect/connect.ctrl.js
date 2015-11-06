@@ -16,7 +16,7 @@ angular.module('App.User.Connect.Controller', [])
     !$state.params.provider || !$state.params.user ||
     ($state.params.provider !== oAuth.provider())
   ) {
-    $state.go(App.home);
+    $state.go(App.state.home);
     return;
   }
 

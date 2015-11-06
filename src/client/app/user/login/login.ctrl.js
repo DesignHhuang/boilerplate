@@ -8,7 +8,7 @@ angular.module('App.User.Login.Controller', [])
  * Controller
  */
 .controller('UserLoginCtrl', function(
-  $scope, $state, $injector, Auth, Login
+  $scope, $state, $injector, Auth, Login, App
 ) {
 
   var oAuth = null;
@@ -59,7 +59,7 @@ angular.module('App.User.Login.Controller', [])
 
     //Login with credentials
     Login.withCredentials(credentials, remember).then(function() {
-      Login.redirect('home');
+      Login.redirect(App.state.home);
     }, function(error) {
       switch (error.code) {
         case 'INVALID_CREDENTIALS':
@@ -107,7 +107,7 @@ angular.module('App.User.Login.Controller', [])
         $scope.oAuthStatus = 'success';
 
         //Redirect, with home state as fallback state
-        Login.redirect('home');
+        Login.redirect(App.state.home);
 
       }, function(error) {
 
