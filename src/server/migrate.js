@@ -78,18 +78,20 @@ var commands = {
         var script = require(path.resolve(migration));
 
         //Log
-        console.log(
-          chalk.grey('Running migration %s...'), migration.replace(MIGRATIONS_PATH, '')
-        );
+        process.stdout.write(chalk.grey(
+          'Running migration ' + migration.replace(MIGRATIONS_PATH, '') + '... '
+        ));
 
         //Check if already ran before
         if (existing[migration]) {
+          process.stdout.write(chalk.yellow('SKIP\n'));
           console.warn(chalk.yellow('Already executed on', existing[migration].date));
           return next();
         }
 
         //Validate migration
         if (typeof script.up !== 'function') {
+          process.stdout.write(chalk.yellow('SKIP\n'));
           console.warn(chalk.yellow('No `up` migration present'));
           return next();
         }
@@ -97,13 +99,14 @@ var commands = {
         //Run migration
         script.up(function(error) {
           if (error) {
-            console.error(chalk.red('Failed:\n' + error.message));
+            process.stdout.write(chalk.red('FAIL\n'));
+            console.error(chalk.red(error.message));
             if (error.stack) {
               console.error(chalk.red(error.stack));
             }
           }
           else {
-            console.log(chalk.green('Ok'));
+            process.stdout.write(chalk.green('OK\n'));
           }
 
           //Save and run next migration
@@ -149,21 +152,26 @@ var commands = {
         var migration = migrations.shift();
 
         //Log
-        console.log(
-          chalk.grey('Rolling back migration %s...'), migration.file.replace(MIGRATIONS_PATH, '')
-        );
+        process.stdout.write(chalk.grey(
+          'Rolling back migration ' + migration.file.replace(MIGRATIONS_PATH, '') + '... '
+        ));
 
         //Try to load the script
         try {
           var script = require(path.resolve(migration.file));
         }
         catch (error) {
-          console.error(chalk.red('Failed:\n' + error.message));
-          return next();
+          process.stdout.write(chalk.red('FAIL\n'));
+          console.error(chalk.red(error.message));
+          migration.remove().then(next, function(error) {
+            done('Failed to remove migration:\n' + error.message);
+          });
+          return;
         }
 
         //Validate migration
         if (typeof script.down !== 'function') {
+          process.stdout.write(chalk.yellow('SKIP\n'));
           console.warn(chalk.yellow('No `down` migration present'));
           return next();
         }
@@ -171,13 +179,14 @@ var commands = {
         //Run migration
         script.down(function(error) {
           if (error) {
-            console.error(chalk.red('Failed:\n' + error.message));
+            process.stdout.write(chalk.red('FAIL\n'));
+            console.error(chalk.red(error.message));
             if (error.stack) {
               console.error(chalk.red(error.stack));
             }
           }
           else {
-            console.log(chalk.green('Ok'));
+            process.stdout.write(chalk.green('OK\n'));
           }
 
           //Remove and run next migration

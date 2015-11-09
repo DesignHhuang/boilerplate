@@ -23,9 +23,7 @@ module.exports = function() {
   }, function(email, password, cb) {
 
     //Find user by email
-    User.findOne({
-      email: email
-    }).then(function(user) {
+    User.findByEmailAndPopulate(email).then(function(user) {
       if (!user) {
         return cb(null, false);
       }

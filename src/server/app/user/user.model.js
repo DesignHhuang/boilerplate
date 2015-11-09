@@ -135,6 +135,22 @@ UserSchema.methods.getClaims = function() {
 };
 
 /**
+ * Find users by ID and populates data as needed
+ */
+UserSchema.statics.findByIdAndPopulate = function(id) {
+  return this.findById(id);
+};
+
+/**
+ * Find users by email and populates data as needed
+ */
+UserSchema.statics.findByEmailAndPopulate = function(email) {
+  return this.findOne({
+    email: email
+  });
+};
+
+/**
  * Transformation to JSON
  */
 UserSchema.options.toJSON = {

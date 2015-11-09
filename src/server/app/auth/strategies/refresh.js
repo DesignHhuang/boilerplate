@@ -36,7 +36,7 @@ module.exports = function() {
       }
 
       //Find user by matching ID
-      User.findById(payload.id).then(function(user) {
+      User.findByIdAndPopulate(payload.id).then(function(user) {
         if (!user) {
           return cb(null, false, {
             error: 'INVALID_TOKEN'
