@@ -39,8 +39,7 @@ angular.module('App', [
  */
 .config(function(
   $locationProvider, $urlRouterProvider, $httpProvider, $stateProvider,
-  $apiProvider, $storageProvider, $logProvider,
-  App, Env
+  $apiProvider, $storageProvider, $logProvider, ENV
 ) {
 
   //Enable HTML 5 mode browsing and set default route
@@ -59,14 +58,14 @@ angular.module('App', [
   });
 
   //Configure API
-  $apiProvider.setBaseUrl(App.api.baseUrl);
-  $apiProvider.setVerbose(false);
+  $apiProvider.setBaseUrl(ENV.api.baseUrl);
+  $apiProvider.setVerbose(ENV.api.verbose);
 
   //Configure storage
-  $storageProvider.setPrefix(App.name);
+  $storageProvider.setPrefix(ENV.app.name);
 
   //Disable all console logging in production
-  if (Env.isProduction) {
+  if (ENV.isProduction) {
     $logProvider.disable('all');
   }
 })
@@ -77,7 +76,6 @@ angular.module('App', [
  * The $state service is injected here to fix an issue with the route not being loaded
  * initially. See https://github.com/angular-ui/ui-router/issues/2051
  */
-.run(function($rootScope, App, $state) {
-  $state = $state;
-  $rootScope.App = App;
+.run(function($rootScope, $state, ENV) {
+  $rootScope.App = ENV.app;
 });

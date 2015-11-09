@@ -26,25 +26,33 @@ module.exports = function() {
     }
 
     //Validate token
-    tokenizer.validate('refresh', refreshToken, function(error, payload) {
-      if (error) {
-        if (error.name === 'TokenExpiredError') {
-          return cb(null, false);
-        }
-        return cb(error);
+    tokenizer.validate('refresh', refreshToken).then(function(payload) {
+
+      //No ID?
+      if (!payload.id) {
+        return cb(null, false, {
+          error: 'INVALID_TOKEN'
+        });
       }
 
       //Find user by matching ID
       User.findById(payload.id).then(function(user) {
         if (!user) {
           return cb(null, false, {
-            error: 'INVALID_USER'
+            error: 'INVALID_TOKEN'
           });
         }
         return cb(null, user);
       }, function(error) {
         return cb(error);
       });
+    }, function(error) {
+      if (error.name === 'TokenExpiredError') {
+        return cb(null, false, {
+          error: 'EXPIRED_TOKEN'
+        });
+      }
+      return cb(error);
     });
   }));
 };

@@ -6,11 +6,15 @@
 module.exports = {
 
   /**
-   * App settings
+   * Client settings
    */
-  app: {
-    title: 'My Application (dev)',
-    baseUrl: 'http://localhost:' + (process.env.PORT || 8080)
+  client: {
+
+    //App
+    app: {
+      title: 'My Application (dev)',
+      baseUrl: 'http://localhost:' + (process.env.PORT || 8080)
+    }
   },
 
   /**

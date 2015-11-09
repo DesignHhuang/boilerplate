@@ -47,7 +47,8 @@ var UserSchema = new Schema({
       enum: ['user', 'admin']
     }],
     default: ['user']
-  }
+  },
+  usedTokens: [String]
 });
 
 /**
@@ -145,7 +146,7 @@ UserSchema.options.toJSON = {
     //Delete authentication related data
     delete ret.password;
     delete ret.roles;
-    delete ret.isSuspended;
+    delete ret.usedTokens;
   }
 };
 

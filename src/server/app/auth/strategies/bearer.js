@@ -21,25 +21,33 @@ module.exports = function() {
   passport.use(new BearerStrategy(function(accessToken, cb) {
 
     //Validate token
-    tokenizer.validate('access', accessToken, function(error, payload) {
-      if (error) {
-        if (error.name === 'TokenExpiredError') {
-          return cb(null, false);
-        }
-        return cb(error);
+    tokenizer.validate('access', accessToken).then(function(payload) {
+
+      //No ID?
+      if (!payload.id) {
+        return cb(null, false, {
+          error: 'INVALID_TOKEN'
+        });
       }
 
       //Find user by matching ID and access token
       User.findById(payload.id).then(function(user) {
         if (!user) {
           return cb(null, false, {
-            error: 'User not found'
+            error: 'INVALID_TOKEN'
           });
         }
         return cb(null, user);
       }, function(error) {
         return cb(error);
       });
+    }, function(error) {
+      if (error.name === 'TokenExpiredError') {
+        return cb(null, false, {
+          error: 'EXPIRED_TOKEN'
+        });
+      }
+      return cb(error);
     });
   }));
 };

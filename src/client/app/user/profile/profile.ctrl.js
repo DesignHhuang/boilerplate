@@ -14,14 +14,11 @@ angular.module('App.User.Profile.Controller', [
   $scope, $state, User
 ) {
 
-  //Copy user model
-  $scope.user = angular.copy(User);
-  $scope.$on('user.loaded', function(even, user) {
-    $scope.user = angular.copy(user);
-  });
+  //Copy user model (otherwise changes would be immediately reflected everywhere)
+  $scope.user = angular.copy(User.current);
 
   //Flags
-  $scope.isSaving = false;
+  $scope.isSubmitting = false;
   $scope.isSendingVerificationMail = false;
 
   /**
@@ -35,12 +32,15 @@ angular.module('App.User.Profile.Controller', [
     }
 
     //Toggle flag
-    $scope.isSaving = true;
+    $scope.isSubmitting = true;
     $scope.error = null;
 
     //Update user details
-    user.save().then(function() {
-      User.fromObject(user.toObject());
+    user.save().then(function(user) {
+
+      //Pass data on to current user model now, and create a fresh copy for our scope
+      User.current.fromObject(user.toObject());
+      $scope.user = angular.copy(User.current);
     }, function(error) {
 
       //Ignore 401's
@@ -63,7 +63,7 @@ angular.module('App.User.Profile.Controller', [
         }
       }
     }).finally(function() {
-      $scope.isSaving = false;
+      $scope.isSubmitting = false;
     });
   };
 

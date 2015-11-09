@@ -57,15 +57,25 @@ module.exports = {
   /**
    * Validate a token
    */
-  validate: function(type, token, cb) {
-    var cfg = getConfig(type);
-    if (!ensureValidConfig(cfg)) {
-      console.warn(chalk.yellow('Missing secret for token configuration of type', type));
-      return '';
-    }
-    jwt.verify(token, cfg.secret, {
-      audience: cfg.audience,
-      issuer: cfg.issuer
-    }, cb);
+  validate: function(type, token) {
+    return new Promise(function(resolve, reject) {
+
+      //Get and validate configuration
+      var cfg = getConfig(type);
+      if (!ensureValidConfig(cfg)) {
+        return reject(new Error('Missing secret for token configuration of type ' + type));
+      }
+
+      //Verify token with secret
+      jwt.verify(token, cfg.secret, {
+        audience: cfg.audience,
+        issuer: cfg.issuer
+      }, function(error, payload) {
+        if (error) {
+          return reject(error);
+        }
+        resolve(payload);
+      });
+    });
   }
 };

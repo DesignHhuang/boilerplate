@@ -10,19 +10,43 @@ angular.module('App.User.Register.Controller', [
 /**
  * Controller
  */
-.controller('UserRegisterCtrl', function($scope, $state, $timeout, Login) {
+.controller('UserRegisterCtrl', function(
+  $scope, $state, $timeout, Login, User, ENV
+) {
+
+  //Set copy of user model in scope
+  $scope.user = angular.copy(User.current);
 
   //Flags
   $scope.isRegistered = false;
-  $scope.isSaving = false;
+  $scope.isSubmitting = false;
   $scope.isLoggingIn = false;
   $scope.isLoggedIn = false;
   $scope.needsManualLogin = false;
 
+  //Password min length
+  $scope.passwordMinLength = ENV.registration.passwordMinLength;
+
   /**
-   * Register
+   * Validity checks
    */
-  $scope.register = function(User) {
+  $scope.isInvalidName = function() {
+    return ($scope.registerForm.$submitted && $scope.registerForm.email.$invalid);
+  };
+  $scope.isInvalidEmail = function() {
+    return ($scope.registerForm.$submitted && $scope.registerForm.email.$invalid);
+  };
+  $scope.isInvalidPassword = function() {
+    return ($scope.registerForm.$submitted && $scope.registerForm.password.$invalid);
+  };
+  $scope.isInvalidPasswordConfirm = function() {
+    return ($scope.registerForm.$submitted && $scope.registerForm.passwordConfirm.$invalid);
+  };
+
+  /**
+   * Submit registration
+   */
+  $scope.submit = function(user) {
 
     //Must be validated
     if ($scope.registerForm.$invalid) {
@@ -30,19 +54,22 @@ angular.module('App.User.Register.Controller', [
     }
 
     //Toggle flag and reset error
-    $scope.isSaving = false;
+    $scope.isSubmitting = false;
     $scope.error = null;
 
     //Register user
-    User.save().then(function(data) {
+    user.save().then(function(user) {
 
       //Toggle flags
       $scope.isRegistered = true;
 
+      //Pass data on to current user model now
+      User.current.fromObject(user.toObject());
+
       //Access token present?
-      if (data.accessToken) {
+      if (user.accessToken) {
         $scope.isLoggingIn = true;
-        return Login.withToken(data.accessToken).then(function() {
+        return Login.withToken(user.accessToken).then(function() {
           $scope.isLoggedIn = true;
         }, function() {
           $scope.needsManualLogin = true;
@@ -70,7 +97,7 @@ angular.module('App.User.Register.Controller', [
         }
       }
     }).finally(function() {
-      $scope.isSaving = false;
+      $scope.isSubmitting = false;
     });
   };
 });

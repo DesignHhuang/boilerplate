@@ -29,7 +29,7 @@ module.exports = function(app) {
   });
 
   //Use the API router
-  app.use(config.app.api.baseUrl, api);
+  app.use(config.client.api.baseUrl, api);
 
   //Send all other GET requests to Angular
   app.get('/*', function(req, res) {

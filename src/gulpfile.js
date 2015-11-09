@@ -146,6 +146,12 @@ function environmentStream() {
   var stream = vinylSourceStream(fileName);
   stream.write(JSON.stringify({}));
 
+  //Create ENV constant for client and append environment data
+  var ENV = config.client;
+  ENV.environment = env;
+  ENV.isDevelopment = env !== 'production';
+  ENV.isProduction = env === 'production';
+
   //Turn into angular constant module JS file
   return stream
     .pipe(vinylBuffer())
@@ -153,12 +159,7 @@ function environmentStream() {
       name: angularModuleName('Env'),
       stream: true,
       constants: {
-        Env: {
-          name: env,
-          isDevelopment: env !== 'production',
-          isProduction: env === 'production'
-        },
-        App: config.app
+        ENV: ENV
       }
     }))
     .pipe(rename(fileName));
@@ -257,7 +258,9 @@ function deployOnModulus(done) {
  * Clean the public folder
  */
 function clean() {
-  return del(destination);
+  return del(destination, {
+    dot: true
+  });
 }
 
 /**
@@ -473,7 +476,7 @@ function buildIndex() {
     .pipe(preprocess({
       context: {
         ENV: env,
-        APP: config.app
+        APP: config.client.app
       }
     }))
     .pipe(removeHtmlComments())

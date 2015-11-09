@@ -33,7 +33,7 @@ angular.module('App.User.Login.Service', [])
         postLoginParams = redirectParams || {};
 
         //Redirect to login state
-        $state.go('user.login');
+        return $state.go('login');
       },
 
       /**
@@ -115,7 +115,7 @@ angular.module('App.User.Login.Service', [])
         //Get valid state
         if (!postLoginState) {
           if (!fallbackState) {
-            return;
+            return $q.when(null);
           }
 
           //Use fallback
@@ -124,11 +124,14 @@ angular.module('App.User.Login.Service', [])
         }
 
         //Redirect
-        $state.go(postLoginState, postLoginParams);
+        var redirectPromise = $state.go(postLoginState, postLoginParams);
 
         //Clear remembered state
         postLoginState = '';
         postLoginParams = {};
+
+        //Return promise
+        return redirectPromise;
       },
 
       /**

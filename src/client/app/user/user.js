@@ -9,7 +9,7 @@ angular.module('App.User', [
   'App.User.Profile',
   'App.User.Email',
   'App.User.Password',
-  'App.User.Service'
+  'App.User.Model'
 ])
 
 /**
@@ -17,14 +17,14 @@ angular.module('App.User', [
  */
 .config(function($stateProvider, $apiProvider, UserProvider) {
 
-  //Default user data
+  //Configure user model
   UserProvider.setDefaultData({
     name: ''
   });
 
   //Register endpoint
   $apiProvider.registerEndpoint('user', {
-    model: 'UserModel',
+    model: 'User',
     url: 'user',
     params: null,
     actions: {
@@ -77,21 +77,34 @@ angular.module('App.User', [
 /**
  * Run logic
  */
-.run(function($rootScope, $state, $log, $q, App, Auth, User, Login) {
-
-  //Expose user and auth service in root scope
-  $rootScope.User = User;
-  $rootScope.Auth = Auth;
+.run(function($rootScope, $state, $log, User, Auth, Login) {
 
   /**
-   * Global logout helper
+   * Create new user instance and attach to static model
+   */
+  User.current = new User();
+
+  /**
+   * Listen for authentication events
+   */
+  $rootScope.$on('auth.status', function(event, auth) {
+    if (auth.isAuthenticated) {
+      User.current.me();
+    }
+    else {
+      User.current.reset();
+    }
+  });
+
+  /**
+   * User logout helper
    */
   $rootScope.doLogout = function() {
     Auth.logout();
   };
 
   /**
-   * Global login helper, optionally specify redirect state name/params
+   * User login helper, optionally specify redirect state name/params
    */
   $rootScope.doLogin = function(redirectState, redirectParams) {
 
@@ -120,20 +133,16 @@ angular.module('App.User', [
       return;
     }
 
-    //If this was a user initiated logout, go to the home page
+    //If this was a user initiated logout, go to login
     if (auth.isUserInitiated) {
-      $log.log('User initiated logout, going to home page.');
-      return $state.go(App.state.home);
+      $log.log('User initiated logout, going to login.');
+      return Login.now();
     }
 
     //If the current state requires authentication, browse away from it,
     //do a login and remember where the user was
     if (auth.isInitial && $state.current.auth === true) {
-      $log.warn(
-        'State', $state.current.name, 'requires authentication.',
-        'Going to login.'
-      );
-      $state.go(App.state.home);
+      $log.warn('State', $state.current.name, 'requires authentication, going to login.');
       return Login.now($state.current.name, $state.params);
     }
 
@@ -141,7 +150,7 @@ angular.module('App.User', [
     //is most likely triggered by a 401 response
     if (!auth.isInitial) {
       $log.log('Not authenticated anymore, going to login.');
-      Login.now();
+      return Login.now();
     }
 
     //If this was the initial auth cycle, we defer handling of non-authenticated
@@ -151,7 +160,7 @@ angular.module('App.User', [
   /**
    * Listen for states that require authentication
    */
-  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState) {
+  $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
 
     //Authentication required for this state?
     if (toState.auth === true) {
@@ -170,14 +179,6 @@ angular.module('App.User', [
         event.preventDefault();
         $log.warn('State', toState.name, 'requires authentication.');
         Login.now(toState.name, toParams);
-
-        //If no from-state is present, navigate to the home state.
-        //This is to capture cases when a user accesses an authentication required
-        //page directly. Otherwise, navigation is simply prevented and the current
-        //page the user was on remains visible.
-        if (fromState.name === '') {
-          $state.go(App.state.home);
-        }
       }
     }
   });

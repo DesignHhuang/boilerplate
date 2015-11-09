@@ -11,13 +11,13 @@ angular.module('App.Auth', [
 /**
  * Config
  */
-.config(function($httpProvider, $apiProvider, AuthProvider, App) {
+.config(function($httpProvider, $apiProvider, AuthProvider, ENV) {
 
   //Add auth interceptor (must be before the error interceptor)
   $httpProvider.interceptors.unshift('AuthInterceptor');
 
   //Configure auth provider
-  AuthProvider.setClientIdentifier(App.auth.clientIdentifier);
+  AuthProvider.setClientIdentifier(ENV.auth.clientIdentifier);
   AuthProvider.setRefreshEnabled(true);
   AuthProvider.setVerifyAgainstServer(true);
   AuthProvider.setStorageEngine('local');
@@ -46,4 +46,17 @@ angular.module('App.Auth', [
       }
     }
   });
+})
+
+/**
+ * Run logic
+ */
+.run(function($rootScope, Auth) {
+
+  /**
+   * Global is authenticated helper
+   */
+  $rootScope.isAuthenticated = function() {
+    return Auth.isAuthenticated();
+  };
 });

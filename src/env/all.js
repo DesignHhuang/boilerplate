@@ -20,17 +20,23 @@ var assets = require('../assets.json');
 module.exports = {
 
   /**
-   * App settings
+   * Client settings
    */
-  app: {
-    name: pkg.name,
-    version: pkg.version,
-    title: 'My Application',
-    baseUrl: '/',
+  client: {
+
+    //App
+    app: {
+      name: pkg.name,
+      version: pkg.version,
+      title: 'My Application',
+      baseUrl: '/'
+    },
 
     //API
     api: {
-      baseUrl: '/api/v1/'
+      version: 1,
+      baseUrl: '/api/v1/',
+      verbose: false
     },
 
     //Authentication
@@ -42,11 +48,6 @@ module.exports = {
     analytics: {
       enabled: false,
       trackingId: ''
-    },
-
-    //Common states
-    state: {
-      home: 'home'
     }
   },
 

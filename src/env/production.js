@@ -6,10 +6,14 @@
 module.exports = {
 
   /**
-   * App settings
+   * Client settings
    */
-  app: {
-    baseUrl: 'http://my-application.com',
+  client: {
+
+    //App
+    app: {
+      baseUrl: 'http://my-application.com'
+    },
 
     //Analytics
     analytics: {

@@ -8,7 +8,7 @@ angular.module('App.User.Connect.Controller', [])
  * Controller
  */
 .controller('UserConnectCtrl', function(
-  $scope, $state, $timeout, App, User, Login, oAuth
+  $scope, $state, $timeout, ENV, User, Login, oAuth
 ) {
 
   //Must have valid provider and user data
@@ -16,7 +16,7 @@ angular.module('App.User.Connect.Controller', [])
     !$state.params.provider || !$state.params.user ||
     ($state.params.provider !== oAuth.provider())
   ) {
-    $state.go(App.state.home);
+    $state.go('home');
     return;
   }
 

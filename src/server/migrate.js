@@ -98,6 +98,9 @@ var commands = {
         script.up(function(error) {
           if (error) {
             console.error(chalk.red('Failed:\n' + error.message));
+            if (error.stack) {
+              console.error(chalk.red(error.stack));
+            }
           }
           else {
             console.log(chalk.green('Ok'));
@@ -169,6 +172,9 @@ var commands = {
         script.down(function(error) {
           if (error) {
             console.error(chalk.red('Failed:\n' + error.message));
+            if (error.stack) {
+              console.error(chalk.red(error.stack));
+            }
           }
           else {
             console.log(chalk.green('Ok'));

@@ -34,7 +34,7 @@ var getCombinedConfig = function() {
   );
 
   //Append environment
-  config.app.env = env;
+  config.env = env;
   return config;
 };
 

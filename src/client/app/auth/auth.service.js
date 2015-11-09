@@ -303,8 +303,9 @@ angular.module('App.Auth.Service', [
             isAuthenticated: true,
             isUserInitiated: true
           });
-        }, function() {
+        }, function(reason) {
           Auth.logout(true);
+          return $q.reject(reason);
         });
       },
 

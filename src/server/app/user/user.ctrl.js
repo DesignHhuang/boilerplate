@@ -18,6 +18,11 @@ var config = require('app/config.js');
 var User = require('app/user/user.model.js');
 
 /**
+ * Configuration
+ */
+var BASE_URL = config.client.app.baseUrl;
+
+/**
  * Generate verification email
  */
 function sendVerificationEmail(req, res) {
@@ -29,7 +34,7 @@ function sendVerificationEmail(req, res) {
 
   //Create data for i18n
   var data = {
-    link: config.app.baseUrl + '/verifyEmail/' + token
+    link: BASE_URL + '/email/verify/' + token
   };
 
   //Create email (TODO: html email should be in a template)
@@ -158,6 +163,14 @@ module.exports = {
    */
   sendPasswordResetMail: function(req, res, next) {
 
+    //If no user was found, send response anyway to prevent hackers from
+    //figuring out which email addresses are valid and which aren't.
+    if (!req.user) {
+      return setTimeout(function() {
+        res.end();
+      }, 1000);
+    }
+
     //Generate a password reset token
     var token = tokenizer.generate('resetPassword', {
       id: req.user.id
@@ -165,7 +178,7 @@ module.exports = {
 
     //Create data for i18n
     var data = {
-      link: config.app.baseUrl + '/resetPassword/' + token,
+      link: BASE_URL + '/password/reset/' + token,
       validity: Math.floor(config.token.types.resetPassword.expiration / 3600)
     };
 
@@ -191,11 +204,14 @@ module.exports = {
    */
   resetPassword: function(req, res, next) {
 
-    //Validate token
-    tokenizer.validate('resetPassword', req.body.token, function(error, payload) {
+    //Get token from body
+    var token = req.body.token;
 
-      //Failed to validate token or no ID present?
-      if (error || !payload.id) {
+    //Validate token
+    tokenizer.validate('resetPassword', token).then(function(payload) {
+
+      //No ID present?
+      if (!payload.id) {
         return next(new ValidationError('INVALID_TOKEN', 'Invalid token'));
       }
 
@@ -207,8 +223,16 @@ module.exports = {
           return next(new ValidationError('INVALID_TOKEN', 'Invalid token'));
         }
 
-        //Update password and save user
+        //Token already used?
+        if (user.usedTokens && user.usedTokens.indexOf(token) >= 0) {
+          return next(new ValidationError('INVALID_TOKEN', 'Invalid token'));
+        }
+
+        //Update password, mark token as used
         user.password = req.body.password;
+        user.usedTokens.push(token);
+
+        //Save user
         user.save().then(function() {
 
           //Create email (TODO: html email should be in a template)
@@ -227,6 +251,8 @@ module.exports = {
           next(new ValidationError(error));
         });
       });
+    }, function() {
+      return next(new ValidationError('INVALID_TOKEN', 'Invalid token'));
     });
   },
 
@@ -247,10 +273,15 @@ module.exports = {
    * Verify sent email verification token
    */
   verifyEmail: function(req, res, next) {
-    tokenizer.validate('verifyEmail', req.body.token, function(error, payload) {
 
-      //Failed to validate token or no ID present?
-      if (error || !payload.id) {
+    //Get token from body
+    var token = req.body.token;
+
+    //Validate token
+    tokenizer.validate('verifyEmail', token).then(function(payload) {
+
+      //No ID present?
+      if (!payload.id) {
         return next(new ValidationError('INVALID_TOKEN', 'Invalid token'));
       }
 
@@ -260,10 +291,14 @@ module.exports = {
       }, {
         isEmailVerified: true
       }).then(function() {
-        res.json({isValid: true});
+        res.json({
+          isValid: true
+        });
       }, function() {
         next(new ValidationError('INVALID_TOKEN', 'Invalid token'));
       });
+    }, function() {
+      next(new ValidationError('INVALID_TOKEN', 'Invalid token'));
     });
   },
 

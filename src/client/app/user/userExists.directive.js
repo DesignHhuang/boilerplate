@@ -9,7 +9,7 @@ angular.module('App.User.UserExists.Directive', [
 /**
  * Directive
  */
-.directive('userExists', function(UserModel, $q, $cacheFactory) {
+.directive('userExists', function(User, $q, $cacheFactory) {
   return {
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
@@ -49,12 +49,8 @@ angular.module('App.User.UserExists.Directive', [
         data[field] = value;
 
         //Check for existence
-        UserModel.exists(data).then(function(exists) {
-
-          //Store result in cache
+        User.exists(data).then(function(exists) {
           userExistsCache.put(value, exists);
-
-          //Reject or resolve promise
           if (exists) {
             deferred.reject();
           }

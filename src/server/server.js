@@ -29,7 +29,7 @@ var expressErrorHandler = require('app/error/handlers/express.js');
 /**
  * Log
  */
-console.log('Running application', chalk.magenta(config.app.name),
+console.log('Running application', chalk.magenta(config.client.app.name),
   'in the', chalk.magenta(process.env.NODE_ENV), 'environment');
 
 /**
