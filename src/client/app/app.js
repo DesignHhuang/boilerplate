@@ -73,9 +73,22 @@ angular.module('App', [
 /**
  * Run logic
  *
- * The $state service is injected here to fix an issue with the route not being loaded
+ * The $state service was injected here to fix an issue with the route not being loaded
  * initially. See https://github.com/angular-ui/ui-router/issues/2051
  */
-.run(function($rootScope, $state, ENV) {
+.run(function($rootScope, $state, $log, ENV) {
+
+  //Expose app config in rootscope
   $rootScope.App = ENV.app;
+
+  /**
+   * Prevent navigation to certain states from initial requests (e.g. browser refresh)
+   */
+  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState) {
+    if (toState.notInitial && !fromState.name) {
+      event.preventDefault();
+      $log.warn('State', toState.name, 'cant be accessed directly.');
+      $state.go('home');
+    }
+  });
 });
