@@ -25,13 +25,6 @@ module.exports = {
   },
 
   /**
-   * Log settings
-   */
-  log: {
-    format: 'dev'
-  },
-
-  /**
    * Database settings
    */
   db: {

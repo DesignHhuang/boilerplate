@@ -30,18 +30,6 @@ module.exports = {
   },
 
   /**
-   * Log settings
-   */
-  log: {
-    format: 'combined',
-    rotate: {
-      filename: 'access.%DATE%.log',
-      frequency: 'daily',
-      verbose: false
-    }
-  },
-
-  /**
    * Database settings
    */
   db: {

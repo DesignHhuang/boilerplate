@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Validation.IsolatedForm.Directive', [])
+angular.module('Shared.Validation.IsolatedForm.Directive', [])
 
 /**
  * Directive

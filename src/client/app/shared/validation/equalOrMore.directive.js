@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Validation.EqualOrMore.Directive', [])
+angular.module('Shared.Validation.EqualOrMore.Directive', [])
 
 /**
  * Directive

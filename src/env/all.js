@@ -36,7 +36,8 @@ module.exports = {
     api: {
       version: 1,
       baseUrl: '/api/v1/',
-      verbose: false
+      verbose: false,
+      enforceDataFormat: true
     },
 
     //Authentication
@@ -114,14 +115,6 @@ module.exports = {
     to: {
       admin: 'Admin <admin@my-application.com>'
     }
-  },
-
-  /**
-   * Log settings
-   */
-  log: {
-    format: 'combined',
-    path: './logs'
   },
 
   /**

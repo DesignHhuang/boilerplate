@@ -16,8 +16,10 @@
 		"describe": false,
 		"before": false,
 		"beforeEach": false,
+		"beforeAll": false,
 		"after": false,
 		"afterEach": false,
+		"afterAll": false,
 		"it": false,
 		"inject": false,
 		"expect": false

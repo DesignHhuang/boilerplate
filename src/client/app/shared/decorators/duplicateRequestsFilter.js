@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Decorators.DuplicateRequestsFilter', [])
+angular.module('Shared.DuplicateRequestsFilter.Decorator', [])
 
 /**
  * Config

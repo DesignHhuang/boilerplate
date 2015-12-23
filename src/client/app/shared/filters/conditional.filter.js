@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.Conditional.Filter', [])
+angular.module('Shared.Conditional.Filter', [])
 
 /**
  * Filter definitions

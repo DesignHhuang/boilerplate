@@ -29,9 +29,8 @@ angular.module('App', [
   'App.Home',
   'App.User',
 
-  //Shared modules
-  'Decorators.DuplicateRequestsFilter',
-  'Directives.ngModel.Directive'
+  //Decorators
+  'Shared.DuplicateRequestsFilter.Decorator'
 ])
 
 /**
@@ -49,17 +48,10 @@ angular.module('App', [
   //Disable legacy $http promise methods
   $httpProvider.useLegacyPromiseExtensions = false;
 
-  //Abstract app state definition
-  $stateProvider.state('app', {
-    url: '',
-    abstract: true,
-    template: '<ui-view />',
-    resolve: {}
-  });
-
   //Configure API
   $apiProvider.setBaseUrl(ENV.api.baseUrl);
   $apiProvider.setVerbose(ENV.api.verbose);
+  $apiProvider.setEnforceDataFormat(ENV.api.enforceDataFormat);
 
   //Configure storage
   $storageProvider.setPrefix(ENV.app.name);
@@ -68,6 +60,19 @@ angular.module('App', [
   if (ENV.isProduction) {
     $logProvider.disable('all');
   }
+
+  //App base state, for the actual application (e.g. when logged in)
+  $stateProvider.state('app', {
+    url: '',
+    abstract: true,
+    templateUrl: 'app.html',
+    controller: 'AppCtrl',
+    resolve: {
+      user: function(UserStore) {
+        return UserStore.getUserPromise();
+      }
+    }
+  });
 })
 
 /**

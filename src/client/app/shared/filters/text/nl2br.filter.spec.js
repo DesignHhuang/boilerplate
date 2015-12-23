@@ -5,7 +5,7 @@
 describe('Nl2br filter', function() {
 
   //Load module
-  beforeEach(module('Filters.Text.Nl2br.Filter'));
+  beforeEach(module('Shared.Text.Nl2br.Filter'));
 
   //Inject filter
   var nl2br;

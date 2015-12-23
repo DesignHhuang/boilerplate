@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.Text.HTMLEntities.Filter', [])
+angular.module('Shared.Text.HTMLEntities.Filter', [])
 
 /**
  * Filter definitions

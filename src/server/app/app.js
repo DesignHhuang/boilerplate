@@ -5,17 +5,11 @@
  */
 var path = require('path');
 var i18n = require('i18n');
-var morgan = require('morgan');
 var express = require('express');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 var serveStatic = require('serve-static');
 var cookieParser = require('cookie-parser');
-
-/**
- * Compatibility
- */
-require('app/compatibility.js');
 
 /**
  * Application dependencies
@@ -24,7 +18,6 @@ var db = require('app/db.js');
 var auth = require('app/auth.js');
 var config = require('app/config.js');
 var router = require('app/router.js');
-var logger = require('app/shared/utility/logger.js');
 
 /**
  * Error handling middleware
@@ -52,9 +45,6 @@ module.exports = function() {
       return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
     }
   }));
-
-  //Use morgan to log access
-  app.use(morgan(logger.format(), logger.options()));
 
   //Parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({

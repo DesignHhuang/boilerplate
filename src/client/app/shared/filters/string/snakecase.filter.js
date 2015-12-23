@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.String.Snakecase.Filter', [
+angular.module('Shared.String.Snakecase.Filter', [
   'Convert.Service'
 ])
 

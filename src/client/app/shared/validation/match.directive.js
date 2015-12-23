@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Validation.Match.Directive', [])
+angular.module('Shared.Validation.Match.Directive', [])
 
 /**
  * Directive

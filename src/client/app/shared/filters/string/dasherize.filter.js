@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.String.Dasherize.Filter', [
+angular.module('Shared.String.Dasherize.Filter', [
   'Convert.Service'
 ])
 

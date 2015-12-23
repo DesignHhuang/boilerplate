@@ -2,8 +2,8 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.String.Camelcase.Filter', [
-  'Utility.Convert.Service'
+angular.module('Shared.String.Camelcase.Filter', [
+  'Convert.Service'
 ])
 
 /**

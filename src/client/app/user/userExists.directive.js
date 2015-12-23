@@ -9,7 +9,7 @@ angular.module('App.User.UserExists.Directive', [
 /**
  * Directive
  */
-.directive('userExists', function(User, $q, $cacheFactory) {
+.directive('userExists', function(User, $q, $cacheFactory, $timeout) {
   return {
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
@@ -23,44 +23,59 @@ angular.module('App.User.UserExists.Directive', [
         userExistsCache = $cacheFactory('userExists.' + field);
       }
 
+      //Pending validation
+      var pendingValidation = null;
+
       //Add asynchronous validator
       ngModel.$asyncValidators.exists = function(modelValue, viewValue) {
 
-        //Create deferred
-        var deferred = $q.defer();
-
-        //Get value to check
-        var value = modelValue || viewValue;
-
-        //Check cache
-        var exists = userExistsCache.get(value);
-        if (exists !== undefined) {
-          if (exists) {
-            deferred.reject();
-          }
-          else {
-            deferred.resolve();
-          }
-          return;
+        //Cancel pending validation
+        if (pendingValidation) {
+          $timeout.cancel(pendingValidation);
         }
 
-        //Create new model with data to check
-        var data = {};
-        data[field] = value;
+        //Helper to get the validation promise
+        function getValidationPromise() {
 
-        //Check for existence
-        User.exists(data).then(function(exists) {
-          userExistsCache.put(value, exists);
-          if (exists) {
-            deferred.reject();
-          }
-          else {
-            deferred.resolve();
-          }
-        });
+          //Get value to check
+          var value = modelValue || viewValue;
 
-        //Return promise
-        return deferred.promise;
+          //Check cache
+          var exists = userExistsCache.get(value);
+          if (exists !== undefined) {
+            if (exists) {
+              return $q.reject();
+            }
+            else {
+              return $q.when();
+            }
+            return;
+          }
+
+          //Create new model with data to check
+          var data = {};
+          data[field] = value;
+
+          //Check for existence
+          return User.exists(data).then(function(exists) {
+            userExistsCache.put(value, exists);
+            if (exists) {
+              return $q.reject();
+            }
+            else {
+              return $q.when();
+            }
+          });
+        }
+
+        //Create pending validation promise
+        pendingValidation = $timeout(function() {
+          pendingValidation = null;
+          return getValidationPromise();
+        }, 500);
+
+        //Return it
+        return pendingValidation;
       };
     }
   };

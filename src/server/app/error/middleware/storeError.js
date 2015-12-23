@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * Application dependencies
+ * External dependencies
  */
-var ErrorModel = require('app/error/error.model.js');
+var mongoose = require('mongoose');
 
 /**
  * Module export
@@ -26,7 +26,7 @@ module.exports = function(err, req, res, next) {
   };
 
   //Save in database
-  ErrorModel.create(data);
+  mongoose.model('Error').create(data);
 
   //Proceed to next middleware
   next(err);

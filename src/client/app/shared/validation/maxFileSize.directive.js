@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Validation.MaxFileSize.Directive', [])
+angular.module('Shared.Validation.MaxFileSize.Directive', [])
 
 /**
  * Directive

@@ -5,7 +5,7 @@
 describe('Conditional filter', function() {
 
   //Load module
-  beforeEach(module('Filters.Conditional.Filter'));
+  beforeEach(module('Shared.Conditional.Filter'));
 
   //Inject filter
   var conditional;

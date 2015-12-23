@@ -28,16 +28,31 @@ angular.module('App.User.Model', [])
    */
   this.$get = function($q, $api, $apiModel) {
 
-    //Expose default data
+    //Expose default data and get booking model
     var defaultData = this.defaultData;
 
     /**
-     * Extend API model
+     * User constructor
      */
     function User(data) {
-      $apiModel.call(this, angular.extend(defaultData, data || {}));
+
+      //Call parent constructor
+      $apiModel.call(this, angular.extend({}, defaultData, data || {}));
+
+      /**
+       * Virtual name property
+       */
+      Object.defineProperty(this, 'name', {
+        get: function() {
+          return String(this.firstName + ' ' + this.lastName).trim();
+        }
+      });
     }
     angular.extend(User.prototype, $apiModel.prototype);
+
+    /*****************************************************************************
+     * Instance methods
+     ***/
 
     /**
      * Save user
@@ -51,55 +66,48 @@ angular.module('App.User.Model', [])
     };
 
     /**
-     * Fetch logged in user data from the server
-     */
-    User.prototype.me = function() {
-
-      //Get self
-      var self = this;
-
-      //Get details from server
-      return $api.user.me().then(function(user) {
-        self.fromObject(user);
-        self.$isLoaded = true;
-        return self;
-      }, function(response) {
-        self.fromObject(defaultData);
-        self.$isLoaded = false;
-        return $q.reject(response);
-      });
-    };
-
-    /**
      * Send verification mail
      */
     User.prototype.sendVerificationEmail = function() {
       return $api.user.sendVerificationEmail();
     };
 
+    /*****************************************************************************
+     * Static methods
+     ***/
+
     /**
-     * Query (static)
+     * Fetch logged in user from the server
      */
-    User.query = function(data) {
-      return $api.user.query(data);
+    User.me = function() {
+      return $api.user.me().then(function(data) {
+        return new User(data);
+      });
     };
 
     /**
-     * Forgot password (static)
+     * Query
+     */
+    User.query = function(filter) {
+      return $api.user.query(filter);
+    };
+
+    /**
+     * Forgot password
      */
     User.forgotPassword = function(credentials) {
       return $api.user.forgotPassword(credentials);
     };
 
     /**
-     * Reset password (static)
+     * Reset password
      */
     User.resetPassword = function(credentials) {
       return $api.user.resetPassword(credentials);
     };
 
     /**
-     * Verify email (static)
+     * Verify email
      */
     User.verifyEmail = function(token) {
       return $api.user.verifyEmail({
@@ -108,7 +116,7 @@ angular.module('App.User.Model', [])
     };
 
     /**
-     * Exists check (static)
+     * Exists check
      */
     User.exists = function(data) {
       return $api.user.exists(data).then(function(data) {
@@ -118,11 +126,6 @@ angular.module('App.User.Model', [])
         return false;
       });
     };
-
-    /**
-     * Reference to current user
-     */
-    User.current = null;
 
     //Return
     return User;

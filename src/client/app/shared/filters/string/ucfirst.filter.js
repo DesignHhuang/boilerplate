@@ -2,8 +2,8 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.String.UcFirst.Filter', [
-  'Utility.Convert.Service'
+angular.module('Shared.String.UcFirst.Filter', [
+  'Convert.Service'
 ])
 
 /**

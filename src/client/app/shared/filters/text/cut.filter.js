@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.Text.Cut.Filter', [])
+angular.module('Shared.Text.Cut.Filter', [])
 
 /**
  * Filter definition

@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.Text.TrustHtml.Filter', [])
+angular.module('Shared.Text.TrustHtml.Filter', [])
 
 /**
  * Filter definitions

@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.Text.Markdown.Filter', [])
+angular.module('Shared.Text.Markdown.Filter', [])
 
 /**
  * Filter definitions

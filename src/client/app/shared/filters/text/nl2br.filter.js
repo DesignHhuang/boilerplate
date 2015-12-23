@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.Text.Nl2br.Filter', [])
+angular.module('Shared.Text.Nl2br.Filter', [])
 
 /**
  * Filter definitions

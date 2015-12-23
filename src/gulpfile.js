@@ -184,6 +184,14 @@ function mergeSources() {
   return merged;
 }
 
+/**
+ * Helper to refresh config
+ */
+function refreshConfig(cb) {
+  config = require('./config');
+  cb();
+}
+
 /*****************************************************************************
  * Deployers
  ***/
@@ -737,7 +745,9 @@ function watchIndex() {
  * Watch environment files
  */
 function watchEnv() {
-  gulp.watch(config.assets.env.js, gulp.series(lintCode, testClientCode, buildAppJs, buildIndex));
+  gulp.watch(config.assets.env.js, gulp.series(
+    refreshConfig, lintCode, testClientCode, buildAppJs, buildIndex
+  ));
 }
 
 /*****************************************************************************
@@ -841,3 +851,4 @@ gulp.task('default', gulp.series(
  */
 gulp.task('clean', clean);
 gulp.task('static', buildStatic);
+gulp.task('tag', tagBump);

@@ -2,7 +2,7 @@
 /**
  * Module definition and dependencies
  */
-angular.module('Filters.Boolean.Filter', [])
+angular.module('Shared.Boolean.Filter', [])
 
 /**
  * Filter definitions

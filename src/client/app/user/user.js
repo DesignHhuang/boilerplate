@@ -9,7 +9,9 @@ angular.module('App.User', [
   'App.User.Profile',
   'App.User.Email',
   'App.User.Password',
-  'App.User.Model'
+  'App.User.Model',
+  'App.User.UserStore.Service',
+  'App.User.UserExists.Directive'
 ])
 
 /**
@@ -77,24 +79,7 @@ angular.module('App.User', [
 /**
  * Run logic
  */
-.run(function($rootScope, $state, $log, User, Auth, Login) {
-
-  /**
-   * Create new user instance and attach to static model
-   */
-  User.current = new User();
-
-  /**
-   * Listen for authentication events
-   */
-  $rootScope.$on('auth.status', function(event, auth) {
-    if (auth.isAuthenticated) {
-      User.current.me();
-    }
-    else {
-      User.current.reset();
-    }
-  });
+.run(function($rootScope, $state, $log, UserStore, Auth, Login) {
 
   /**
    * User logout helper
@@ -107,54 +92,40 @@ angular.module('App.User', [
    * User login helper, optionally specify redirect state name/params
    */
   $rootScope.doLogin = function(redirectState, redirectParams) {
-
-    //Not logged in yet?
     if (!Auth.isAuthenticated()) {
       return Login.now(redirectState, redirectParams);
     }
-
-    //Already logged in, redirect to redirect state
     if (redirectState) {
-      $log.log('Already authenticated, going to redirect state', redirectState);
       $state.go(redirectState, redirectParams || {});
-    }
-    else {
-      $log.log('Already authenticated');
     }
   };
 
   /**
-   * Listen for authentication events
+   * Listen for authentication status changes
    */
   $rootScope.$on('auth.status', function(event, auth) {
 
-    //If authenticated, all is well
+    //If we became authenticated all is well
     if (auth.isAuthenticated) {
+      UserStore.findAuthenticatedUser();
       return;
     }
 
-    //If this was a user initiated logout, go to login
+    //Clear user data
+    UserStore.clearUser();
+
+    //If we logged out manually, we redirect the user to the login page
     if (auth.isUserInitiated) {
-      $log.log('User initiated logout, going to login.');
+      $log.log('User logged out manually, going to login');
       return Login.now();
     }
 
-    //If the current state requires authentication, browse away from it,
-    //do a login and remember where the user was
-    if (auth.isInitial && $state.current.auth === true) {
-      $log.warn('State', $state.current.name, 'requires authentication, going to login.');
+    //If we were authenticated, but are no longer, and if the current state requires
+    //authentication, we need to browse away from it and go to login
+    if ($state.current.auth === true) {
+      $log.warn('State', $state.current.name, 'requires authentication, need to login again.');
       return Login.now($state.current.name, $state.params);
     }
-
-    //Otherwise, if this wasn't the initial auth cycle, prompt login as this
-    //is most likely triggered by a 401 response
-    if (!auth.isInitial) {
-      $log.log('Not authenticated anymore, going to login.');
-      return Login.now();
-    }
-
-    //If this was the initial auth cycle, we defer handling of non-authenticated
-    //cases to the $stateChangeStart event handler below.
   });
 
   /**
@@ -168,8 +139,17 @@ angular.module('App.User', [
       //Are we verifying authentication? Await the result, then try again
       if (Auth.isVerifying()) {
         event.preventDefault();
-        $log.log('State', toState.name, 'requires authentication, awaiting server verify.');
+        $log.warn('State', toState.name, 'requires authentication, awaiting server verify.');
         return Auth.verify().finally(function() {
+          $state.go(toState.name, toParams);
+        });
+      }
+
+      //Are we refreshing?
+      else if (Auth.isRefreshing()) {
+        event.preventDefault();
+        $log.warn('State', toState.name, 'requires authentication, awaiting server refresh.');
+        return Auth.refresh().finally(function() {
           $state.go(toState.name, toParams);
         });
       }
@@ -178,8 +158,25 @@ angular.module('App.User', [
       if (!Auth.isAuthenticated()) {
         event.preventDefault();
         $log.warn('State', toState.name, 'requires authentication.');
-        Login.now(toState.name, toParams);
+        return Login.now(toState.name, toParams);
       }
+
+      //Admin required?
+      if (toState.admin === true && !Auth.isAdmin()) {
+        event.preventDefault();
+        $log.warn('State', toState.name, 'requires admin role.');
+        return;
+      }
+    }
+  });
+
+  /**
+   * Prevent user arriving on a auth required state unauthenticated
+   */
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams) {
+    if (toState.auth === true && !Auth.isAuthenticated()) {
+      $log.warn('State', toState.name, 'requires authentication.');
+      Login.now(toState.name, toParams);
     }
   });
 });

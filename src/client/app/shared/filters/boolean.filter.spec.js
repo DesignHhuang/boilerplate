@@ -5,7 +5,7 @@
 describe('Boolean filter', function() {
 
   //Load module
-  beforeEach(module('Filters.Boolean.Filter'));
+  beforeEach(module('Shared.Boolean.Filter'));
 
   //Inject filter
   var boolean;
